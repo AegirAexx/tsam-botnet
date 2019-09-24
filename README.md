@@ -7,10 +7,13 @@ Dagur Kristjánsson (dagur17)
 ## Usage of accompanying teacher code
 
 > `g++ -std=c++11 client.cpp -lpthread -o client`
+
 > `g++ -std=c+=11 server.cpp o server`
 
 To run (on same machine):
+
 > `./server 10000`
+
 > `./client 127.0.0.1 10000`
 
 Commands on client:
