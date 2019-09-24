@@ -1,6 +1,6 @@
 # TSAM - The Botnet Rises
 
-## Group 4
+## V_Group_4
 Ægir Tómasson (aegir15)<br>
 Dagur Kristjánsson (dagur17)
 
