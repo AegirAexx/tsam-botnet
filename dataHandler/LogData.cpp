@@ -25,8 +25,8 @@ std::ostream& operator << (std::ostream& outs, const LogData& logData){
     return outs;
 }
 
-void LogData::addTimeStamp(){
-
+std::string LogData::addTimeStampString(){
+    return std::asctime(std::localtime(&timeStamp));
 }
 void LogData::setMessage(std::string message){
 

@@ -13,13 +13,14 @@ class LogData {
 
         friend std::ostream& operator << (std::ostream& outs, const LogData& logData);
 
-        void addTimeStamp();
+        std::string addTimeStampString();
         void setMessage(std::string message);
         std::string getMessage();
 
     private:
         int id;
         std::string message;
+        std::string timeString;
         std::time_t timeStamp;
 };
 
