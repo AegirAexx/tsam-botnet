@@ -25,7 +25,9 @@ int main(int argc, char *argv[]){
 
     // PART: REGEX KNOWN COMMANDS
 
-    std::array<std::string,9> commands{"LEAVE","listservers","keepaLIVE","GET MSG","Servers","send msg","DELETE","statusreq","statusresp"};
+    std::array<std::string,10> commands{"LEAVE","listservers","keepaLIVE","GET MSG","Servers","send msg","DELETE","statusreq","statusresp","statusrespt"};
+
+
 
     std::cout << "\n######### Initial: " << std::endl;
     for(auto i: commands) std::cout << i << std::endl;
@@ -39,29 +41,45 @@ int main(int argc, char *argv[]){
     for(auto i: commands) std::cout << i << std::endl;
 
     // RegEx fishing ############
-    std::regex knownCommands("(leave)|(listservers)|(servers)|(keepalive)|(get msg)|(send msg)|(statusreq)|(statusresp)");
+
+
+
+    // std::regex soh("[\x01]");
+    // std::regex eot("[\x04]");
+    std::regex soh_eot("[\x01]|[\x04]");
+
+    std::cout << "\n######### RegExing SOH/EOT" << std::endl;
+
+    for(size_t i = 0; i < rawVec.size(); i++){
+
+        std::smatch match;
+        std::string temp{(char)rawVec[i]};
+        std::regex_search(temp, match, soh_eot);
+
+        std::cout << std::boolalpha;
+        // std::cout << "Checked for Results: " << match.ready() << std::endl;
+        std::cout << "Matches found: " << !match.empty() << std::endl;
+        std::cout << "Number of matches: " << match.size() << std::endl;
+
+        std::cout << std::endl;
+    }
 
     std::cout << "\n######### RegExing yo" << std::endl;
+
+    std::regex knownCommands("leave|(list)*servers$|keepalive|[\\s]msg$|statusre(q$|sp$)");
 
     for(size_t i = 0; i < commands.size(); i++){
 
         std::smatch match;
         std::regex_search(commands[i], match, knownCommands);
-        // if(i != 0) commands[i] = match.suffix().str();
 
-        // Show true and false in output
         std::cout << std::boolalpha;
-        std::cout << "Checked for Results: " << match.ready() << std::endl;
-        std::cout << "Are there no matches: " << match.empty() << std::endl;
+        // std::cout << "Checked for Results: " << match.ready() << std::endl;
+        std::cout << "Matches found: " << !match.empty() << std::endl;
         std::cout << "Number of matches: " << match.size() << std::endl;
 
-        // Get the first match
-        if(!match.empty()) std::cout << "The actual match: " << match.str() << std::endl;
+        if(!match.empty()) std::cout << "The match: " << match.str() << "\nFor word: " << commands[i] << std::endl;
         else std::cout << "No match: " << commands[i] << std::endl;
-
-        // Eliminate the previous match and create
-        // a new string to search
-        // str = match.suffix().str();
 
         std::cout << std::endl;
     }
