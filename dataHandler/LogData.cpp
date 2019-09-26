@@ -15,8 +15,7 @@ LogData::LogData(int id, std::string message, std::time_t timeStamp) :
 // virtual ~LogData() {}
 
 
-friend std::ostream& operator << (std::ostream& outs, const LogData& logData);
-
+// std::iomanip
 std::ostream& operator << (std::ostream& outs, const LogData& logData){
     // Time tempNorm = time; // Temporary variable to circumvent "const" restrictions.
     // tempNorm.normalize(); // Output normalized before being printed.
