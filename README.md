@@ -1,8 +1,12 @@
 # TODO
 ## Critical services
 - Validation services
+  - _RegEx well under way_
+  - _string => byteVector => string_
 - Network logging
+  - Working on LogData datatype
 - Data/File services
+  - READ / WRITE ios::binary to file
 
 
 # TSAM - The Botnet Rises
