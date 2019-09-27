@@ -4,11 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "LogData.h"
+// INCLUDE HEADER FOR TYPES
 
-// TODO: BRING IN TIME
-// TODO: DECIDE ON LOG INFO AND LAYOUT
-// FEAT: Maybe we need a custom data type to hold the data in memory??
 
 int main(){
 

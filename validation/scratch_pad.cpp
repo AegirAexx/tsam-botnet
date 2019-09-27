@@ -5,6 +5,8 @@
 #include <array>
 // #include <string>
 #include <cctype>
+#include <ctime>
+#include <chrono>
 
 std::vector<std::byte> getRawBytes(std::string str);
 
@@ -37,47 +39,64 @@ int main(int argc, char *argv[]){
 
 
     // PART: ToLower TRANSFORM
-    std::cout << "\n######### Initial: " << std::endl;
-    for(auto i: commands) std::cout << i << std::endl;
+    // std::cout << "\n######### Initial: " << std::endl;
+    // for(auto i: commands) std::cout << i << std::endl;
 
-    // COM: ToLower()
-    for(auto &i: commands) std::transform(i.begin(), i.end(), i.begin(), [] (unsigned char c){ return std::tolower(c); });
+    // // COM: ToLower() / ToUpper()
+    // for(auto &i: commands) std::transform(i.begin(), i.end(), i.begin(), [] (unsigned char c){ return std::toupper(c); }); // std::toupper(c)tolower
 
-    std::cout << "\n######### Transformed: " << std::endl;
-    for(auto i: commands) std::cout << i << std::endl;
+    // std::cout << "\n######### Transformed: " << std::endl;
+    // for(auto i: commands) std::cout << i << std::endl;
 
     // PART: FILTER FOR SOH & EOT.
-    std::regex soh_eot("[\x01]|[\x04]");
+    // std::regex soh_eot("[\x01]|[\x04]");
 
-    std::cout << "\n######### RegExing SOH/EOT" << std::endl;
+    // std::cout << "\n######### RegExing SOH/EOT" << std::endl;
 
-    // Check if ready for valdation [match.ready()]
+    // // Check if ready for valdation [match.ready()]
 
-    for(size_t i = 0; i < rawVec.size(); i++){
-        std::smatch match;
-        std::string temp{(char)rawVec[i]};
-        std::regex_search(temp, match, soh_eot);
-        std::cout << std::boolalpha;
-        std::cout << "Matches found: " << !match.empty() << std::endl;
-        std::cout << "Number of matches: " << match.size() << std::endl;
-        std::cout << std::endl;
-    }
+    // for(size_t i = 0; i < rawVec.size(); i++){
+    //     std::smatch match;
+    //     std::string temp{(char)rawVec[i]};
+    //     std::regex_search(temp, match, soh_eot);
+    //     std::cout << std::boolalpha;
+    //     std::cout << "Matches found: " << !match.empty() << std::endl;
+    //     std::cout << "Number of matches: " << match.size() << std::endl;
+    //     std::cout << std::endl;
+    // }
 
     // PART: FILTER FOR KNOWN COMMANDS
-    std::cout << "\n######### RegExing yo" << std::endl;
+    // std::cout << "\n######### RegExing yo" << std::endl;
 
-    std::regex knownCommands("leave|(list)*servers$|keepalive|[\\s]msg$|statusre(q$|sp$)");
+    // std::regex knownCommands("leave|(list)*servers$|keepalive|[\\s]msg$|statusre(q$|sp$)");
 
-    for(size_t i = 0; i < commands.size(); i++){
-        std::smatch match;
-        std::regex_search(commands[i], match, knownCommands);
-        std::cout << std::boolalpha;
-        std::cout << "Matches found: " << !match.empty() << std::endl;
-        std::cout << "Number of matches: " << match.size() << std::endl;
-        if(!match.empty()) std::cout << "The match: " << match.str() << "\nFor word: " << commands[i] << std::endl;
-        else std::cout << "No match: " << commands[i] << std::endl;
-        std::cout << std::endl;
+    // for(size_t i = 0; i < commands.size(); i++){
+    //     std::smatch match;
+    //     std::regex_search(commands[i], match, knownCommands);
+    //     std::cout << std::boolalpha;
+    //     std::cout << "Matches found: " << !match.empty() << std::endl;
+    //     std::cout << "Number of matches: " << match.size() << std::endl;
+    //     if(!match.empty()) std::cout << "The match: " << match.str() << "\nFor word: " << commands[i] << std::endl;
+    //     else std::cout << "No match: " << commands[i] << std::endl;
+    //     std::cout << std::endl;
+    // }
+
+    // PART: EXPERIMENT WITH TIME
+    const auto timeStamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::cout << "Number of seconds since Epoch: " << (size_t)timeStamp << std::endl;
+
+    // PART: SIMULATE MESSAGE/COMMAND STRING
+
+    std::string str("SERVERS,V_GROUP_1,130.208.243.61,8888;V_GROUP_2,10.2.132.12,888;");
+    std::cout << "###\nPlain string: " << str << std::endl;
+    auto bufferPayload{getRawBytes(str)};
+    std::cout << "###\nByte version of bufferPayload with SOH/EOT:\n";
+    for(size_t i{1}; i <= bufferPayload.size(); ++i) {
+        std::cout << std::hex << (size_t)bufferPayload.at(i-1) <<((i % 16 == 0) ? "\n" : " ");
     }
+
+
+
     return 0;
 }
 
