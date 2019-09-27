@@ -18,7 +18,7 @@ class ReceivedMessage {
         char recipient[12];
         char sender[12];
         char message[5000];
-        int timeStamp;
+        size_t timeStamp;
 };
 
 #endif // RECEIVEDMESSAGE_H

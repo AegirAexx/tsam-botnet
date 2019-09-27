@@ -24,12 +24,12 @@ int main(int argc, char *argv[]) {
 
         switch (ifa->ifa_addr->sa_family) {
             case AF_INET:
-                struct sockaddr_in *s4 = (struct sockaddr_in *)ifa->ifa_addr;
-                in_addr = &s4->sin_addr;
+                {struct sockaddr_in *s4 = (struct sockaddr_in *)ifa->ifa_addr;
+                in_addr = &s4->sin_addr;}
                 break;
             case AF_INET6:
-                struct sockaddr_in6 *s6 = (struct sockaddr_in6 *)ifa->ifa_addr;
-                in_addr = &s6->sin6_addr;
+                {struct sockaddr_in6 *s6 = (struct sockaddr_in6 *)ifa->ifa_addr;
+                in_addr = &s6->sin6_addr;}
                 break;
             default:
                 continue;
