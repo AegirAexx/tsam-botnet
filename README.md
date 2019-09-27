@@ -1,12 +1,13 @@
 # TODO
 ## Critical services
 - Validation services
-  - _RegEx well under way_
+  - _RegEx well under way_, __Next simulate a message coming in through the pipes.__
   - _string => byteVector => string_
 - Network logging
-  - Working on LogData datatype
+  - _Three datatypes ready; ReceivedMessage, SentMessage and ServerProfile_
 - Data/File services
-  - READ / WRITE ios::binary to file
+  - READ / WRITE ios::binary to file.
+  - Three logs total, two for messages and one for servers.
 
 
 # TSAM - The Botnet Rises
