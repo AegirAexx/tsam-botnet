@@ -157,15 +157,15 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     // Varable to store the combined output from the command.
     std::string output;
-    
+
     // Not sure if it's a overkill but I felt this was a good buffer size.
-    char res_client[8192];
+    char res_client[4096];
 
     // This assumes that the supplied command has no parameters
     if((tokens[0].compare("SYS") == 0) && (tokens.size() >= 2)){
         // Not completely sure how these streams work, but this just works...
         FILE *fp = popen(cmd.c_str(),"r");
-        while ( fgets( res_client, 8192, fp ) != NULL ) {
+        while ( fgets( res_client, 4096, fp ) != NULL ) {
             output += res_client;
         }
         pclose(fp);
@@ -182,15 +182,15 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
 int main(int argc, char* argv[]){
     bool finished;
-    int listenSock;                 // Socket for connections to server
-    int clientSock;                 // Socket of connecting client
-    fd_set openSockets;             // Current open sockets
-    fd_set readSockets;             // Socket list for select()
-    fd_set exceptSockets;           // Exception socket list
-    int maxfds;                     // Passed to select() as max fd in set
-    struct sockaddr_in client;      // address of incoming client
-    socklen_t clientLen;            // address length
-    char buffer[1025];              // buffer for reading from clients
+    int listenSock;                        // Socket for connections to server
+    int clientSock;                        // Socket of connecting client
+    fd_set openSockets;                    // Current open sockets
+    fd_set readSockets;                    // Socket list for select()
+    fd_set exceptSockets;                  // Exception socket list
+    int maxfds;                            // Passed to select() as max fd in set
+    struct sockaddr_in client;             // address of incoming client
+    socklen_t clientLen;                   // address length
+    char buffer[1025];                     // buffer for reading from clients
     std::vector<int> clientSocketsToClear; // List of closed sockets to remove
 
     if(argc != 2){
@@ -199,12 +199,8 @@ int main(int argc, char* argv[]){
     }
 
     // Setup socket for server to listen to
-
     listenSock = open_socket(atoi(argv[1]));
-
     printf("Listening on port: %d\n", atoi(argv[1]));
-    printf("       (range of available ports on skel.ru.is is 4000-4100)\n");
-
     if(listen(listenSock, BACKLOG) < 0){
         printf("Listen failed on port %s\n", argv[1]);
         exit(0);
