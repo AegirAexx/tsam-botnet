@@ -47,11 +47,18 @@ int main(int argc, char* argv[]){
     // Buffer size for each packet.
     char res_server[1024];
 
-    // Infinite loop that takes user input.
-    // It does not have any way of ending gracefully.
-    while(true){
+    bool isFinished{false};
+
+    std::cout << "Welcome to the command client. Use \"EXIT\" to quit." << std::endl;
+
+    while(!isFinished){
         std::cout << "Client $> ";
         getline(std::cin, message);
+
+        if(message == "EXIT"){
+            isFinished = true;
+            continue;
+        }
 
         // Send
         if(send(sock, message.c_str(), message.size() + 1, 0) < 0){
