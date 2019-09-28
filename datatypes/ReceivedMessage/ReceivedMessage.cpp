@@ -18,3 +18,15 @@ ReceivedMessage::ReceivedMessage(std::string recipient, std::string sender, std:
 }
 
 ReceivedMessage::~ReceivedMessage() {}
+
+// Add a pretty print overload
+std::ostream& operator << (std::ostream& outs, const ReceivedMessage& message){
+    ReceivedMessage tempMessage = message; // Temporary variable to circumvent "const" restrictions.
+    std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
+    outs << "--\nTO:   " << tempMessage.recipient
+         << "\nFROM: " << tempMessage.recipient
+         << "\n--\nPAYLOAD:\n" << tempMessage.message
+         << "\n--\nTIMESTAMP: " << std::put_time(std::gmtime(&t), "%d.%m.%y|%H:%M:%S"  )
+    << std::endl;
+    return outs;
+}
