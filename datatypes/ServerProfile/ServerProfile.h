@@ -3,10 +3,12 @@
 
 #include <cstring>
 #include <ostream>
+#include <iomanip>
 
 class ServerProfile {
     public:
         ServerProfile();
+        // Maybe a clone/copy constructor??
         ServerProfile(int port, std::string ip, std::string group);
         virtual ~ServerProfile();
 
