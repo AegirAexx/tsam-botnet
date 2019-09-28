@@ -42,10 +42,10 @@ int main(int argc, char* argv[]){
     }
 
     // Create the message data variable.
-    std::string message;
+    std::string message{};
 
-    // I was not sure about buffer size. Better safe than sorry?
-    char res_server[8192];
+    // Buffer size for each packet.
+    char res_server[1024];
 
     // Infinite loop that takes user input.
     // It does not have any way of ending gracefully.
@@ -59,17 +59,26 @@ int main(int argc, char* argv[]){
             return(-1);
         }
 
-        // Initialise memory
-        memset(res_server, 0, 8192);
+        // Receive
+        int in_packet{};
 
-        // Recieve
-        if(recv(sock, res_server, 8192, 0) < 0){
-            perror("Failed to recieve");
-            return(-1);
-        }
+        do{
+            // Initialise memory
+            memset(res_server, 0, 1024);
+            // Get packet
+            in_packet = recv(sock, res_server, 1024, 0);
+            // Validate packet
+            if(in_packet < 0){
+                perror("Failed to receive");
+                return(-1);
+            }
+            // Write the buffer
+            std::cout << res_server;
 
-        // Write out the server response.
-        std::cout << res_server << std::endl;
+        } while(in_packet == 1024);
+        // Clear the buffer
+        std::cout << std::endl;
+
     }
 
     // Sadly the code will never get here because of the infinite loop.
