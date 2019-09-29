@@ -1,6 +1,6 @@
 // TODO: VALIDATION!!
 
-#include "ServerProfile.h"
+#include "../../include/model/ServerProfile.h"
 
 ServerProfile::ServerProfile(){
     this->port = 0;

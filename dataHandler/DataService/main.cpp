@@ -1,9 +1,9 @@
 // SECTION: All datatypes in the mix.
 
-#include "DataService.h"
-#include "SentMessage.h"
-#include "ReceivedMessage.h"
-#include "ServerProfile.h"
+#include "include/service/DataService.h"
+#include "include/model/SentMessage.h"
+#include "include/model/ReceivedMessage.h"
+#include "include/model/ServerProfile.h"
 
 #include <fstream>
 #include <iostream>

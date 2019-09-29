@@ -1,6 +1,6 @@
 // TODO: VALIDATION!!
 
-#include "ReceivedMessage.h"
+#include "../../include/model/ReceivedMessage.h"
 
 ReceivedMessage::ReceivedMessage(){
     strcpy (this->recipient, "NOID_NOID");
