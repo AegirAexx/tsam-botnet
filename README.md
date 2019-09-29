@@ -1,14 +1,14 @@
 # TODO
 ## Critical services
-- Validation services
-  - _RegEx well under way_, __Next simulate a message coming in through the pipes.__
-  - _string => byteVector => string_
-- Network logging
-  - _Three datatypes ready; ReceivedMessage, SentMessage and ServerProfile_
 - Data/File services
   - READ / WRITE ios::binary to file.
   - Three logs total, two for messages and one for servers.
 
+## UtiltyClass
+Add a utilty class. Features include getCommand() and the actions following that command. It then returns a convinient data format.
+
+## Networking layer
+Create a server/client hybrid. Look into select() to get away from threads.
 
 # TSAM - The Botnet Rises
 ## V_Group_4
