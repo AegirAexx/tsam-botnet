@@ -97,20 +97,20 @@ int main(int argc, char *argv[]){
     // }
 
 
-    std::string v{"01234;5678 AeGiR er ad fara heim;"};
-    std::string x{"01234 5678 AeGiR er ad fara heim"};
+    // std::string v{"01234;5678 AeGiR er ad fara heim;"};
+    // std::string x{"01234 5678 AeGiR er ad fara heim"};
 
-    if(std::any_of(std::begin(v), std::end(v), [](char c) { return c == ';'; })) {
-        std::cout << "Yes it has a \";\"" << std::endl;
-    }else{
-        std::cout << "No it does not have a \";\"" << std::endl;
-    }
+    // if(std::any_of(std::begin(v), std::end(v), [](char c) { return c == ';'; })) {
+    //     std::cout << "Yes it has a \";\"" << std::endl;
+    // }else{
+    //     std::cout << "No it does not have a \";\"" << std::endl;
+    // }
 
-    if(std::any_of(std::begin(x), std::end(x), [](char c) { return c == ';'; })) {
-        std::cout << "Yes it has a \";\"" << std::endl;
-    }else{
-        std::cout << "No it does not have a \";\"" << std::endl;
-    }
+    // if(std::any_of(std::begin(x), std::end(x), [](char c) { return c == ';'; })) {
+    //     std::cout << "Yes it has a \";\"" << std::endl;
+    // }else{
+    //     std::cout << "No it does not have a \";\"" << std::endl;
+    // }
 
 
     return 0;
