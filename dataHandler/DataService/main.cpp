@@ -4,6 +4,7 @@
 #include "include/model/SentMessage.h"
 #include "include/model/ReceivedMessage.h"
 #include "include/model/ServerProfile.h"
+#include "include/service/Utilities.h"
 
 #include <iostream>
 
@@ -78,6 +79,10 @@ int main(){
     // std::cout << "--------------------------------------------------------------------" << std::endl;
 
     // // COM: Utility class
+    Utilities u;
+
+    std::cout << "seconds since Epoch: " << u.getTimestamp() << std::endl;
+    std::cout << "Local ip address: " << u.getLocalIP() << std::endl;
 
 
     return 0;
