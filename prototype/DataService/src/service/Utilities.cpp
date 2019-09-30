@@ -23,16 +23,69 @@ std::string Utilities::getLocalIP() {
     return "error";
 }
 
-std::vector<std::string> split(std::string stringToSplit, char delimeter) {
+    // LISTSERVERS,<FROM_GROUP_ID>
+    // KEEPALIVE,<# of Messages>
+    // GET MSG,<GROUP_ID>
+    // SEND MSG,<FROM_GROUP_ID>,<TO_GROUP_ID>,<Message content>
+    // LEAVE,SERVER_IP,PORT
+    // STATUSREQ,FROM_GROUP
+    // CONNECT ??
 
-    if(std::any_of(std::begin(stringToSplit), std::end(stringToSplit), [=](char c) { return c == delimeter; })) {
-        std::cout << "Yes it has a: " << delimeter << std::endl;
+int Utilities::idCommand(std::string payload){
+
+    // !isComma?
+    // if(!std::any_of(std::begin(payload), std::end(payload), [=](char c) { return c == ','; })) {
+    //     // std::cout << "no " << ',' << std::endl;
+    //     // ERROR
+    // }
+
+    // ((SEND|GET)[\s-_]?MSG|KEEPALIVE|CONNECT|LEAVE|STATUSREQ|LISTSERVERS)
+
+    // std::regex rx("^[A-Za-z\s-_]+(?=,)");
+    std::regex rx("^[A-Za-z\\s]+(?=,)");
+    std::smatch match;
+    std::regex_search(payload, match, rx);
+
+    if(!match.empty()){
+        std::string command(match.str());
+        std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
+        if(command == "SEND MSG"){
+            std::cout << "SEND MSG - REGISTERED - COMMAND #1 " + match.str() << std::endl;
+            return 1;
+        } else if(command == "GET MSG"){
+            std::cout << "GET MSG - REGISTERED - COMMAND #2 " + match.str() << std::endl;
+            return 2;
+        } else if(command == "KEEPALIVE"){
+            std::cout << "KEEPALIVE - REGISTERED - COMMAND #3 " + match.str() << std::endl;
+            return 3;
+        } else if(command == "CONNECT"){
+            std::cout << "CONNECT - REGISTERED - COMMAND #4 " + match.str() << std::endl;
+            return 4;
+        } else if(command == "LEAVE"){
+            std::cout << "LEAVE - REGISTERED - COMMAND #5 " + match.str() << std::endl;
+            return 5;
+        } else if(command == "STATUSREQ"){
+            std::cout << "STATUSREQ - REGISTERED - COMMAND #6 " + match.str() << std::endl;
+            return 6;
+        } else if(command == "LISTSERVERS"){
+            std::cout << "LISTSERVERS - REGISTERED - COMMAND #7 " + match.str() << std::endl;
+            return 7;
+        } else {
+            std::cout << "UNKNOWN COMMAND - MADE IT THROUGH THE FILTER" << std::endl;
+        }
+
     }
+    std::cout << "No command found in payload" << std::endl;
+    return -1;
+ }
 
 
+// PART: PRIVATE
+
+std::vector<std::string> Utilities::split(std::string stringToSplit, char delimeter) {
     std::stringstream ss(stringToSplit);
-    std::string item;
+    std::string word;
 	std::vector<std::string> splittedStrings;
-    while (std::getline(ss, item, delimeter)) splittedStrings.push_back(item);
-	return splittedStrings;
+    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
+    return splittedStrings;
 }

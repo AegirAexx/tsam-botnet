@@ -83,6 +83,36 @@ int main(){
 
     std::cout << "seconds since Epoch: " << u.getTimestamp() << std::endl;
     std::cout << "Local ip address: " << u.getLocalIP() << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+
+    std::string command1("LISTSERVERS,V_GROUP_4");
+    std::string command2("KEEPALIVE,24");
+    std::string command3("GET MSG,V_GROUP_4");
+    std::string command4("SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! For real, do not trust GlaDos. Stay Safe.");
+    std::string command5("LEAVE," + u.getLocalIP() + ",21341");
+    std::string command6("STATUSREQ,V_GROUP_4");
+    std::string command7("CONNECT, V_GROUP_4");
+    std::string command8("TYPPI");
+    std::string command9("TYPPI,RASS");
+
+    std::cout << "\n\nINPUT #1 (LISTSERVERS,V_GROUP_4): " << std::endl;
+    u.idCommand(command1);
+    std::cout << "\n\nINPUT #2 (KEEPALIVE,24): " << std::endl;
+    u.idCommand(command2);
+    std::cout << "\n\nINPUT #3 (GET MSG,V_GROUP_4): " << std::endl;
+    u.idCommand(command3);
+    std::cout << "\n\nINPUT #4 (SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! For real, do not trust GlaDos. Stay Safe.): " << std::endl;
+    u.idCommand(command4);
+    std::cout << "\n\nINPUT #5 (LEAVE," + u.getLocalIP() + ",21341): " << std::endl;
+    u.idCommand(command5);
+    std::cout << "\n\nINPUT #6 (STATUSREQ,V_GROUP_4): " << std::endl;
+    u.idCommand(command6);
+    std::cout << "\n\nINPUT #7 (CONNECT, V_GROUP_4): " << std::endl;
+    u.idCommand(command7);
+    std::cout << "\n\nINPUT #8 (TYPPI): " << std::endl;
+    u.idCommand(command8);
+    std::cout << "\n\nINPUT #9 (TYPPI,RASS): " << std::endl;
+    u.idCommand(command9);
 
 
     return 0;

@@ -2,6 +2,7 @@
 #define UTILITIES_H
 
 #include <iostream>
+#include <regex>
 #include <ctime>
 #include <chrono>
 #include <iomanip>
@@ -19,9 +20,10 @@ class Utilities {
         Utilities();
         std::size_t getTimestamp();
         std::string getLocalIP();
+        int idCommand(std::string payload);
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
 
-    // private:
+    private:
 
 };
 
