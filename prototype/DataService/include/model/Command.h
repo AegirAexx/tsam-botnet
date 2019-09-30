@@ -5,25 +5,21 @@
 // #include <chrono>
 // #include <cstring>
 #include <ostream>
-#include "../service/Utilities.h"
+#include <vector>
 // #include <iomanip>
 
 class Command {
     public:
-        Command();
-        Command(std::string raw);
-        // Command(...);
+        Command(int commandID, std::vector<std::string> arguments);
         virtual ~Command();
 
         friend std::ostream& operator << (std::ostream& outs, const Command& command);
 
     private:
     int commandID;
-    std::string raw;
     std::string first;
     std::string second;
     std::string third;
-    Utilities u;
 
 
 };

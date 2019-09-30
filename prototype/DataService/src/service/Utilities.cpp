@@ -56,8 +56,16 @@ void Utilities::processPayload(const std::string payload) {
         std::regex semiColon(";");
         std::regex_replace(temp, semiColon, ",");
     }
-    
+
+    /* Do I need a fixed size for the array?? Are there ever more than three arguments? */
+
     auto strings{split(temp, ',')};
+
+    strings.erase(strings.begin());
+
+    std::cout << "commandTypeID: " << commandID << std::endl;
+
+    for(auto i : strings) std::cout << i << std::endl;
 
 }
 

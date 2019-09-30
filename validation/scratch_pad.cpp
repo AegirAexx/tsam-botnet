@@ -112,6 +112,9 @@ int main(int argc, char *argv[]){
     //     std::cout << "No it does not have a \";\"" << std::endl;
     // }
 
+    std::vector<std::string> asdf;
+
+    std::cout << asdf.max_size() << std::endl;
 
     return 0;
 }

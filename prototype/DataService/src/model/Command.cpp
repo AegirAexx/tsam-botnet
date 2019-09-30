@@ -2,11 +2,9 @@
 
 #include "../../include/model/Command.h"
 
-Command::Command(){}
-Command::Command(std::string raw){
-    this->raw = raw;
-    this->commandID = u.idCommand(raw);
-
+Command::Command(int commandID, std::vector<std::string> arguments) {
+    this->commandID = commandID;
+    // Here we need some logic if there are multiple commands ";"
 }
 
 Command::~Command() {}

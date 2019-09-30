@@ -1,7 +1,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include "../model/Command.h"
+/* #include "../model/Command.h" */
 
 #include <iostream>
 #include <regex>
