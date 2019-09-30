@@ -95,6 +95,16 @@ int main(){
     std::string command8("TYPPI");
     std::string command9("TYPPI,RASS");
 
+    LISTSERVERS,V_GROUP_4
+    KEEPALIVE,24
+    GET MSG,V_GROUP_4
+    SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! For real, do not trust GlaDos. Stay Safe.
+    LEAVE," + u.getLocalIP() + ",21341
+    STATUSREQ,V_GROUP_4
+    CONNECT, V_GROUP_4
+    TYPPI
+    TYPPI,RASS
+
     std::cout << "\nINPUT #1 (LISTSERVERS,V_GROUP_4): " << u.idCommand(command1) << std::endl;
     std::cout << "\nINPUT #2 (KEEPALIVE,24): " << u.idCommand(command2) << std::endl;
     std::cout << "\nINPUT #3 (GET MSG,V_GROUP_4): " << u.idCommand(command3) << std::endl;
@@ -108,6 +118,9 @@ int main(){
     std::cout << "--------------------------------------------------------------------" << std::endl;
 
     u.listCommands();
+
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+
 
     return 0;
 }

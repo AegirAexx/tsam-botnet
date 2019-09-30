@@ -23,27 +23,6 @@ std::string Utilities::getLocalIP() {
     return "error";
 }
 
-int Utilities::idCommand(const std::string payload) {
-
-    std::regex rx("^[A-Za-z\\s]+(?=,)");
-    std::smatch match;
-    std::regex_search(payload, match, rx);
-
-    if(!match.empty()){
-        std::string command(match.str());
-        std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
-        if(command == "SEND MSG") return 1;
-        else if(command == "GET MSG") return 2;
-        else if(command == "KEEPALIVE") return 3;
-        else if(command == "CONNECT") return 4;
-        else if(command == "LEAVE") return 5;
-        else if(command == "STATUSREQ") return 6;
-        else if(command == "LISTSERVERS") return 7;
-        else return 0;
-    }
-    return -1;
-}
-
 // DEBUG:
  void Utilities::listCommands() {
     std::cout << "############ KNOWN COMMANDS ############" << std::endl;
@@ -59,8 +38,53 @@ int Utilities::idCommand(const std::string payload) {
     std::cout << "########################################" << std::endl;
 }
 
+// (?<=,)\s?[\w+\.]+
+
+// TODO: WIP WIP WIP WIP
+void Utilities::processPayload(const std::string payload) {
+
+    // std::vector<std::string> strings;
+    std::string temp(payload);
+
+    int commandID{idCommand(temp)};
+
+    if(commandID <= 0){
+        // NOT A COMMAND
+    }
+
+    if(std::any_of(std::begin(temp), std::end(temp), [](char c) { return c == ';'; })) {
+        std::regex semiColon(";");
+        std::regex_replace(temp, semiColon, ",");
+    }
+    
+    auto strings{split(temp, ',')};
+
+}
 
 // PART: PRIVATE
+
+int Utilities::idCommand(const std::string payload) {
+
+    std::regex rx("^[\\w\\s]+(?=,)");
+    std::smatch match;
+    std::regex_search(payload, match, rx);
+
+    if(!match.empty()){
+        std::string command(match.str());
+        std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
+        if(command == "SEND MSG") return 1;
+        else if(command == "GET MSG") return 2;
+        else if(command == "KEEPALIVE") return 3;
+        else if(command == "CONNECT") return 4;
+        else if(command == "LEAVE") return 5;
+        else if(command == "STATUSREQ") return 6;
+        else if(command == "LISTSERVERS") return 7;
+        else if(command == "SERVERS") return 8;
+        else if(command == "STATUSRESP") return 9;
+        else return 0;
+    } else return -1;
+}
+
 
 std::vector<std::string> Utilities::split(std::string stringToSplit, char delimeter) {
     std::stringstream ss(stringToSplit);

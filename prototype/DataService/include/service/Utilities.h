@@ -1,6 +1,8 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include "../model/Command.h"
+
 #include <iostream>
 #include <regex>
 #include <ctime>
@@ -23,6 +25,7 @@ class Utilities {
         int idCommand(const std::string payload);
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
         void listCommands();
+        void processPayload(const std::string payload);
 
     private:
 
