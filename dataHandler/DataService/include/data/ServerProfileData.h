@@ -1,14 +1,14 @@
-#ifndef DATASERVICE_H
-#define DATASERVICE_H
+#ifndef SERVERPROFILEDATA_H
+#define SERVERPROFILEDATA_H
 
 #include <fstream>
 #include <vector>
 #include "../model/ServerProfile.h"
 
 
-class DataService{
+class ServerProfileData{
     public:
-        DataService();
+        ServerProfileData();
         std::vector<ServerProfile> getServers();
         // Set as void, but maybe should be an int? For error checking?
         void write(ServerProfile server);
@@ -20,4 +20,4 @@ class DataService{
 
 };
 
-#endif // DATASERVICE_H
+#endif // SERVERPROFILEDATA_H
