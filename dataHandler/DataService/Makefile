@@ -20,5 +20,5 @@ clean:
 		rm -v x.out
 
 # Wipe local memory, ALL DATA WILL BE REMOVED!
-clear:
+memory:
 		rm -v data/*

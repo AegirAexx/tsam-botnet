@@ -1,14 +1,47 @@
 # TODO
 ## Critical services
-- Data/File services
-  - READ / WRITE ios::binary to file.
-  - Three logs total, two for messages and one for servers.
-
-## UtiltyClass
-Add a utilty class. Features include getCommand() and the actions following that command. It then returns a convinient data format.
+EMPTY
 
 ## Networking layer
 Create a server/client hybrid. Look into select() to get away from threads.
+
+## Folder structure
+```BASH
+.
+├── data
+├── include
+│   ├── data
+│   │   └── ServerProfileData.h
+│   ├── model
+│   │   ├── ReceivedMessage.h
+│   │   ├── SentMessage.h
+│   │   └── ServerProfile.h
+│   ├── service
+│   │   └── Utilities.h
+│   └── ui
+├── main.cpp
+├── Makefile
+└── src
+    ├── data
+    │   └── ServerProfileData.cpp
+    ├── model
+    │   ├── ReceivedMessage.cpp
+    │   ├── SentMessage.cpp
+    │   └── ServerProfile.cpp
+    ├── service
+    │   └── Utilities.cpp
+    └── ui
+```
+
+## Usage
+Compile:
+- `make`
+
+Remove:
+- `make clean`
+
+Wipe local persistent memory:
+- `make memory`
 
 # TSAM - The Botnet Rises
 ## V_Group_4
