@@ -2,7 +2,14 @@
 # Variables
 CC=g++
 FLAGS=-O2 -g -Wall -std=gnu++17
-NERD=&& echo "w00t!!!1!" | toilet --gay
+NERD=&& echo "SUCCESS!!" | toilet --gay
+# Verbosity
+V = 0
+ACTUAL_CC := $(CC)
+CC_0 = @echo "\nCompiling ...\n"; $(ACTUAL_CC)
+CC_1 = $(ACTUAL_CC)
+CC = $(CC_$(V))
+
 
 #Default
 all:
@@ -15,5 +22,3 @@ clean:
 # Wipe local memory, ALL DATA WILL BE REMOVED!
 clear:
 		rm -v data/*
-
-#
