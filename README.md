@@ -2,7 +2,8 @@
 
 # TODO
 ## Critical services
-EMPTY
+Command processing.
+- WIP adding a utility function.
 
 ## Networking layer
 Create a server/client hybrid. Look into select() to get away from threads.
