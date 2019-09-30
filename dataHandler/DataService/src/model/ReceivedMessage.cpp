@@ -6,7 +6,6 @@ ReceivedMessage::ReceivedMessage(){
     strcpy (this->recipient, "NOID_NOID");
     strcpy (this->sender, "NOID_NOID");
     memset (this->message, 0, 5000);
-    // this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     this->timeStamp = 0;
 }
 
