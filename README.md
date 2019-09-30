@@ -1,3 +1,5 @@
+# TSAM - The Botnet Rises
+
 # TODO
 ## Critical services
 EMPTY
@@ -35,20 +37,18 @@ Create a server/client hybrid. Look into select() to get away from threads.
 
 ## Usage
 Compile:
-- `make`
+
+> `make`
 
 Remove:
-- `make clean`
+
+> `make clean`
 
 Wipe local persistent memory:
-- `make memory`
 
-# TSAM - The Botnet Rises
-## V_Group_4
-Ægir Tómasson (aegir15)<br>
-Dagur Kristjánsson (dagur17)
+> `make memory`
 
-## Usage of accompanying teacher code
+### Usage of accompanying teacher code
 > `g++ -std=c++11 client.cpp -lpthread -o client`
 
 > `g++ -std=c+=11 server.cpp o server`
@@ -69,6 +69,11 @@ Commands on client:
   - Send message to name
 - `MSG ALL <message>`
   - Send message to all connected
+
+
+## V_Group_4
+Ægir Tómasson (aegir15)<br>
+Dagur Kristjánsson (dagur17)
 
 # The handout PDF
 
@@ -142,9 +147,7 @@ The server should support at least the following commands with other servers.
 
 Reply with servers response (below)
 
----
-
-> `SERVERS`
+`SERVERS`
 
 Provide a list of directly connected - i.e. 1-hop, servers to this server.
 
@@ -182,7 +185,6 @@ Disconnect from server at specified port.
 
 Reply with `STATUSRESP` as below.
 
----
 
 > `STATUSRESP,FROM_GROUP,TO_GROUP,<server, msgs held>,...`
 
