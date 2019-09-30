@@ -23,25 +23,8 @@ std::string Utilities::getLocalIP() {
     return "error";
 }
 
-    // LISTSERVERS,<FROM_GROUP_ID>
-    // KEEPALIVE,<# of Messages>
-    // GET MSG,<GROUP_ID>
-    // SEND MSG,<FROM_GROUP_ID>,<TO_GROUP_ID>,<Message content>
-    // LEAVE,SERVER_IP,PORT
-    // STATUSREQ,FROM_GROUP
-    // CONNECT ??
+int Utilities::idCommand(const std::string payload) {
 
-int Utilities::idCommand(std::string payload){
-
-    // !isComma?
-    // if(!std::any_of(std::begin(payload), std::end(payload), [=](char c) { return c == ','; })) {
-    //     // std::cout << "no " << ',' << std::endl;
-    //     // ERROR
-    // }
-
-    // ((SEND|GET)[\s-_]?MSG|KEEPALIVE|CONNECT|LEAVE|STATUSREQ|LISTSERVERS)
-
-    // std::regex rx("^[A-Za-z\s-_]+(?=,)");
     std::regex rx("^[A-Za-z\\s]+(?=,)");
     std::smatch match;
     std::regex_search(payload, match, rx);
@@ -49,35 +32,32 @@ int Utilities::idCommand(std::string payload){
     if(!match.empty()){
         std::string command(match.str());
         std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
-        if(command == "SEND MSG"){
-            std::cout << "SEND MSG - REGISTERED - COMMAND #1 " + match.str() << std::endl;
-            return 1;
-        } else if(command == "GET MSG"){
-            std::cout << "GET MSG - REGISTERED - COMMAND #2 " + match.str() << std::endl;
-            return 2;
-        } else if(command == "KEEPALIVE"){
-            std::cout << "KEEPALIVE - REGISTERED - COMMAND #3 " + match.str() << std::endl;
-            return 3;
-        } else if(command == "CONNECT"){
-            std::cout << "CONNECT - REGISTERED - COMMAND #4 " + match.str() << std::endl;
-            return 4;
-        } else if(command == "LEAVE"){
-            std::cout << "LEAVE - REGISTERED - COMMAND #5 " + match.str() << std::endl;
-            return 5;
-        } else if(command == "STATUSREQ"){
-            std::cout << "STATUSREQ - REGISTERED - COMMAND #6 " + match.str() << std::endl;
-            return 6;
-        } else if(command == "LISTSERVERS"){
-            std::cout << "LISTSERVERS - REGISTERED - COMMAND #7 " + match.str() << std::endl;
-            return 7;
-        } else {
-            std::cout << "UNKNOWN COMMAND - MADE IT THROUGH THE FILTER" << std::endl;
-        }
-
+        if(command == "SEND MSG") return 1;
+        else if(command == "GET MSG") return 2;
+        else if(command == "KEEPALIVE") return 3;
+        else if(command == "CONNECT") return 4;
+        else if(command == "LEAVE") return 5;
+        else if(command == "STATUSREQ") return 6;
+        else if(command == "LISTSERVERS") return 7;
+        else return 0;
     }
-    std::cout << "No command found in payload" << std::endl;
     return -1;
- }
+}
+
+// DEBUG:
+ void Utilities::listCommands() {
+    std::cout << "############ KNOWN COMMANDS ############" << std::endl;
+    std::cout << "~ NO COMMAND - #(-1)" << std::endl;
+    std::cout << "~ UNKNOWN COMMAND - MADE IT THROUGH THE FILTER - COMMAND #(0)" << std::endl;
+    std::cout << "SEND MSG - COMMAND #(1)" << std::endl;
+    std::cout << "GET MSG - COMMAND #(2)" << std::endl;
+    std::cout << "KEEPALIVE - COMMAND #(3)" << std::endl;
+    std::cout << "CONNECT - COMMAND #(4)" << std::endl;
+    std::cout << "LEAVE - COMMAND #(5)" << std::endl;
+    std::cout << "STATUSREQ - COMMAND #(6)" << std::endl;
+    std::cout << "LISTSERVERS - COMMAND #(7)" << std::endl;
+    std::cout << "########################################" << std::endl;
+}
 
 
 // PART: PRIVATE

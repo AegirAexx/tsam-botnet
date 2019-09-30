@@ -20,8 +20,9 @@ class Utilities {
         Utilities();
         std::size_t getTimestamp();
         std::string getLocalIP();
-        int idCommand(std::string payload);
+        int idCommand(const std::string payload);
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
+        void listCommands();
 
     private:
 
