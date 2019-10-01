@@ -11,7 +11,7 @@ ReceivedMessage::ReceivedMessage(){
 
 ReceivedMessage::ReceivedMessage(std::string recipient, std::string sender, std::string message, size_t timeStamp){
     strcpy (this->recipient, recipient.c_str());
-    strcpy (this->recipient, sender.c_str());
+    strcpy (this->sender, sender.c_str());
     memset (this->message, 0, 5000);
     strcpy (this->message, message.c_str());
     this->timeStamp = timeStamp;
