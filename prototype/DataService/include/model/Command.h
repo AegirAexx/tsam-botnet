@@ -3,23 +3,27 @@
 
 // #include <ctime>
 // #include <chrono>
-// #include <cstring>
+#include <cstring>
 #include <ostream>
 #include <vector>
 // #include <iomanip>
 
 class Command {
     public:
-        Command(int commandID, std::vector<std::string> arguments);
-        virtual ~Command();
+        Command(int commandID, std::string arguments);
 
         friend std::ostream& operator << (std::ostream& outs, const Command& command);
 
+        // Get argument [number] / Gets args from buffer.
+        // std::string first;
+        // std::string second;
+        // std::string third;
+
     private:
-    int commandID;
-    std::string first;
-    std::string second;
-    std::string third;
+        int commandID;
+        int argCount;
+        char buffer[4096];
+
 
 
 };

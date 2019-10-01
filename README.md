@@ -156,7 +156,7 @@ The first IP address in the list should be the IP of the connected server.
 
 Servers should be specified as `GROUP_ID`, the `HOST_IP`, and `PORT` they will accept connections on, comma separated within the message, each server separated by `;`, eg:
 
-> `SERVERS,V_GROUP_1,130.208.243.61,8888;V_GROUP_2,10.2.132.12,888;`
+> `SERVERS,V_GROUP_1,130.208.243.61,8888;V_GROUP_2,10.2.132.12,8888;`
 
 ---
 

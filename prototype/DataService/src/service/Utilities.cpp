@@ -38,35 +38,37 @@ std::string Utilities::getLocalIP() {
     std::cout << "########################################" << std::endl;
 }
 
-// (?<=,)\s?[\w+\.]+
+std::vector<Command> Utilities::processPayload(const std::string payload) {
 
-// TODO: WIP WIP WIP WIP
-void Utilities::processPayload(const std::string payload) {
-
-    // std::vector<std::string> strings;
+    std::vector<std::string> args;
     std::string temp(payload);
-
     int commandID{idCommand(temp)};
+    std::vector<Command> commands;
 
-    if(commandID <= 0){
-        // NOT A COMMAND
+    if(commandID > 0) {
+        if(std::any_of(std::begin(temp), std::end(temp), [](char c) { return c == ';'; })) {
+            std::regex rx(",");
+            args = split(temp, ';');
+            std::smatch match;
+            std::regex_search(args.at(0), match, rx);
+            args.at(0) = match.suffix();
+            for(size_t i {0}; i < args.size(); ++i){
+                Command command(commandID, args[i]);
+                commands.push_back(command);
+            }
+        } else {
+            args = split(temp, ',');
+            args.erase(args.begin());
+            std::string tempSingle;
+            for(auto i : args) {
+                tempSingle += (i + ",");
+            }
+            tempSingle.pop_back();
+            Command command(commandID, tempSingle);
+            commands.push_back(command);
+        }
     }
-
-    if(std::any_of(std::begin(temp), std::end(temp), [](char c) { return c == ';'; })) {
-        std::regex semiColon(";");
-        std::regex_replace(temp, semiColon, ",");
-    }
-
-    /* Do I need a fixed size for the array?? Are there ever more than three arguments? */
-
-    auto strings{split(temp, ',')};
-
-    strings.erase(strings.begin());
-
-    std::cout << "commandTypeID: " << commandID << std::endl;
-
-    for(auto i : strings) std::cout << i << std::endl;
-
+    return commands;
 }
 
 // PART: PRIVATE
@@ -93,7 +95,6 @@ int Utilities::idCommand(const std::string payload) {
     } else return -1;
 }
 
-
 std::vector<std::string> Utilities::split(std::string stringToSplit, char delimeter) {
     std::stringstream ss(stringToSplit);
     std::string word;
@@ -101,3 +102,11 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
     return splittedStrings;
 }
+
+// std::regex semiColon(";");
+
+// std::regex comma(",");
+
+// std::regex_replace(temp, semiColon, ",");
+
+// temp = strings.at(0)

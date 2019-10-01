@@ -83,6 +83,7 @@ int main(){
 
     std::cout << "seconds since Epoch: " << u.getTimestamp() << std::endl;
     std::cout << "Local ip address: " << u.getLocalIP() << std::endl;
+
     std::cout << "--------------------------------------------------------------------" << std::endl;
 
     std::string command1("LISTSERVERS,V_GROUP_4");
@@ -94,37 +95,30 @@ int main(){
     std::string command7("CONNECT, V_GROUP_4");
     std::string command8("TYPPI");
     std::string command9("TYPPI,RASS");
-
-    /* LISTSERVERS,V_GROUP_4 */
-    /* KEEPALIVE,24 */
-    /* GET MSG,V_GROUP_4 */
-    /* SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! For real, do not trust GlaDos. Stay Safe. */
-    /* LEAVE," + u.getLocalIP() + ",21341 */
-    /* STATUSREQ,V_GROUP_4 */
-    /* CONNECT, V_GROUP_4 */
-    /* TYPPI */
-    /* TYPPI,RASS */
-
-    /* std::cout << "\nINPUT #1 (LISTSERVERS,V_GROUP_4): " << u.idCommand(command1) << std::endl; */
-    /* std::cout << "\nINPUT #2 (KEEPALIVE,24): " << u.idCommand(command2) << std::endl; */
-    /* std::cout << "\nINPUT #3 (GET MSG,V_GROUP_4): " << u.idCommand(command3) << std::endl; */
-    /* std::cout << "\nINPUT #4 (SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! For real, do not trust GlaDos. Stay Safe.): " << u.idCommand(command4) << std::endl; */
-    /* std::cout << "\nINPUT #5 (LEAVE," + u.getLocalIP() + ",21341): " << u.idCommand(command5) << std::endl; */
-    /* std::cout << "\nINPUT #6 (STATUSREQ,V_GROUP_4): " << u.idCommand(command6) << std::endl; */
-    /* std::cout << "\nINPUT #7 (CONNECT, V_GROUP_4): " << u.idCommand(command7) << std::endl; */
-    /* std::cout << "\nINPUT #8 (TYPPI): " << u.idCommand(command8) << std::endl; */
-    /* std::cout << "\nINPUT #9 (TYPPI,RASS): " << u.idCommand(command9) << std::endl; */
+    std::string command0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
 
     std::cout << "--------------------------------------------------------------------" << std::endl;
-
     u.listCommands();
-
     std::cout << "--------------------------------------------------------------------" << std::endl;
-
     u.processPayload(command4);
-
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command6);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command2);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command9);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command1);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command3);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command8);
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    u.processPayload(command0);
     std::cout << "--------------------------------------------------------------------" << std::endl;
 
+    // const std::string fnames[] = {"foo.txt", "bar.txt", "baz.dat", "zoidberg"};
+    // for(auto i : fnames) std::cout << i << std::endl;
 
     return 0;
 }
