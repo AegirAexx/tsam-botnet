@@ -14,11 +14,6 @@ class Command {
 
         friend std::ostream& operator << (std::ostream& outs, const Command& command);
 
-        // Get argument [number] / Gets args from buffer.
-        // std::string first;
-        // std::string second;
-        // std::string third;
-
     private:
         int commandID;
         int argCount;
