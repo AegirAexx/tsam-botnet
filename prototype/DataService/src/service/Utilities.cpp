@@ -102,11 +102,3 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
     return splittedStrings;
 }
-
-// std::regex semiColon(";");
-
-// std::regex comma(",");
-
-// std::regex_replace(temp, semiColon, ",");
-
-// temp = strings.at(0)

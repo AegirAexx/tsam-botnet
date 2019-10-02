@@ -1,6 +1,8 @@
 // SECTION: All datatypes in the mix.
 
 #include "include/data/ServerProfileData.h"
+#include "include/data/ReceivedMessageData.h"
+#include "include/data/SentMessageData.h"
 #include "include/model/SentMessage.h"
 #include "include/model/ReceivedMessage.h"
 #include "include/model/ServerProfile.h"
@@ -43,82 +45,88 @@ int main(){
 
 
     // // COM: Server datatype - Two constructors
-    // ServerProfile server1(4084, "123.245.130.251", "V_GROUP_111");
+    ServerProfile server1(4084, "123.245.130.251", "V_GROUP_111");
     // ServerProfile server2(4067, "133.225.120.261", "V_GROUP_121");
     // ServerProfile server3(4012, "153.255.110.271", "V_GROUP_131");
     // ServerProfile server4;
 
-    // std::cout << server1;
-    // std::cout << server2;
-    // std::cout << server3;
-    // std::cout << server4;
+    std::cout << "Written from local: " << server1;
+    // std::cout << "Written from local: " << server2;
+    // std::cout << "Written from local: " << server3;
+    // std::cout << "Written from local: " << server4;
     // std::cout << "--------------------------------------------------------------------" << std::endl;
 
-    // // COM: DataService layer - Member functions
-    // ServerProfileData data;
+    // COM: DataService layer - Member functions
+    ServerProfileData data;
 
-    // std::cout << "writing data..." << std::endl;
+    std::cout << "writing data..." << std::endl;
 
-    // data.write(server1);
+    data.write(server1);
     // data.write(server2);
     // data.write(server3);
     // data.write(server4);
 
-    // std::cout << "writing data... DONE!" << std::endl;
+    std::cout << "writing data... DONE!" << std::endl;
 
-    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
 
-    // std::cout << "printing data...\n" << std::endl;
+    std::cout << "printing data...\n" << std::endl;
 
-    // auto servers = data.getServers();
-    // for(auto i: servers) std::cout << i;
-    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    auto servers = data.getServers();
+    for(auto i: servers) std::cout << i;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
 
     // std::cout << std::boolalpha;
     // std::cout << "checkFile with true: " << data.checkFile(true) << std::endl;
     // std::cout << "--------------------------------------------------------------------" << std::endl;
 
     // // COM: Utility class
-    Utilities u;
+    // Utilities u;
 
-    std::cout << "seconds since Epoch: " << u.getTimestamp() << std::endl;
-    std::cout << "Local ip address: " << u.getLocalIP() << std::endl;
+    // std::cout << "seconds since Epoch: " << u.getTimestamp() << std::endl;
+    // std::cout << "Local ip address: " << u.getLocalIP() << std::endl;
 
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
 
-    std::string command1("LISTSERVERS,V_GROUP_4");
-    std::string command2("KEEPALIVE,24");
-    std::string command3("GET MSG,V_GROUP_4");
-    std::string command4("SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! Do not trust GlaDos. Stay Safe.");
-    std::string command5("LEAVE," + u.getLocalIP() + ",21341");
-    std::string command6("STATUSREQ,V_GROUP_4");
-    std::string command7("CONNECT, V_GROUP_4");
-    std::string command8("TYPPI");
-    std::string command9("TYPPI,RASS");
-    std::string command0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
+    // std::string command1("LISTSERVERS,V_GROUP_4");
+    // std::string command2("KEEPALIVE,24");
+    // std::string command3("GET MSG,V_GROUP_4");
+    // std::string command4("SEND MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! Do not trust GlaDos. Stay Safe.");
+    // std::string command5("LEAVE," + u.getLocalIP() + ",21341");
+    // std::string command6("STATUSREQ,V_GROUP_4");
+    // std::string command7("CONNECT, V_GROUP_4");
+    // std::string command8("TYPPI");
+    // std::string command9("TYPPI,RASS");
+    // std::string command0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
 
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.listCommands();
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command4);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command6);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command2);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command9);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command1);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command3);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command8);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
-    u.processPayload(command0);
-    std::cout << "--------------------------------------------------------------------" << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // u.listCommands();
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto a = u.processPayload(command4);
+    // for(auto i : a) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto b = u.processPayload(command6);
+    // for(auto i : b) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto c = u.processPayload(command2);
+    // for(auto i : c) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto d = u.processPayload(command9);
+    // for(auto i : d) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto e = u.processPayload(command1);
+    // for(auto i : e) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto f = u.processPayload(command3);
+    // for(auto i : f) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto g = u.processPayload(command8);
+    // for(auto i : g) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
+    // auto h = u.processPayload(command0);
+    // for(auto i : h) std::cout << i << std::endl;
+    // std::cout << "--------------------------------------------------------------------" << std::endl;
 
-    // const std::string fnames[] = {"foo.txt", "bar.txt", "baz.dat", "zoidberg"};
-    // for(auto i : fnames) std::cout << i << std::endl;
 
     return 0;
 }

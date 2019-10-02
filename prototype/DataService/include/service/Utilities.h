@@ -26,7 +26,7 @@ class Utilities {
         int idCommand(const std::string payload);
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
         void listCommands();
-        std::vector<Command> Utilities::processPayload(const std::string payload);
+        std::vector<Command> processPayload(const std::string payload);
 
     private:
 
