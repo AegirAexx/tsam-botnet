@@ -58,23 +58,47 @@ int main(){
 
     // COM: DataService layer - Member functions
     ServerProfileData data;
-
     std::cout << "writing data..." << std::endl;
-
     data.write(server1);
-    // data.write(server2);
-    // data.write(server3);
-    // data.write(server4);
-
     std::cout << "writing data... DONE!" << std::endl;
-
     std::cout << "--------------------------------------------------------------------" << std::endl;
-
     std::cout << "printing data...\n" << std::endl;
-
-    auto servers = data.getServers();
-    for(auto i: servers) std::cout << i;
+    auto servers1 = data.getServers();
+    for(auto i: servers1) std::cout << i;
     std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "writing data..." << std::endl;
+    data.write(server1);
+    std::cout << "writing data... DONE!" << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "printing data...\n" << std::endl;
+    auto servers2 = data.getServers();
+    for(auto i: servers2) std::cout << i;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "writing data..." << std::endl;
+    data.write(server1);
+    std::cout << "writing data... DONE!" << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "printing data...\n" << std::endl;
+    auto servers3 = data.getServers();
+    for(auto i: servers3) std::cout << i;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "writing data..." << std::endl;
+    data.write(server1);
+    std::cout << "writing data... DONE!" << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "printing data...\n" << std::endl;
+    auto servers4 = data.getServers();
+    for(auto i: servers4) std::cout << i;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "writing data..." << std::endl;
+    data.write(server1);
+    std::cout << "writing data... DONE!" << std::endl;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+    std::cout << "printing data...\n" << std::endl;
+    auto servers5 = data.getServers();
+    for(auto i: servers5) std::cout << i;
+    std::cout << "--------------------------------------------------------------------" << std::endl;
+
 
     // std::cout << std::boolalpha;
     // std::cout << "checkFile with true: " << data.checkFile(true) << std::endl;

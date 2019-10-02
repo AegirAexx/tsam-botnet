@@ -31,7 +31,7 @@ std::vector<ReceivedMessage> ReceivedMessageData::getReceivedMessages(){
 void ReceivedMessageData::write(ReceivedMessage server){
 
     std::ofstream output;
-    output.open("data/ServerProfileData", std::ios::binary|std::ios::app);
+    output.open("data/ServerProfileData.dat", std::ios::binary|std::ios::app);
     output.write((char*)(&server), sizeof(ReceivedMessage));
     output.close();
 

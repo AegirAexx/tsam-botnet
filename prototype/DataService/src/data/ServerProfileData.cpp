@@ -1,30 +1,48 @@
 
 #include "../../include/data/ServerProfileData.h"
 
-ServerProfileData::ServerProfileData(){}
+ServerProfileData::ServerProfileData(){
+    dataPointer = nullptr;
+}
+
+ServerProfileData::~ServerProfileData(){
+    // delete [] dataPointer; // HACK:
+}
 
 std::vector<ServerProfile> ServerProfileData::getServers(){
     std::vector<ServerProfile> servers;
     std::ifstream input;
+
     input.open("data/ServerProfileData.dat", std::ios::binary);
+
     input.seekg(0, input.end);
+
     size_t totalLogged {input.tellg() / sizeof(ServerProfile)};
+
     input.seekg(0, input.beg);
-    ServerProfile *dataPointer = new ServerProfile[totalLogged];
+
+    // ServerProfile *dataPointer = new ServerProfile[totalLogged];
+    dataPointer = new ServerProfile[totalLogged];
+
     input.read((char*)dataPointer, sizeof(ServerProfile) * totalLogged);
     input.close();
+
     for(size_t i{0}; i < totalLogged; ++i){
         servers.push_back(dataPointer[i]);
     }
+
     // TODO: MEMORY LEAKS??
-    // delete [] dataPointer; // BUG:
+    delete [] dataPointer; // BUG:
+
+    dataPointer = nullptr;
+
     return servers;
 }
 
 void ServerProfileData::write(ServerProfile server){
 
     std::ofstream output;
-    output.open("data/ServerProfileData", std::ios::app | std::ios::binary);
+    output.open("data/ServerProfileData.dat", std::ios::app | std::ios::binary);
     output.write((char*)(&server), sizeof(ServerProfile));
     output.close();
 

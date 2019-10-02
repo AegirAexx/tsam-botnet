@@ -11,9 +11,13 @@
 class ServerProfileData{
     public:
         ServerProfileData();
+        virtual ~ServerProfileData();
+
         std::vector<ServerProfile> getServers();
         void write(ServerProfile server);
         bool checkFile(bool x);
+    private:
+        ServerProfile *dataPointer;
 
 };
 
