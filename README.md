@@ -201,13 +201,13 @@ Communication between the __Client__ and __Server__ should use the protocol belo
 
 ---
 
- > `GETMSG, GROUP_ID`
+ > `GET MSG, GROUP_ID`
 
 Get a single message from the server for the GROUP_ID.
 
 ---
 
-> `SENDMSG, GROUP_ID`
+> `SEND MSG, GROUP_ID`
 
 Send a message to the server for the GROUP_ID.
 
