@@ -7,7 +7,7 @@ std::vector<SentMessage> SentMessageData::getSentMessages(){
 
     std::vector<SentMessage> sentMessages;
     std::ifstream input;
-    input.open("data/SentMessageData", std::ios::binary);
+    input.open("data/SentMessageData.dat", std::ios::binary);
 
     input.seekg(0, input.end);
     size_t totalLogged {input.tellg() / sizeof(SentMessage)};

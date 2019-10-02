@@ -7,7 +7,7 @@ std::vector<ReceivedMessage> ReceivedMessageData::getReceivedMessages(){
 
     std::vector<ReceivedMessage> receivedMessags;
     std::ifstream input;
-    input.open("data/ReceivedMessageData", std::ios::binary);
+    input.open("data/ReceivedMessageData.dat", std::ios::binary);
 
     input.seekg(0, input.end);
     size_t totalLogged {input.tellg() / sizeof(ReceivedMessage)};

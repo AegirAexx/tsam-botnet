@@ -6,7 +6,7 @@ ServerProfileData::ServerProfileData(){}
 std::vector<ServerProfile> ServerProfileData::getServers(){
     std::vector<ServerProfile> servers;
     std::ifstream input;
-    input.open("data/ServerProfileData", std::ios::binary);
+    input.open("data/ServerProfileData.dat", std::ios::binary);
     input.seekg(0, input.end);
     size_t totalLogged {input.tellg() / sizeof(ServerProfile)};
     input.seekg(0, input.beg);
