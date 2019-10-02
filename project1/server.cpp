@@ -150,7 +150,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
     std::string cmd;
 
     // Loop to append each token from tokens to the cmd string.
-    for(int i = 1; i < tokens.size(); ++i){
+    for(size_t i = 1; i < tokens.size(); ++i){
         cmd += tokens[i];
         cmd += " ";
     }
@@ -170,6 +170,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         }
         pclose(fp);
         // Send the output back to the client.
+        if(output.size() < 1) send(clientSocket, "Command not found!", 18, 0);
         send(clientSocket, output.c_str(), output.size(), 0);
     }else{
         // If there is a user error this gets executed.
@@ -194,7 +195,7 @@ int main(int argc, char* argv[]){
     std::vector<int> clientSocketsToClear; // List of closed sockets to remove
 
     if(argc != 2){
-        printf("Usage: server <ip port>\n");
+        printf("Usage: server <ip>  <port>\n");
         exit(0);
     }
 
