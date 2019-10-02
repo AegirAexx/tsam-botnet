@@ -14,8 +14,11 @@ Create a server/client hybrid. Look into select() to get away from threads.
 ├── data
 ├── include
 │   ├── data
+│   │   ├── ReceivedMessageData.h
+│   │   ├── SentMessageData.h
 │   │   └── ServerProfileData.h
 │   ├── model
+│   │   ├── Command.h
 │   │   ├── ReceivedMessage.h
 │   │   ├── SentMessage.h
 │   │   └── ServerProfile.h
@@ -24,16 +27,21 @@ Create a server/client hybrid. Look into select() to get away from threads.
 │   └── ui
 ├── main.cpp
 ├── Makefile
-└── src
-    ├── data
-    │   └── ServerProfileData.cpp
-    ├── model
-    │   ├── ReceivedMessage.cpp
-    │   ├── SentMessage.cpp
-    │   └── ServerProfile.cpp
-    ├── service
-    │   └── Utilities.cpp
-    └── ui
+├── src
+│   ├── data
+│   │   ├── ReceivedMessageData.cpp
+│   │   ├── SentMessageData.cpp
+│   │   └── ServerProfileData.cpp
+│   ├── model
+│   │   ├── Command.cpp
+│   │   ├── ReceivedMessage.cpp
+│   │   ├── SentMessage.cpp
+│   │   └── ServerProfile.cpp
+│   ├── service
+│   │   └── Utilities.cpp
+│   └── ui
+└── val.sh
+
 ```
 
 ## Usage
