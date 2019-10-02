@@ -88,8 +88,6 @@ int main(int argc, char* argv[]){
 
     }
 
-    // Sadly the code will never get here because of the infinite loop.
-    // Felt it should still be here if I ever fix the loop.
     close(sock);
 
     return 0;
