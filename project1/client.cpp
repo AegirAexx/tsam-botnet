@@ -61,7 +61,7 @@ int main(int argc, char* argv[]){
         }
 
         // Send
-        if(send(sock, message.c_str(), message.size() + 1, 0) < 0){
+        if(send(sock, message.c_str(), message.size(), 0) < 0){
             perror("Failed to send");
             return(-1);
         }
