@@ -33,7 +33,7 @@ class Utilities {
 
         // SECTION: NETWORKING
         void closeClient(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds);
-        void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer);
+        void clientCommand(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds, char *buffer);
 
 
 

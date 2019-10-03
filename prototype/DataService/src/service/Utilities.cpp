@@ -109,11 +109,10 @@ void Utilities::closeClient(std::vector<Client> clients, int clientSocket, fd_se
 
 // SECTION: NETWORKING SERVER
 
-void Utilities::clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
+void Utilities::clientCommand(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
     std::vector<std::string> tokens;
     std::string token;
     std::string msg;
-    // Split command from client into tokens for parsing
     std::stringstream stream(buffer);
 
     while(stream >> token) tokens.push_back(token);
@@ -123,9 +122,6 @@ void Utilities::clientCommand(int clientSocket, fd_set *openSockets, int *maxfds
         msg = "Connected!";
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
     } else if(tokens[0].compare("LEAVE") == 0) {
-        // Close the socket, and leave the socket handling
-        // code to deal with tidying up clients etc. when
-        // select() detects the OS has torn down the connection.
         closeClient(clientSocket, openSockets, maxfds);
         msg = "Hasta la vista baby!";
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
@@ -135,13 +131,8 @@ void Utilities::clientCommand(int clientSocket, fd_set *openSockets, int *maxfds
         for(auto const& names : clients) {
             msg += names.second->name + ",";
         }
-        // Reducing the msg length by 1 loses the excess "," - which
-        // granted is totally cheating.
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
     } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
-        // This is slightly fragile, since it's relying on the order
-        // of evaluation of the if statement.
-
         for(auto i = tokens.begin()+2;i != tokens.end();i++) {
             msg += *i + " ";
         }
