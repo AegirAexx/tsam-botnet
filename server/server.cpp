@@ -8,6 +8,7 @@
 #include <map>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 
 //Backlog
@@ -42,6 +43,80 @@ void closeClient(int clientSocket, fd_set *openSockets, int *maxfds) {
 }
 
 
+
+void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds) {
+
+    // COM: Create a socket
+    int serverSock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
+
+    if(serverSock < 0) {
+        std::perror("Can't create socket");
+        return;
+    }
+
+    //Socket address
+    struct sockaddr_in sk_addr;
+    memset(&sk_addr, 0, sizeof(sk_addr));
+
+    sk_addr.sin_family = AF_INET;
+    sk_addr.sin_port = htons(port);
+    inet_pton(AF_INET, ipAddress.c_str(), &sk_addr.sin_addr);
+
+
+
+    // COM: Connect to another server
+    int connectResponse{connect(serverSock, (sockaddr*)&sk_addr, sizeof(sockaddr_in))};
+
+    if(connectResponse < 0) {
+        std::perror("Can't connect");
+        return;
+    }
+
+    // COM: Command set up
+
+
+
+    FD_SET(serverSock, &*openSockets);
+
+    *maxfds = std::max(*maxfds, serverSock);
+    // // create a new client to store information.
+    clients[serverSock] = new Client(serverSock);
+
+    // while(!isFinished) {
+    //     //Send message to dude
+    //     command = "Hello!";
+
+    //     if(send(serverSock, command.c_str(), command.size(), 0) < 0) {
+    //         std::perror("Can't send");
+    //         return -1;
+    //     }
+
+    //     if(send(serverSock, command.c_str(), command.size(), 0) < 0) {
+    //         std::perror("Can't send");
+    //         return -1;
+    //     }
+
+    //     //Receive
+    //     int in_packet{0};
+
+    //     do{
+    //         //Initalize memory
+    //         memset(buffer, 0, 1024);
+    //         //Get packet
+    //         in_packet = recv(serverSock, buffer, 1024, 0);
+    //         //Validate packet
+    //         if(in_packet < 0) {
+    //             std::perror("Can't receive");
+    //             return -1;
+    //         }
+    //         //Write the buffer
+    //         std::cout << buffer;
+
+    //     } while(in_packet == 1024);
+
+    // }
+}
+
 // Process command from client on the server
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
@@ -53,9 +128,11 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     while(stream >> token) tokens.push_back(token);
 
-    if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 2)) {
+    if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
+        //Connect to client
         clients[clientSocket]->name = tokens[1];
-        msg = "Connected!";
+        connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds);
+        msg = "Si patron";
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
     } else if(tokens[0].compare("LEAVE") == 0) {
         // Close the socket, and leave the socket handling
