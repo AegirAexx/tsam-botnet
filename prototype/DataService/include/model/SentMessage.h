@@ -16,7 +16,7 @@ class SentMessage {
         friend std::ostream& operator << (std::ostream& outs, const SentMessage& sentMessage);
 
     private:
-        char recipient[12];
+        char recipient[13];
         char message[5000];
         size_t timeStamp;
 };

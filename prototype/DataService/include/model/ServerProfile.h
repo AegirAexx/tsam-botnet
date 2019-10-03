@@ -17,7 +17,7 @@ class ServerProfile {
     private:
         int port;
         char ip[16];
-        char group[12];
+        char group[13];
 };
 
 #endif // SERVERPROFILE_H
