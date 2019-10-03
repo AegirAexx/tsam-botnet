@@ -23,20 +23,6 @@ std::string Utilities::getLocalIP() {
     return "error";
 }
 
-// DEBUG:
- void Utilities::listCommands() {
-    std::cout << "############ KNOWN COMMANDS ############" << std::endl;
-    std::cout << "~ NO COMMAND - #(-1)" << std::endl;
-    std::cout << "~ UNKNOWN COMMAND - MADE IT THROUGH THE FILTER - COMMAND #(0)" << std::endl;
-    std::cout << "SEND MSG - COMMAND #(1)" << std::endl;
-    std::cout << "GET MSG - COMMAND #(2)" << std::endl;
-    std::cout << "KEEPALIVE - COMMAND #(3)" << std::endl;
-    std::cout << "CONNECT - COMMAND #(4)" << std::endl;
-    std::cout << "LEAVE - COMMAND #(5)" << std::endl;
-    std::cout << "STATUSREQ - COMMAND #(6)" << std::endl;
-    std::cout << "LISTSERVERS - COMMAND #(7)" << std::endl;
-    std::cout << "########################################" << std::endl;
-}
 
 std::vector<Command> Utilities::processPayload(const std::string payload) {
 
@@ -71,7 +57,6 @@ std::vector<Command> Utilities::processPayload(const std::string payload) {
     return commands;
 }
 
-// PART: PRIVATE
 
 int Utilities::idCommand(const std::string payload) {
 
@@ -102,3 +87,95 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
     return splittedStrings;
 }
+
+// SECTION: NETWORKING SERVER
+
+void Utilities::closeClient(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds) {
+
+    // Remove client from the clients list
+    // BUG: Change the data structure from std::map => std::vector
+    // clients.erase(clientSocket);
+
+
+    if(*maxfds == clientSocket) {
+        for(auto const& p : clients) {
+            // *maxfds = std::max(*maxfds, p.second->sock); // BUG: Missing reference to the parameter in the client data structure.
+        }
+    }
+
+    // And remove from the list of open sockets.
+    FD_CLR(clientSocket, openSockets);
+}
+
+// SECTION: NETWORKING SERVER
+
+void Utilities::clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::string msg;
+    // Split command from client into tokens for parsing
+    std::stringstream stream(buffer);
+
+    while(stream >> token) tokens.push_back(token);
+
+    if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 2)) {
+        clients[clientSocket]->name = tokens[1];
+        msg = "Connected!";
+        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+    } else if(tokens[0].compare("LEAVE") == 0) {
+        // Close the socket, and leave the socket handling
+        // code to deal with tidying up clients etc. when
+        // select() detects the OS has torn down the connection.
+        closeClient(clientSocket, openSockets, maxfds);
+        msg = "Hasta la vista baby!";
+        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+    } else if(tokens[0].compare("WHO") == 0) {
+        std::cout << "Who is logged on" << std::endl;
+
+        for(auto const& names : clients) {
+            msg += names.second->name + ",";
+        }
+        // Reducing the msg length by 1 loses the excess "," - which
+        // granted is totally cheating.
+        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+    } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
+        // This is slightly fragile, since it's relying on the order
+        // of evaluation of the if statement.
+
+        for(auto i = tokens.begin()+2;i != tokens.end();i++) {
+            msg += *i + " ";
+        }
+
+        for(auto const& pair : clients) {
+            send(pair.second->sock, msg.c_str(), msg.length(),0);
+        }
+    } else if(tokens[0].compare("MSG") == 0) {
+        for(auto const& pair : clients) {
+            if(pair.second->name.compare(tokens[1]) == 0) {
+                std::string msg;
+                for(auto i = tokens.begin()+2;i != tokens.end();i++) {
+                    msg += *i + " ";
+                }
+                send(pair.second->sock, msg.c_str(), msg.length(),0);
+            }
+        }
+    } else {
+        std::cout << "Unknown command from client:" << buffer << std::endl;
+    }
+}
+
+// DEBUG:
+ void Utilities::listCommands() {
+    std::cout << "############ KNOWN COMMANDS ############" << std::endl;
+    std::cout << "~ NO COMMAND - #(-1)" << std::endl;
+    std::cout << "~ UNKNOWN COMMAND - MADE IT THROUGH THE FILTER - COMMAND #(0)" << std::endl;
+    std::cout << "SEND MSG - COMMAND #(1)" << std::endl;
+    std::cout << "GET MSG - COMMAND #(2)" << std::endl;
+    std::cout << "KEEPALIVE - COMMAND #(3)" << std::endl;
+    std::cout << "CONNECT - COMMAND #(4)" << std::endl;
+    std::cout << "LEAVE - COMMAND #(5)" << std::endl;
+    std::cout << "STATUSREQ - COMMAND #(6)" << std::endl;
+    std::cout << "LISTSERVERS - COMMAND #(7)" << std::endl;
+    std::cout << "########################################" << std::endl;
+}
+
