@@ -33,8 +33,9 @@ int main(int argc, char* argv[]){
     int port{atoi(argv[2])};
 
     //Socket address
-    // TODO: Memset
     sockaddr_in sk_addr;
+    memset(&sk_addr, 0, sizeof(sk_addr));
+
     sk_addr.sin_family = AF_INET;
     sk_addr.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &sk_addr.sin_addr);
