@@ -58,8 +58,9 @@ std::vector<Command> Utilities::processPayload(const std::string payload) {
 }
 
 
-int Utilities::idCommand(const std::string payload) {
+int Utilities::idCommand(const char *buffer) {
 
+    std::string payload(buffer);
     std::regex rx("^[\\w\\s]+(?=,)");
     std::smatch match;
     std::regex_search(payload, match, rx);
@@ -67,8 +68,8 @@ int Utilities::idCommand(const std::string payload) {
     if(!match.empty()){
         std::string command(match.str());
         std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
-        if(command == "SEND MSG") return 1;
-        else if(command == "GET MSG") return 2;
+        if(command == "SEND_MSG") return 1;
+        else if(command == "GET_MSG") return 2;
         else if(command == "KEEPALIVE") return 3;
         else if(command == "CONNECT") return 4;
         else if(command == "LEAVE") return 5;
@@ -110,13 +111,43 @@ void Utilities::closeClient(std::vector<Client> clients, int clientSocket, fd_se
 // SECTION: NETWORKING SERVER
 
 void Utilities::clientCommand(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
+
+    int command{idCommand(buffer)};
+
+    if(command > 0) {
+        if(command == 1){
+
+        } else if(command == 2){
+
+        } else if(command == 3){
+
+        } else if(command == 4){
+            clients[clientSocket]->name = tokens[1];
+            msg = "Connected!";
+            send(clientSocket, msg.c_str(), msg.length()-1, 0);
+        } else if(command == 5){
+
+        } else if(command == 6){
+
+        } else if(command == 7){
+
+        } else if(command == 8){
+
+        } else if(command == 9){
+
+        }
+    } else {
+        // Somthing went wrong(LAYER 8).
+    }
+
+    // PART: FROM TEACHER: BUFFER
     std::vector<std::string> tokens;
     std::string token;
     std::string msg;
     std::stringstream stream(buffer);
-
     while(stream >> token) tokens.push_back(token);
 
+    // PART: FROM TEACHER: COMMAND EXECUTION
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 2)) {
         clients[clientSocket]->name = tokens[1];
         msg = "Connected!";

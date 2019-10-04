@@ -26,7 +26,9 @@ class Utilities {
 
         std::size_t getTimestamp();
         std::string getLocalIP();
-        int idCommand(const std::string payload);
+
+        int idCommand(const char *buffer);
+
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
         void listCommands();
         std::vector<Command> processPayload(const std::string payload);
