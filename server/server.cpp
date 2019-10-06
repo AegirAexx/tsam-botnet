@@ -17,6 +17,8 @@ class Client {
   public:
     int sock;              // socket of client connection
     std::string name;           // Limit length of name of client's user
+    std::string ipAddress;
+    int port;
     Client(int socket) : sock(socket) {}
     ~Client() {}
 };
@@ -44,7 +46,7 @@ void closeClient(int clientSocket, fd_set *openSockets, int *maxfds) {
 
 
 
-void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds) {
+void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
 
     // COM: Create a socket
     int serverSock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
@@ -80,41 +82,18 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
     *maxfds = std::max(*maxfds, serverSock);
     // // create a new client to store information.
+
+
+
     clients[serverSock] = new Client(serverSock);
 
-    // while(!isFinished) {
-    //     //Send message to dude
-    //     command = "Hello!";
+    std::cout <<  "ipAddress: " << ipAddress << std::endl;
+    std::cout <<  "port: " << port << std::endl;
 
-    //     if(send(serverSock, command.c_str(), command.size(), 0) < 0) {
-    //         std::perror("Can't send");
-    //         return -1;
-    //     }
-
-    //     if(send(serverSock, command.c_str(), command.size(), 0) < 0) {
-    //         std::perror("Can't send");
-    //         return -1;
-    //     }
-
-    //     //Receive
-    //     int in_packet{0};
-
-    //     do{
-    //         //Initalize memory
-    //         memset(buffer, 0, 1024);
-    //         //Get packet
-    //         in_packet = recv(serverSock, buffer, 1024, 0);
-    //         //Validate packet
-    //         if(in_packet < 0) {
-    //             std::perror("Can't receive");
-    //             return -1;
-    //         }
-    //         //Write the buffer
-    //         std::cout << buffer;
-
-    //     } while(in_packet == 1024);
-
-    // }
+    // DAGUR: store ipAddress and port number of new connection
+    clients[serverSock]->name = name;
+    clients[serverSock]->ipAddress = ipAddress;
+    clients[serverSock]->port = port;
 }
 
 // Process command from client on the server
@@ -130,10 +109,11 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
         //Connect to client
-        clients[clientSocket]->name = tokens[1];
-        connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds);
+        // TODO: need to find the right place for the naming of the client, should not be here I think
+        clients[clientSocket]->name = "client"; //Naming of client should not be here
+        connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds, tokens[1]);
         msg = "Si patron";
-        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+        send(clientSocket, msg.c_str(), msg.length(), 0);  // DAGUR: Tok ut -1 af msg.length ???
     } else if(tokens[0].compare("LEAVE") == 0) {
         // Close the socket, and leave the socket handling
         // code to deal with tidying up clients etc. when
@@ -143,13 +123,14 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
     } else if(tokens[0].compare("WHO") == 0) {
         std::cout << "Who is logged on" << std::endl;
-
-        for(auto const& names : clients) {
-            msg += names.second->name + ",";
+        // TODO: Breyta thessu i skipunina LISTSERVER og byrja a ad na i eigin ip addressu og port og prenta svo ut client mapid
+        for(auto const& client : clients) {
+            //char port = static_cast<char>(client.second->port);
+            msg += client.second->name + " " + "ip: " + client.second->ipAddress + " port: "; //+ port + ","; // DAGUR: Prenta ut ipAddress og port a theim sem eru tengdir
         }
-        // Reducing the msg length by 1 loses the excess "," - which
+        // Reducing the msg length by 1 loses the excess "," - which // DAGUR: Eg breytti thessu lika, er ekki ad eyda sidasta stakinu
         // granted is totally cheating.
-        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+        send(clientSocket, msg.c_str(), msg.length(), 0);
     } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
         // This is slightly fragile, since it's relying on the order
         // of evaluation of the if statement.
@@ -279,6 +260,7 @@ int main(int argc, char* argv[]){
                         std::cout << "Client closed connection:" << client->sock << std::endl;
                         close(client->sock);
                         closeClient(client->sock, &openSockets, &maxfds);
+                        break; // DAGUR: Added this so server would not crash when connection is closed
                     } else {
                         // We don't check for -1 (nothing received) because select()
                         // only triggers if there is something on the socket for us.
