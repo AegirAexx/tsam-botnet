@@ -169,11 +169,30 @@ std::vector<std::byte> Utilities::getRawBytes(std::string str){
     return rawBytes;
 }
 
+std::string Utilities::removeRawBytes(std::string str){
+    std::vector<std::byte> rawBytes;
+    std::string reformattedString;
+    for(auto charByte: str) rawBytes.push_back((std::byte)charByte);
+
+    rawBytes.pop_back();
+    rawBytes.erase(rawBytes.begin());
+
+    for(auto byte: rawBytes) reformattedString.push_back((char)byte);
+
+    return reformattedString;
+}
+
 std::string Utilities::rebuildString(std::string str) {
     std::string rebuiltString;
     auto rawVec{getRawBytes(str)};
     for(auto byte: rawVec) rebuiltString.push_back((char)byte);
     return rebuiltString;
+}
+
+std::string Utilities::handshake(std::string groupName, std::string ipAddress, int port) {
+    std::string str("LISTSERVERS," + groupName + "," + ipAddress + "," + std::to_string(port));
+    std::string x(rebuildString(str));
+    return x;
 }
 
 

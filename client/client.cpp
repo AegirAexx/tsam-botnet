@@ -9,9 +9,6 @@
 
 int main(int argc, char* argv[]){
 
-    std::string greeting("Hello from the client!");
-    std::cout << greeting << std::endl;
-
     // COM: Check if correct usage
     if(argc != 3) {
         std::cout << "usage: client <ip address> <ip port>\n";

@@ -25,8 +25,10 @@ class Server {
     ~Server() {}
 };
 
+// DAGUR: Sloppy hornid
 std::map<int, Server*> servers;
 int serverCount{0};
+std::string group("P3_GROUP_4");
 
 
 void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
@@ -111,7 +113,6 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
     std::string msg;
     // Split command from client into tokens for parsing
     std::stringstream stream(buffer);
-    std::string group("P3_GROUP_4");
     Utilities u;
 
     while(stream >> token) tokens.push_back(token);
@@ -169,15 +170,17 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 }
 
 void serverCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
-    std::vector<std::string> tokens;
-    std::string token;
-    std::string msg;
-    // Split command from client into tokens for parsing
-    std::stringstream stream(buffer);
-    std::string group("P3_GROUP_4");
     Utilities u;
 
-    while(stream >> token) tokens.push_back(token);
+    //Clean SOH & EOT
+    auto cleanBuffer = u.removeRawBytes(buffer);
+
+    // Split command from client into tokens for parsing
+    auto tokens = u.split(cleanBuffer, ',');
+
+    std::string msg;
+
+    std::cout << "tokens[0]: " << tokens[0] << std::endl;
 
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
         //Connect to client
@@ -195,11 +198,17 @@ void serverCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
     } else if(tokens[0].compare("LISTSERVERS") == 0) {
 
+        //save Ip address and port and group name to the newest connection // DAGUR: otharfi heldur dagur tvi buid ad skra i connect command hlutanum
+        // servers[clientSocket]->name = tokens[1];
+        // servers[clientSocket]->ipAddress = tokens[2];
+        // servers[clientSocket]->port = atoi(tokens[3].c_str());
+
         //Get IP address, put in message to send
         msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
         for(auto const& client : servers) {
             //char port = static_cast<char>(client.second->port);
+            // TODO: isCOC if clause
             msg += client.second->name + "," + client.second->ipAddress + "," +  std::to_string(client.second->port) + ";";
         }
         //Add start & end hex
@@ -226,8 +235,18 @@ void serverCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
                 send(pair.second->sock, msg.c_str(), msg.length(),0);
             }
         }
+    } else if (tokens[0].compare("SERVERS") == 0){
+
+        servers[clientSocket]->name = tokens[1];
+        servers[clientSocket]->ipAddress = tokens[2];
+        servers[clientSocket]->port = atoi(tokens[3].c_str());
+
+        //Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
+        std::cout << "Servers command from server:" << cleanBuffer << std::endl;
+
     } else {
-        std::cout << "Unknown command from client:" << buffer << std::endl;
+        std::cout << "Unknown command from client: " << buffer << std::endl;
+        std::cout << "cleanBuffer: " << cleanBuffer << std::endl;
     }
 }
 
@@ -365,7 +384,7 @@ int main(int argc, char* argv[]){
             std::cout << "Client connected on socket: " << newSock << std::endl;
         }
 
-        if(FD_ISSET(serverSock, &readSockets)&& servers.size() < 6) {
+        if(FD_ISSET(serverSock, &readSockets)&& servers.size() < 5) {
             newSock = accept(serverSock, (struct sockaddr *)&server, &serverLen);
             // Add new client to the list of open sockets
             FD_SET(newSock, &openSockets);
@@ -374,6 +393,11 @@ int main(int argc, char* argv[]){
             // create a new client to store information.
             servers[newSock] = new Server(newSock);
             serverCount++; //increment server count
+            std::cout << "Server count: " << serverCount << std::endl;
+            //Listserver sent to incoming connection server
+            std::string msg;
+            msg = u.handshake(group, myIpAddress, serverPort);
+            send(newSock, msg.c_str(), msg.length(), 0);
             // Decrement the number of sockets waiting to be dealt with
             n--;
             std::cout << "Server connected on socket: " << newSock << std::endl;

@@ -37,9 +37,13 @@ class Utilities {
         //void closeClient(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds);
         //void clientCommand(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds, char *buffer);
 
-        //Adding start stop
+        //start stop
         std::vector<std::byte> getRawBytes(std::string str);
         std::string rebuildString(std::string str);
+        std::string removeRawBytes(std::string str);
+
+        //Handshake
+        std::string handshake(std::string groupName, std::string ipAddress, int port);
 
 
 
