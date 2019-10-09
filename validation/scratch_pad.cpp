@@ -19,17 +19,17 @@ int main(int argc, char *argv[]){
     // std::cout << "###\nPlain string: " << input << std::endl;
     // std::cout << "Plain string length: " << input.size() << std::endl;
 
-    // // std::vector<std::byte> rawVec{getRawBytes(input)};
-    // std::cout << "###\nByte version of string with SOH/EOT: ";
-    // auto rawVec{getRawBytes(input)};
-    // for(auto i: rawVec) std::cout << std::hex << (size_t)i << " ";
-    // std::cout << std::endl;
-    // std::cout << "Length byte vector: " << std::dec << rawVec.size() << " bytes" << std::endl;
+    //std::vector<std::byte> rawVec{getRawBytes(input)};
+    std::cout << "###\nByte version of string with SOH/EOT: ";
+    auto rawVec{getRawBytes(input)};
+    for(auto i: rawVec) std::cout << std::hex << (size_t)i << " ";
+    std::cout << std::endl;
+    std::cout << "Length byte vector: " << std::dec << rawVec.size() << " bytes" << std::endl;
 
-    // std::string rebuiltString;
-    // for(auto byte: rawVec) rebuiltString.push_back((char)byte);
-    // std::cout << "###\nString rebuilt from byte vector: " << rebuiltString << std::endl;
-    // std::cout << "String length: " << rebuiltString.size() << std::endl;
+    std::string rebuiltString;
+    for(auto byte: rawVec) rebuiltString.push_back((char)byte);
+    std::cout << "###\nString rebuilt from byte vector: " << rebuiltString << std::endl;
+    std::cout << "String length: " << rebuiltString.size() << std::endl;
 
 
 // // SECTION: REGEX KNOWN COMMANDS

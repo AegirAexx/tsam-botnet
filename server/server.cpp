@@ -9,6 +9,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include "Utilities.h"
 
 
 //Backlog
@@ -98,19 +99,21 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
 // Process command from client on the server
 
-void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer) {
+void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
     std::vector<std::string> tokens;
     std::string token;
     std::string msg;
     // Split command from client into tokens for parsing
     std::stringstream stream(buffer);
+    std::string group("P3_GROUP_4");
+    Utilities u;
 
     while(stream >> token) tokens.push_back(token);
 
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
         //Connect to client
         // TODO: need to find the right place for the naming of the client, should not be here I think
-        clients[clientSocket]->name = "client"; //Naming of client should not be here
+        //clients[clientSocket]->name = "client"; //Naming of client should not be here
         connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds, tokens[1]);
         msg = "Si patron";
         send(clientSocket, msg.c_str(), msg.length(), 0);  // DAGUR: Tok ut -1 af msg.length ???
@@ -121,16 +124,18 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         closeClient(clientSocket, openSockets, maxfds);
         msg = "Hasta la vista baby!";
         send(clientSocket, msg.c_str(), msg.length()-1, 0);
-    } else if(tokens[0].compare("WHO") == 0) {
-        std::cout << "Who is logged on" << std::endl;
-        // TODO: Breyta thessu i skipunina LISTSERVER og byrja a ad na i eigin ip addressu og port og prenta svo ut client mapid
+    } else if(tokens[0].compare("LISTSERVERS") == 0) {
+
+        //Get IP address, put in message to send
+        msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
+        //Go through clients/servers map and add all to message
         for(auto const& client : clients) {
             //char port = static_cast<char>(client.second->port);
-            msg += client.second->name + " " + "ip: " + client.second->ipAddress + " port: "; //+ port + ","; // DAGUR: Prenta ut ipAddress og port a theim sem eru tengdir
+            msg += client.second->name + "," + client.second->ipAddress + "," +  std::to_string(client.second->port) + ";";
         }
-        // Reducing the msg length by 1 loses the excess "," - which // DAGUR: Eg breytti thessu lika, er ekki ad eyda sidasta stakinu
-        // granted is totally cheating.
-        send(clientSocket, msg.c_str(), msg.length(), 0);
+        //Add start & end hex
+        std::string formattedMsg(u.rebuildString(msg));
+        send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
     } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
         // This is slightly fragile, since it's relying on the order
         // of evaluation of the if statement.
@@ -162,42 +167,45 @@ int main(int argc, char* argv[]){
 
     // COM: Open socket
 
-    struct sockaddr_in sk_addr;
-    int sock{socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0)};
+    struct sockaddr_in server_addr;
+    int serverSock{socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0)};
     int set = 1;
     int portno{atoi(argv[1])};
 
-    //struct to keep hold of incoming client address
-    struct sockaddr_in client;
-    // DAGUR:Sennilega lengdin a client structinu
-    socklen_t clientLen;
+    Utilities u; //Utilities class
 
-    if(sock < 0) {
+    std::string myIpAddress(u.getLocalIP()); //Get our Ip address
+
+    //struct to keep hold of incoming client address
+    struct sockaddr_in server;
+    // DAGUR:Sennilega lengdin a client structinu
+    socklen_t serverLen;
+
+    if(serverSock < 0) {
         std::perror("Failed to open socket");
         return -1;
     }
 
     // Set sock opt SO_REUSADDR // DAGUR: Einhverskonar hefd samkvaemt geeks for geeks
-    if(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &set, sizeof(set)) < 0) {
+    if(setsockopt(serverSock, SOL_SOCKET, SO_REUSEADDR, &set, sizeof(set)) < 0) {
         std::perror("Failed to set SO_REUSEADDR:");
     }
 
-    memset(&sk_addr, 0, sizeof(sk_addr));
+    memset(&server_addr, 0, sizeof(server_addr));
 
-    sk_addr.sin_family = AF_INET;
-    sk_addr.sin_addr.s_addr = INADDR_ANY;
-    sk_addr.sin_port = htons(portno);
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(portno);
 
     // Bind to socket to listen for connections from clients
-    if(bind(sock, (struct sockaddr *)&sk_addr, sizeof(sk_addr)) < 0) {
+    if(bind(serverSock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         std::perror("Failed to bind to socket:");
         return -1;
     }
 
-    int listenSock{sock};
     int clientSock{0};
 
-    std::cout << "Listening on socket#: " << listenSock << std::endl;
+    std::cout << "Listening for servers on socket#: " << serverSock << std::endl;
 
     // COM: Now we need to listen
 
@@ -209,16 +217,16 @@ int main(int argc, char* argv[]){
     fd_set exceptSockets;
 
     //listen
-    if(listen(listenSock, 5) < 0) {
+    if(listen(serverSock, 5) < 0) {
         std::perror("Listen failed on port");
         return -1;
     }
 
     //Add listen socket to socket set we are monitoring
-    FD_SET(listenSock, &openSockets);
+    FD_SET(serverSock, &openSockets);
 
     //Maxfds
-    int maxfds{listenSock};
+    int maxfds{serverSock};
 
 
     bool isFinished{false};
@@ -238,8 +246,8 @@ int main(int argc, char* argv[]){
         }
 
         // Add listen socket to socket set we are monitoring
-        if(FD_ISSET(listenSock, &readSockets)) {
-            clientSock = accept(listenSock, (struct sockaddr *)&client, &clientLen);
+        if(FD_ISSET(serverSock, &readSockets)) {
+            clientSock = accept(serverSock, (struct sockaddr *)&server, &serverLen);
             // Add new client to the list of open sockets
             FD_SET(clientSock, &openSockets);
             // And update the maximum file descriptor
@@ -265,7 +273,7 @@ int main(int argc, char* argv[]){
                         // We don't check for -1 (nothing received) because select()
                         // only triggers if there is something on the socket for us.
                         std::cout << buffer << std::endl;
-                        clientCommand(client->sock, &openSockets, &maxfds, buffer);
+                        clientCommand(client->sock, &openSockets, &maxfds, buffer, myIpAddress, portno);
                     }
                 }
             }
