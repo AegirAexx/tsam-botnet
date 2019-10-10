@@ -111,142 +111,126 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
     std::vector<std::string> tokens;
     std::string token;
     std::string msg;
-    // Split command from client into tokens for parsing
+    // COM: Split command from client into tokens for parsing
     std::stringstream stream(buffer);
     Utilities u;
 
     while(stream >> token) tokens.push_back(token);
 
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
-        //Connect to client
-        // TODO: need to find the right place for the naming of the client, should not be here I think
-        //clients[clientSocket]->name = "client"; //Naming of client should not be here
+        // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
         connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds, tokens[1]);
         msg = "Si patron";
-        send(clientSocket, msg.c_str(), msg.length(), 0);  // DAGUR: Tok ut -1 af msg.length ???
-    } else if(tokens[0].compare("LEAVE") == 0) {
-        // Close the socket, and leave the socket handling
-        // code to deal with tidying up clients etc. when
-        // select() detects the OS has torn down the connection.
-        closeServer(clientSocket, openSockets, maxfds);
-        msg = "Hasta la vista baby!";
-        send(clientSocket, msg.c_str(), msg.length()-1, 0);
+        send(clientSocket, msg.c_str(), msg.length(), 0);
     } else if(tokens[0].compare("LISTSERVERS") == 0) {
-
-        //Get IP address, put in message to send
+        // TODO: Spurning hvort IP addressan eigi ad fylgja med eda ekki thegar client-spyr, sennilega ekki
         msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
-        for(auto const& client : servers) {
-            //char port = static_cast<char>(client.second->port);
-            msg += client.second->name + "," + client.second->ipAddress + "," +  std::to_string(client.second->port) + ";";
+        for(auto const& server : servers) {
+            msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
         }
         //Add start & end hex
+        // TODO: Tharf thetta tegar madur er ad respond-a a client, sennilega ekki
         std::string formattedMsg(u.rebuildString(msg));
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-    } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
-        // This is slightly fragile, since it's relying on the order
-        // of evaluation of the if statement.
-
-        for(auto i = tokens.begin()+2;i != tokens.end();i++) {
-            msg += *i + " ";
-        }
-
-        for(auto const& pair : servers) {
-            send(pair.second->sock, msg.c_str(), msg.length(),0);
-        }
-    } else if(tokens[0].compare("MSG") == 0) {
-        for(auto const& pair : servers) {
-            if(pair.second->name.compare(tokens[1]) == 0) {
-                std::string msg;
-                for(auto i = tokens.begin()+2;i != tokens.end();i++) {
-                    msg += *i + " ";
-                }
-                send(pair.second->sock, msg.c_str(), msg.length(),0);
-            }
-        }
+    }
+    else if((tokens[0].compare("GET") == 0) &&  (tokens[1].compare("MSG") == 0)) {
+        // TODO: Utfaera thetta fall
+        // Spurning hvernig thetta fall se
+        // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
+        // ef ekki tha senda get MSG a alla one hop gaurana
+    } else if((tokens[0].compare("SEND") == 0) &&  (tokens[1].compare("MSG") == 0)) {
+        // TODO: Utfaera thetta fall
+        // Spurning hvernig thetta fall se
+        // Athuga hvort eg se med tilgreindan hop sem one hop
+        // ef ekki tha spyrja alla one hop gaurana hvort their seu med thennan dude tengdan
+        // Ef ekki tha geyma message i message gagnagrindinni, i einhvern x tima adur en thetta er endurtekid
+        // Svo thegar buid er ad endurtaka thetta nokkrum sinnum tha er gert hvad? skilabodinu hent? eda?
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
 }
 
-void serverCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
+void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
     Utilities u;
 
-    //Clean SOH & EOT
+    // COM: Clean SOH & EOT from buffer
+    // TODO: Need to validate message somewhere to see if it has SOH & EOT before we clean it, also if we have noise after or before SOH and EOT I think we are supposed to ignore it
     auto cleanBuffer = u.removeRawBytes(buffer);
 
-    // Split command from client into tokens for parsing
+    // COM: Split command from client into tokens for parsing
     auto tokens = u.split(cleanBuffer, ',');
 
+    // String to hold response message
     std::string msg;
 
-    std::cout << "tokens[0]: " << tokens[0] << std::endl;
-
-    if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
-        //Connect to client
-        // TODO: need to find the right place for the naming of the client, should not be here I think
-        //clients[clientSocket]->name = "client"; //Naming of client should not be here
-        connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds, tokens[1]);
-        msg = "Si patron";
-        send(clientSocket, msg.c_str(), msg.length(), 0);  // DAGUR: Tok ut -1 af msg.length ???
-    } else if(tokens[0].compare("LEAVE") == 0) {
-        // Close the socket, and leave the socket handling
-        // code to deal with tidying up clients etc. when
-        // select() detects the OS has torn down the connection.
-        closeServer(clientSocket, openSockets, maxfds);
-        msg = "Hasta la vista baby!";
-        send(clientSocket, msg.c_str(), msg.length()-1, 0);
-    } else if(tokens[0].compare("LISTSERVERS") == 0) {
-
-        //save Ip address and port and group name to the newest connection // DAGUR: otharfi heldur dagur tvi buid ad skra i connect command hlutanum
-        // servers[clientSocket]->name = tokens[1];
-        // servers[clientSocket]->ipAddress = tokens[2];
-        // servers[clientSocket]->port = atoi(tokens[3].c_str());
-
-        //Get IP address, put in message to send
+    if((tokens[0].compare("LISTSERVERS") == 0)) { //Usage: CONNECT groupID IPaddress Port
+        // Get IP address, put in message to send
         msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
-        for(auto const& client : servers) {
-            //char port = static_cast<char>(client.second->port);
-            // TODO: isCOC if clause
-            msg += client.second->name + "," + client.second->ipAddress + "," +  std::to_string(client.second->port) + ";";
+        for(auto const& server : servers) {
+            // If server is not a client then add to msg // DAGUR: er thessi isCOC logic kannski sma stupid? aettum vid ad hafa ser client map frekar?
+            if(!server.second->isCOC) {
+                msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
+            }
         }
         //Add start & end hex
         std::string formattedMsg(u.rebuildString(msg));
-        send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-    } else if((tokens[0].compare("MSG") == 0) && (tokens[1].compare("ALL") == 0)) {
-        // This is slightly fragile, since it's relying on the order
-        // of evaluation of the if statement.
+        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+    } else if(tokens[0].compare("LEAVE") == 0) {  // DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
+        // Tokens[1] = serverIp
+        std::string ipAddressToLeave(tokens[1]);
+        // Tokens[2] = serverPort
+        int portToLeave{atoi(tokens[2].c_str())};
 
-        for(auto i = tokens.begin()+2;i != tokens.end();i++) {
-            msg += *i + " ";
-        }
-
-        for(auto const& pair : servers) {
-            send(pair.second->sock, msg.c_str(), msg.length(),0);
-        }
-    } else if(tokens[0].compare("MSG") == 0) {
-        for(auto const& pair : servers) {
-            if(pair.second->name.compare(tokens[1]) == 0) {
-                std::string msg;
-                for(auto i = tokens.begin()+2;i != tokens.end();i++) {
-                    msg += *i + " ";
-                }
-                send(pair.second->sock, msg.c_str(), msg.length(),0);
+        // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+        for(auto const& server : servers) {
+            if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
+                std::cout << "Adios " << server.second->name << std::endl;
+                closeServer(serverSocket, openSockets, maxfds);
             }
         }
+    } else if(tokens[0].compare("KEEPALIVE") == 0) {
+        // Hvernig a eiginlega ad virka?
+    } else if((tokens[0].compare("GET") == 0) && (tokens[1].compare("MSG") == 0)) {
+        // TODO: Utfaera thetta fall
+        // Spurning hvernig thetta fall se
+        // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
+        // ef ekki tha senda get MSG a alla one hop gaurana
+        // ??????????
+    } else if((tokens[0].compare("SEND") == 0) && (tokens[1].compare("MSG") == 0)) {
+        // TODO: Utfaera thetta fall
+        // Spurning hvernig thetta fall se
+        // Athuga hvort eg se med tilgreindan hop sem one hop
+        // ef ekki tha spyrja alla one hop gaurana hvort their seu med thennan dude tengdan
+        // Ef ekki tha geyma message i message gagnagrindinni, i einhvern x tima adur en thetta er endurtekid
+        // Svo thegar buid er ad endurtaka thetta nokkrum sinnum tha er gert hvad? skilabodinu hent? eda?
+        // ??????????
     } else if (tokens[0].compare("SERVERS") == 0){
 
-        servers[clientSocket]->name = tokens[1];
-        servers[clientSocket]->ipAddress = tokens[2];
-        servers[clientSocket]->port = atoi(tokens[3].c_str());
+        servers[serverSocket]->name = tokens[1];
+        // TODO: Aetti ad vera haegt ad skra allar thessar upplysingar fyrir utan nafnid a theim timapunkti sem accept() er gert
+        servers[serverSocket]->ipAddress = tokens[2];
+        servers[serverSocket]->port = atoi(tokens[3].c_str());
 
-        //Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
-        std::cout << "Servers command from server:" << cleanBuffer << std::endl;
+        // TODO: Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
+        std::cout << "SERVERS message from server:" << cleanBuffer << std::endl; // DEBUG:
 
+        // Taka alla server-ana i svarinu og athuga fyrst hvort vid seum nu thegar tengdir theim
+        // Ef ekki tha geyma tha i timabundinni gagnagrind (map svipad og servers vaentanlega)
+        // rulla svo i gegnum tha og gera connect a server-ana a medan ad servercount er minna en 5
+
+    } else if(tokens[0].compare("STATUSREQ") == 0) {
+        // Thegar thetta kemur inn tha a madur ad skila tilbaka streng sem byrjar a STATUSRESP
+        // Og svo fara ofan i gagnagrindina og finna oll skilabodin sem madur er med thar
+        // Held eg en frekar oskyrt
+    } else if(tokens[0].compare("STATUSRESP") == 0) {
+        // Thegar thetta kemur inn tydir ad madur er ad fa response fra statusreq sem madur hefur sent
+        // Madur vaentanlega sendir statusreq til ad ga hvada skilabod onehop gaurarnir manns eru med
+        // Svo er tha spurning hvad madur gerir vid thessar upplysingar?
+        // Fer vaentanlega eftir tvi hvernig madur utfaerir get MSG
     } else {
         std::cout << "Unknown command from client: " << buffer << std::endl;
-        std::cout << "cleanBuffer: " << cleanBuffer << std::endl;
     }
 }
 
@@ -377,7 +361,7 @@ int main(int argc, char* argv[]){
             // And update the maximum file descriptor
             maxfds = std::max(maxfds, newSock);
             // MAybe some C&C info if we want.
-            servers[newSock] = new Server(newSock);
+            servers[newSock] = new Server(newSock); // DAGUR: Afhverju erum vid aftur ad skra client-ana inn i map-id????
             servers[newSock]->isCOC = true;
             // Decrement the number of sockets waiting to be dealt with
             n--;
@@ -392,6 +376,8 @@ int main(int argc, char* argv[]){
             maxfds = std::max(maxfds, newSock);
             // create a new client to store information.
             servers[newSock] = new Server(newSock);
+            // DAGUR: Herna aettum vid ad geta skrad inn upplysingarnar um thann sem er ad tengjast okkur strax med server.sin_addr og server.sin_port
+            // Thar eru upplysingarnar thurfum i raun ekki ad bida eftir LSTSERVER >> SERVER svarinu
             serverCount++; //increment server count
             std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
@@ -424,7 +410,6 @@ int main(int argc, char* argv[]){
                         else {
                             serverCommand(server->sock, &openSockets, &maxfds, buffer, myIpAddress, serverPort);
                         }
-
                     }
                 }
             }
