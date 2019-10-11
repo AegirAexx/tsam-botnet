@@ -8,6 +8,7 @@
 #include <cctype>
 #include <ctime>
 #include <chrono>
+#include "Command.h"
 
 std::vector<std::byte> getRawBytes(std::string str);
 
@@ -20,16 +21,16 @@ int main(int argc, char *argv[]){
     // std::cout << "Plain string length: " << input.size() << std::endl;
 
     //std::vector<std::byte> rawVec{getRawBytes(input)};
-    std::cout << "###\nByte version of string with SOH/EOT: ";
-    auto rawVec{getRawBytes(input)};
-    for(auto i: rawVec) std::cout << std::hex << (size_t)i << " ";
-    std::cout << std::endl;
-    std::cout << "Length byte vector: " << std::dec << rawVec.size() << " bytes" << std::endl;
+    // std::cout << "###\nByte version of string with SOH/EOT: ";
+    // auto rawVec{getRawBytes(input)};
+    // for(auto i: rawVec) std::cout << std::hex << (size_t)i << " ";
+    // std::cout << std::endl;
+    // std::cout << "Length byte vector: " << std::dec << rawVec.size() << " bytes" << std::endl;
 
-    std::string rebuiltString;
-    for(auto byte: rawVec) rebuiltString.push_back((char)byte);
-    std::cout << "###\nString rebuilt from byte vector: " << rebuiltString << std::endl;
-    std::cout << "String length: " << rebuiltString.size() << std::endl;
+    // std::string rebuiltString;
+    // for(auto byte: rawVec) rebuiltString.push_back((char)byte);
+    // std::cout << "###\nString rebuilt from byte vector: " << rebuiltString << std::endl;
+    // std::cout << "String length: " << rebuiltString.size() << std::endl;
 
 
 // // SECTION: REGEX KNOWN COMMANDS
@@ -88,7 +89,7 @@ int main(int argc, char *argv[]){
 
 // PART: SIMULATE MESSAGE/COMMAND STRING
 
-    // std::string str("SERVERS,V_GROUP_1,130.208.243.61,8888;V_GROUP_2,10.2.132.12,888;");
+    // std::string str1("SERVERS,V_GROUP_1,130.208.243.61,8888;V_GROUP_2,10.2.132.12,888;");
     // std::cout << "###\nPlain string: " << str << std::endl;
     // auto bufferPayload{getRawBytes(str)};
     // std::cout << "###\nByte version of bufferPayload with SOH/EOT:\n";
@@ -112,9 +113,32 @@ int main(int argc, char *argv[]){
     //     std::cout << "No it does not have a \";\"" << std::endl;
     // }
 
-    std::vector<std::string> asdf;
+    // std::vector<std::string> asdf;
 
-    std::cout << asdf.max_size() << std::endl;
+    // std::cout << asdf.max_size() << std::endl;
+
+
+    std::string commandstring1("LISTSERVERS,V_GROUP_4");
+    std::string commandstring2("KEEPALIVE,24");
+    std::string commandstring3("GET_MSG,V_GROUP_4");
+    std::string commandstring4("SEND_MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! Do not trust GlaDos. Stay Safe.");
+    std::string commandstring5("LEAVE,123.123.123.1223,21341");
+    std::string commandstring6("STATUSREQ,V_GROUP_4");
+    std::string commandstring7("CONNECT, V_GROUP_4");
+    std::string commandstring8("TYPPI");
+    std::string commandstring9("TYPPI,RASS");
+    std::string commandstring0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
+
+    // std::regex rx(";");
+    // std::regex_replace(commandstring0,rx,",");
+
+    // std::cout << "Command after change: " << std::regex_replace(commandstring0,rx,",") << std::endl;
+
+    Command cmd1(commandstring0);
+
+    std::cout << "Command ID: " << cmd1.getID() << std::endl;
+    std::cout << "payload length: " << cmd1.getPayload().size() << std::endl;
+    for(auto i: cmd1.getPayload()) std::cout << i << std::endl;
 
     return 0;
 }
