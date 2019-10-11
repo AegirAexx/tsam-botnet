@@ -24,38 +24,38 @@ std::string Utilities::getLocalIP() {
 }
 
 
-std::vector<Command> Utilities::processPayload(const std::string payload) {
+// std::vector<Command> Utilities::processPayload(const std::string payload) {
 
-    std::vector<std::string> args;
-    std::string temp(payload);
-    int commandID{idCommand(temp.c_str())};
-    std::vector<Command> commands;
+//     std::vector<std::string> args;
+//     std::string temp(payload);
+//     int commandID{idCommand(temp.c_str())};
+//     std::vector<Command> commands;
 
-    if(commandID > 0) {
-        if(std::any_of(std::begin(temp), std::end(temp), [](char c) { return c == ';'; })) {
-            std::regex rx(",");
-            args = split(temp, ';');
-            std::smatch match;
-            std::regex_search(args.at(0), match, rx);
-            args.at(0) = match.suffix();
-            for(size_t i {0}; i < args.size(); ++i){
-                Command command(commandID, args[i]);
-                commands.push_back(command);
-            }
-        } else {
-            args = split(temp, ',');
-            args.erase(args.begin());
-            std::string tempSingle;
-            for(auto i : args) {
-                tempSingle += (i + ",");
-            }
-            tempSingle.pop_back();
-            Command command(commandID, tempSingle);
-            commands.push_back(command);
-        }
-    }
-    return commands;
-}
+//     if(commandID > 0) {
+//         if(std::any_of(std::begin(temp), std::end(temp), [](char c) { return c == ';'; })) {
+//             std::regex rx(",");
+//             args = split(temp, ';');
+//             std::smatch match;
+//             std::regex_search(args.at(0), match, rx);
+//             args.at(0) = match.suffix();
+//             for(size_t i {0}; i < args.size(); ++i){
+//                 Command command(commandID, args[i]);
+//                 commands.push_back(command);
+//             }
+//         } else {
+//             args = split(temp, ',');
+//             args.erase(args.begin());
+//             std::string tempSingle;
+//             for(auto i : args) {
+//                 tempSingle += (i + ",");
+//             }
+//             tempSingle.pop_back();
+//             Command command(commandID, tempSingle);
+//             commands.push_back(command);
+//         }
+//     }
+//     return commands;
+// }
 
 
 int Utilities::idCommand(const char *buffer) {

@@ -23,6 +23,22 @@ std::ostream& operator << (std::ostream& outs, const Message& msg){
     return outs;
 }
 
+std::string Message::getFrom() {
+    return this->from;
+}
+
+std::string Message::getTo() {
+    return this->to;
+}
+
+std::string Message::getMsg() {
+    return this->msg;
+}
+
+size_t Message::getTimeStamp() {
+    return this->timeStamp;
+}
+
 // std::time_t today_time = std::chrono::system_clock::to_time_t(p1);
 //     std::cout << "today: " << std::ctime(&today_time);
 

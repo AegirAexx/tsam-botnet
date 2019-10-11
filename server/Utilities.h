@@ -31,7 +31,7 @@ class Utilities {
 
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
         void listCommands();
-        std::vector<Command> processPayload(const std::string payload);
+        // std::vector<Command> processPayload(const std::string payload);
 
         // SECTION: NETWORKING
         //void closeClient(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds);
