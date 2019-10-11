@@ -1,0 +1,18 @@
+client: skipanir sem koma fra client
+LISTSERVERS
+LEAVE //Debugging
+CONNECT
+GET MSG
+SEND MSG
+
+server: skipanir sem koma fra server
+LISTSERVERS
+LEAVE
+KEEPALIVE
+SEND MSG
+GET MSG
+SERVERS
+STATUSREQ
+STATUSRESP
+
+

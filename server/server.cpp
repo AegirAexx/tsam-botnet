@@ -9,7 +9,9 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include <queue>
 #include "Utilities.h"
+#include "Message.h"
 
 
 //Backlog
@@ -29,6 +31,7 @@ class Server {
 std::map<int, Server*> servers;
 int serverCount{0};
 std::string group("P3_GROUP_4");
+std::queue<Message> msgQ;
 
 
 void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
@@ -123,14 +126,12 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         msg = "Si patron";
         send(clientSocket, msg.c_str(), msg.length(), 0);
     } else if(tokens[0].compare("LISTSERVERS") == 0) {
-        // TODO: Spurning hvort IP addressan eigi ad fylgja med eda ekki thegar client-spyr, sennilega ekki
-        msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
         for(auto const& server : servers) {
             msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
         }
         //Add start & end hex
-        // TODO: Tharf thetta tegar madur er ad respond-a a client, sennilega ekki
+        // DEBUG: Tharf thetta tegar madur er ad respond-a a client, sennilega ekki
         std::string formattedMsg(u.rebuildString(msg));
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
     }
@@ -146,6 +147,16 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // ef ekki tha spyrja alla one hop gaurana hvort their seu med thennan dude tengdan
         // Ef ekki tha geyma message i message gagnagrindinni, i einhvern x tima adur en thetta er endurtekid
         // Svo thegar buid er ad endurtaka thetta nokkrum sinnum tha er gert hvad? skilabodinu hent? eda?
+        std::string from; //
+        std::string to;
+        std::string msg;
+
+        // Skra msg nidur i FIFO grind
+        newMessage = new Message();
+
+        // Check if FIFO grind is full or index[0] msg is too old
+        // then send to random one-hopper
+
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
@@ -378,6 +389,7 @@ int main(int argc, char* argv[]){
             servers[newSock] = new Server(newSock);
             // DAGUR: Herna aettum vid ad geta skrad inn upplysingarnar um thann sem er ad tengjast okkur strax med server.sin_addr og server.sin_port
             // Thar eru upplysingarnar thurfum i raun ekki ad bida eftir LSTSERVER >> SERVER svarinu
+            // TODO: add ipAddress and port to new Server .... server.sin_ipAdress server.sin_port
             serverCount++; //increment server count
             std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
