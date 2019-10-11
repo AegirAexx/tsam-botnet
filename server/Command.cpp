@@ -1,17 +1,38 @@
-// TODO: VALIDATION!!
 
 #include "Command.h"
 
-Command::Command(int commandID, std::string arguments) {
-    this->commandID = commandID;
-    memset (this->buffer, 0, 4096);
-    strcpy (this->buffer, arguments.c_str());
-    this->argCount = 0;
+Command::Command(std::string buffer) {
+    std::regex rx("^[\\w\\s]+(?=,)");
+    std::smatch match;
+    std::regex_search(buffer, match, rx);
+    if(!match.empty()){
+        std::string command(match.str());
+        std::transform(command.begin(), command.end(), command.begin(), [] (unsigned char c){ return std::toupper(c); });
+        if(command == "SEND_MSG") this->id = 1;
+        else if(command == "GET_MSG") this->id = 2;
+        else if(command == "KEEPALIVE") this->id = 3;
+        else if(command == "CONNECT") this->id = 4;
+        else if(command == "LEAVE") this->id = 5;
+        else if(command == "STATUSREQ") this->id = 6;
+        else if(command == "LISTSERVERS") this->id = 7;
+        else if(command == "SERVERS") this->id = 8;
+        else if(command == "STATUSRESP") this->id = 9;
+        else this->id = 0;
+    } else this->id = -1;
+
+    if(this->id > 0) {
+        std::regex rx(";");
+        std::regex_replace(buffer,rx,",");
+        this->payload = split(buffer, ',');
+        this->payload.erase(this->payload.begin());
+    }
+
 }
 
-// Add a pretty print overload
-std::ostream& operator << (std::ostream& outs, const Command& command){
-    Command tempCommand = command; // Temporary variable to circumvent "const" restrictions.
-    outs << "Command#" << tempCommand.commandID << "\nBuffer: " << tempCommand.buffer << std::endl;
-    return outs;
+std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
+    std::stringstream ss(stringToSplit);
+    std::string word;
+	std::vector<std::string> splittedStrings;
+    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
+    return splittedStrings;
 }
