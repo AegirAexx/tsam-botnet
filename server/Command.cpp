@@ -2,7 +2,6 @@
 #include "Command.h"
 
 Command::Command(std::string buffer) {
-
     std::regex rx("^[\\w\\s]+(?=,)");
     std::smatch match;
     std::regex_search(buffer, match, rx);
@@ -24,14 +23,11 @@ Command::Command(std::string buffer) {
         else this->id = 0;
     } else this->id = -1;
 
-
-
     if(this->id > 0) {
         std::regex rx(";");
         this->payload = split(std::regex_replace(buffer,rx,","), ',');
         this->payload.erase(this->payload.begin());
     }
-
 }
 
 std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
