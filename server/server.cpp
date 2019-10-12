@@ -20,6 +20,7 @@ class Server {
     int sock;              // socket of client connection
     std::string name;           // Limit length of name of client's user
     std::string ipAddress;
+    int groupID;
     int port;
     bool isCOC = false;
     Server(int socket) : sock(socket) {}
@@ -60,6 +61,7 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
 
 void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
 
+    Utilities u;
     // COM: Create a socket
     int serverSock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
 
@@ -104,6 +106,8 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
     // DAGUR: store ipAddress and port number of new connection
     servers[serverSock]->name = name;
+    auto temp = u.split(name, '_');
+    servers[serverSock]->groupID =atoi(temp[temp.size()-1].c_str());
     servers[serverSock]->ipAddress = ipAddress;
     servers[serverSock]->port = port;
 }
@@ -126,6 +130,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     if(c.getID() == 4) { // COM: CONNECT
         // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
+
         connectToServer(c.getPayload()[1], atoi(c.getPayload()[2].c_str()), &*openSockets, &*maxfds, c.getPayload()[0]);
         msg = "Si patron";
         send(clientSocket, msg.c_str(), msg.length(), 0);
@@ -144,13 +149,13 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // Spurning hvernig thetta fall se
         // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
         // ef ekki tha senda get MSG a alla one hop gaurana
-    } else if(c.getID() == 11) { // COM: SEND_MSG
+    } else if(c.getID() == 11) { // COM: SENDMSG
 
-        std::string from = c.getPayload()[0]; //Tekur inn fyrsta argument
-        std::string to = c.getPayload()[1]; //Tekur inn annad argument
+        std::string from = group; //Tekur inn fyrsta argument
+        std::string to = c.getPayload()[0]; //Tekur inn annad argument
         std::string msg; //Tekur inn message-id sjalft
 
-        for (unsigned int i = 2; i < c.getPayload().size(); i++) {
+        for (unsigned int i = 1; i < c.getPayload().size(); i++) {
             msg += c.getPayload()[i] + " ";
         }
 
@@ -162,6 +167,12 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // COM: Add new message to FIFO data structure
         msgQ.push(*newMessage);
 
+        // DAGUR: Baeta herna inn ++ a videigandi array holf
+        int groupID = msgQ.front().getGroupID();
+
+        std::cout << "GroupMsgCount Fyrir: " << groupMsgCount[groupID] << std::endl;
+        groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
+        std::cout << "GroupMsgCount Eftir: " << groupMsgCount[groupID] << std::endl;
         // DAGUR: Delete here?
 
         // Check if FIFO grind is full or index[0] msg is too old
@@ -169,7 +180,10 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             // then send to random one-hopper
 
         }
-        std::cout << "Message stored in Q, From: " << msgQ.front().getFrom() << " To: " << msgQ.front().getTo() << " Message: " << msgQ.front().getMsg() << std::endl;
+
+        // TODO: Implement-a eins server megin
+
+        std::cout << "Message stored in Q, From: " << msgQ.front().getFrom() << " To: " << msgQ.front().getTo() << " Message: " << msgQ.front().getMsg() << " With group ID: " << msgQ.front().getGroupID() << std::endl;
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
@@ -250,6 +264,10 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
     } else if (c.getID() == 8){ // COM: SERVERS
 
         servers[serverSocket]->name = c.getPayload()[0];
+
+        auto temp = u.split(c.getPayload()[0], '_');
+        servers[serverSocket]->groupID =atoi(temp[temp.size()-1].c_str());
+        std::cout << "GroupID a incoming server connection: " << servers[serverSocket]->groupID << std::endl;
         // TODO: Aetti ad vera haegt ad skra allar thessar upplysingar fyrir utan nafnid a theim timapunkti sem accept() er gert
         servers[serverSocket]->ipAddress = c.getPayload()[1];
         servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
@@ -283,12 +301,12 @@ size_t sendKeepAlive() {
     for(auto const& pair : servers) {
         Server *server = pair.second;
 
-        aliveMsg += std::to_string(0); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
+        aliveMsg += std::to_string(groupMsgCount[server->groupID]); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
 
         std::string formattedMsg(u.addRawBytes(aliveMsg));
         send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
 
-        std::cout << "Send keep alive to: " << server->name << std::endl;
+        std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl;
     }
 
     return u.getTimestamp();
