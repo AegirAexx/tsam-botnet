@@ -17,6 +17,9 @@ Command::Command(std::string buffer) {
         else if(command == "LISTSERVERS") this->id = 7;
         else if(command == "SERVERS") this->id = 8;
         else if(command == "STATUSRESP") this->id = 9;
+        else if(command == "GETMSG") this->id = 10;
+        else if(command == "SENDMSG") this->id = 11;
+        else if(command == "CONNECT") this->id = 12;
         else this->id = 0;
     } else this->id = -1;
 

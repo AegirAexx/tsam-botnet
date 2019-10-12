@@ -64,11 +64,10 @@ void Message::logMessage() {
 std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
-    outs << tempMessage.from
-         << "," << tempMessage.to
-         << "," << tempMessage.msg
-         << "," << tempMessage.timeStamp
-         << "," << std::put_time(std::gmtime(&t), "%d.%m.%y-%H:%M:%S"  )
+    outs << "FROM: " << tempMessage.from
+         << " | TO: " << tempMessage.to
+         << " | MSG: " << tempMessage.msg
+         << " | TIMESTAMP: " << std::put_time(std::gmtime(&t), "%d.%m.%y -=- %H:%M:%S")
     << std::endl;
     return outs;
 }
