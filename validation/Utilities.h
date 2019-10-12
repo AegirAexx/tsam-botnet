@@ -1,0 +1,41 @@
+#ifndef UTILITIES_H
+#define UTILITIES_H
+
+// #include "Command.h"
+//#include "Client.h"
+
+// #include <iostream>
+// #include <regex>
+// #include <iomanip>
+// #include <algorithm>
+#include <ctime>
+#include <chrono>
+#include <vector>
+#include <iterator>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+class Utilities {
+    public:
+        Utilities();
+
+        std::size_t getTimestamp();
+        std::string getLocalIP();
+
+        // start stop | SOH - EOT
+        std::string addRawBytes(std::string str);
+        std::string removeRawBytes(std::string str);
+
+        // Handshake
+        std::string handshake(std::string groupName, std::string ipAddress, int port);
+
+
+    private:
+
+};
+
+#endif // UTILITIES_H
+

@@ -22,7 +22,6 @@ Command::Command(std::string buffer) {
 
     if(this->id > 0) {
         std::regex rx(";");
-        // std::regex_replace(buffer,rx,",");
         this->payload = split(std::regex_replace(buffer,rx,","), ',');
         this->payload.erase(this->payload.begin());
     }
