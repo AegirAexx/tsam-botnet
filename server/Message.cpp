@@ -8,6 +8,8 @@ Message::Message(Command cmd) {
     for (size_t i = 2; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
     this->msg.pop_back();
     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    this->groupID = getGroupID();
+
 }
 
 

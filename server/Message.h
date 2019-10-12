@@ -20,7 +20,7 @@ class Message {
         std::string getMsg();
         size_t getTimeStamp();
         std::string getFormattedMessage();
-
+        int getGroupID();
 
         void logMessage();
 
@@ -33,7 +33,6 @@ class Message {
         std::string msg;
         int groupID;
         size_t timeStamp;
-        int getGroupID();
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
 
 };
