@@ -5,10 +5,12 @@
 #include <chrono>
 #include <ostream>
 #include <iomanip>
+#include "Command.h"
 
 class Message {
     public:
         Message(std::string from, std::string to, std::string msg);
+        Message(Command cmd);
         virtual ~Message();
 
         std::string getFrom();

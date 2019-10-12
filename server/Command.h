@@ -9,7 +9,7 @@
 class Command {
     public:
         Command(std::string buffer);
-        Command(const char *buffer);
+
         int getID();
         std::vector<std::string> getPayload();
 
