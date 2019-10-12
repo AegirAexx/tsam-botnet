@@ -12,8 +12,6 @@
 #include <algorithm>
 #include <vector>
 #include <iterator>
-
-// TODO: Are all of these includes needed?
 #include <sys/types.h>
 #include <ifaddrs.h>
 #include <sys/socket.h>
@@ -27,24 +25,12 @@ class Utilities {
         std::size_t getTimestamp();
         std::string getLocalIP();
 
-        int idCommand(const char *buffer);
-
-        std::vector<std::string> split(std::string stringToSplit, char delimeter);
-        void listCommands();
-        // std::vector<Command> processPayload(const std::string payload);
-
-        // SECTION: NETWORKING
-        //void closeClient(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds);
-        //void clientCommand(std::vector<Client> clients, int clientSocket, fd_set *openSockets, int *maxfds, char *buffer);
-
-        //start stop
-        std::vector<std::byte> getRawBytes(std::string str);
-        std::string rebuildString(std::string str);
+        // start stop | SOH - EOT
+        std::string addRawBytes(std::string str);
         std::string removeRawBytes(std::string str);
 
-        //Handshake
+        // Handshake
         std::string handshake(std::string groupName, std::string ipAddress, int port);
-
 
 
     private:
