@@ -16,6 +16,7 @@ class Command {
     private:
         int id;
         std::vector<std::string> payload;
+
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
 
 };
