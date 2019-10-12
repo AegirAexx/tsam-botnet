@@ -195,6 +195,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Get IP address, put in message to send
         msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
+
         for(auto const& server : servers) {
             // If server is not a client then add to msg // DAGUR: er thessi isCOC logic kannski sma stupid? aettum vid ad hafa ser client map frekar?
             if(!server.second->isCOC) {
