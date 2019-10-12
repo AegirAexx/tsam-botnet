@@ -28,18 +28,18 @@ Command::Command(std::string buffer) {
 
 }
 
-std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
-    std::stringstream ss(stringToSplit);
-    std::string word;
-	std::vector<std::string> splittedStrings;
-    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
-    return splittedStrings;
-}
-
 std::vector<std::string>  Command::getPayload(){
     return this->payload;
 }
 
 int Command::getID(){
     return this->id;
+}
+
+std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
+    std::stringstream ss(stringToSplit);
+    std::string word;
+	std::vector<std::string> splittedStrings;
+    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
+    return splittedStrings;
 }
