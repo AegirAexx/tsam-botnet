@@ -21,10 +21,11 @@ Message::~Message() {}
 std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
-    outs << "--\nFROM: " << tempMessage.from
-         << "\n--\nTO: " << tempMessage.to
-         << "\n--\nPAYLOAD:\n" << tempMessage.msg
-         << "\n--\nTIMESTAMP: " << std::put_time(std::gmtime(&t), "%d.%m.%y|%H:%M:%S"  )
+    outs << "[FROM: " << tempMessage.from
+         << " | TO: " << tempMessage.to
+         << " | TIMESTAMP: " << std::put_time(std::gmtime(&t), "%d.%m.%y - %H:%M:%S"  )
+         << " | MSG: " << tempMessage.msg
+         << "]"
     << std::endl;
     return outs;
 }

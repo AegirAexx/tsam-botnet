@@ -9,8 +9,8 @@
 #include <ctime>
 #include <chrono>
 #include "Command.h"
-
-std::vector<std::byte> getRawBytes(std::string str);
+#include "Message.h"
+#include "Utilities.h"
 
 int main(int argc, char *argv[]){
 
@@ -117,6 +117,7 @@ int main(int argc, char *argv[]){
 
     // std::cout << asdf.max_size() << std::endl;
 
+// PART: SIMULATE MESSAGE/COMMAND STRING PART 2!!
 
     std::string commandstring1("LISTSERVERS,V_GROUP_4");
     std::string commandstring2("KEEPALIVE,24");
@@ -129,28 +130,25 @@ int main(int argc, char *argv[]){
     std::string commandstring9("TYPPI,RASS");
     std::string commandstring0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
 
-    // std::regex rx(";");
-    // std::regex_replace(commandstring0,rx,",");
-
-    // std::cout << "Command after change: " << std::regex_replace(commandstring0,rx,",") << std::endl;
 
     Command cmd1(commandstring0);
+    Command cmd2(commandstring4);
 
+    Message msg(cmd2);
+
+    std::cout << "##############################" << std::endl;
     std::cout << "Command ID: " << cmd1.getID() << std::endl;
     std::cout << "payload length: " << cmd1.getPayload().size() << std::endl;
     for(auto i: cmd1.getPayload()) std::cout << i << std::endl;
+    std::cout << "##############################" << std::endl;
+    std::cout << "Command ID: " << cmd2.getID() << std::endl;
+    std::cout << "payload length: " << cmd2.getPayload().size() << std::endl;
+    for(auto i: cmd2.getPayload()) std::cout << i << std::endl;
+    std::cout << "##############################" << std::endl;
+    std::cout << msg << std::endl;
+
 
     return 0;
-}
-
-// This function stuffs 0x01 and 0x04 on either end.
-// could be used to construct outgoing messages.
-std::vector<std::byte> getRawBytes(std::string str){
-    std::vector<std::byte> rawBytes;
-    rawBytes.push_back((std::byte)0x01);
-    for(auto charByte: str) rawBytes.push_back((std::byte)charByte);
-    rawBytes.push_back((std::byte)0x04);
-    return rawBytes;
 }
 
 // PART: COMMANDS - MINIMUM REQUIRED
