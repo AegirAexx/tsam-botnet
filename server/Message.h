@@ -11,6 +11,10 @@ class Message {
         Message(std::string from, std::string to, std::string msg);
         virtual ~Message();
 
+        std::string getFrom();
+        std::string getTo();
+        std::string getMsg();
+        size_t getTimeStamp();
         friend std::ostream& operator << (std::ostream& outs, const Message& msg);
 
     private:

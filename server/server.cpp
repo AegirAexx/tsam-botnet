@@ -118,6 +118,8 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
     std::stringstream stream(buffer);
     Utilities u;
 
+    Command c(buffer);
+
     while(stream >> token) tokens.push_back(token);
 
     if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
@@ -140,23 +142,32 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // Spurning hvernig thetta fall se
         // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
         // ef ekki tha senda get MSG a alla one hop gaurana
-    } else if((tokens[0].compare("SEND") == 0) &&  (tokens[1].compare("MSG") == 0)) {
-        // TODO: Utfaera thetta fall
-        // Spurning hvernig thetta fall se
-        // Athuga hvort eg se med tilgreindan hop sem one hop
-        // ef ekki tha spyrja alla one hop gaurana hvort their seu med thennan dude tengdan
-        // Ef ekki tha geyma message i message gagnagrindinni, i einhvern x tima adur en thetta er endurtekid
-        // Svo thegar buid er ad endurtaka thetta nokkrum sinnum tha er gert hvad? skilabodinu hent? eda?
-        std::string from; //
-        std::string to;
-        std::string msg;
+    } else if(c.getID() == 1) { // COM: SEND_MSG
 
-        // Skra msg nidur i FIFO grind
-        newMessage = new Message();
+        std::string from = c.getPayload()[0]; //Tekur inn fyrsta argument
+        std::string to = c.getPayload()[1]; //Tekur inn annad argument
+        std::string msg; //Tekur inn message-id sjalft
+
+        for (unsigned int i = 2; i < c.getPayload().size(); i++) {
+            msg += c.getPayload()[i] + " ";
+        }
+
+        msg.pop_back();
+
+        // COM: Create new Message to store message info
+        Message *newMessage = new Message(from, to, msg);
+
+        // COM: Add new message to FIFO data structure
+        msgQ.push(*newMessage);
+
+        // DAGUR: Delete here?
 
         // Check if FIFO grind is full or index[0] msg is too old
-        // then send to random one-hopper
+        if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+            // then send to random one-hopper
 
+        }
+        std::cout << "Message stored in Q, From: " << msgQ.front().getFrom() << " To: " << msgQ.front().getTo() << " Message: " << msgQ.front().getMsg() << std::endl;
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
@@ -210,13 +221,24 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // ef ekki tha senda get MSG a alla one hop gaurana
         // ??????????
     } else if((tokens[0].compare("SEND") == 0) && (tokens[1].compare("MSG") == 0)) {
-        // TODO: Utfaera thetta fall
-        // Spurning hvernig thetta fall se
-        // Athuga hvort eg se med tilgreindan hop sem one hop
-        // ef ekki tha spyrja alla one hop gaurana hvort their seu med thennan dude tengdan
-        // Ef ekki tha geyma message i message gagnagrindinni, i einhvern x tima adur en thetta er endurtekid
-        // Svo thegar buid er ad endurtaka thetta nokkrum sinnum tha er gert hvad? skilabodinu hent? eda?
-        // ??????????
+
+        // std::string from; //Tekur inn fyrsta argument
+        // std::string to; //Tekur inn annad argument
+        // std::string msg; //Tekur inn message-id sjalft
+
+        // // COM: Create new Message to store message info
+        // Message *newMessage = new Message(from, to, msg);
+
+        // // COM: Add new message to FIFO data structure
+        // msgQ.push(*newMessage);
+
+        // // DAGUR: Delete here?
+
+        // // Check if FIFO grind is full or index[0] msg is too old
+        // if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+        //     // then send to random one-hopper
+        // }
+
     } else if (tokens[0].compare("SERVERS") == 0){
 
         servers[serverSocket]->name = tokens[1];
@@ -390,6 +412,12 @@ int main(int argc, char* argv[]){
             // DAGUR: Herna aettum vid ad geta skrad inn upplysingarnar um thann sem er ad tengjast okkur strax med server.sin_addr og server.sin_port
             // Thar eru upplysingarnar thurfum i raun ekki ad bida eftir LSTSERVER >> SERVER svarinu
             // TODO: add ipAddress and port to new Server .... server.sin_ipAdress server.sin_port
+            // DAGUR: Sma tilraunamennska her
+            // servers[serverSock]->ipAddress = server.sin_addr.s_addr;
+            // servers[serverSock]->port = server.sin_port;
+            // std::cout << "Sin address: " << server.sin_addr.s_addr << std::endl;
+            // std::cout << "Sin port: " << server.sin_port << std::endl;
+
             serverCount++; //increment server count
             std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
