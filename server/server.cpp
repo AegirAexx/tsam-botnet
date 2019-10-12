@@ -13,7 +13,6 @@
 #include "Utilities.h"
 #include "Message.h"
 
-
 //Backlog
 
 class Server {
@@ -125,7 +124,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     while(stream >> token) tokens.push_back(token);
 
-    if(c.getID() == 12) { // COM: CONNECT
+    if(c.getID() == 4) { // COM: CONNECT
         // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
         connectToServer(c.getPayload()[1], atoi(c.getPayload()[2].c_str()), &*openSockets, &*maxfds, c.getPayload()[0]);
         msg = "Si patron";
@@ -222,6 +221,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Hvernig a eiginlega ad virka?
         // Taka vid keepalive skilabod-um fra odrum server, meta hvort tad seu einhver skilabod til okkar
         // t.e. ad fjoldinn se staerri en 0, ef svo er tha a ad gera get msg a vidkomandi socket
+
     } else if(c.getID() == 2) { // COM: GET_MSG
         // TODO: Utfaera thetta fall
         // Spurning hvernig thetta fall se
@@ -230,22 +230,22 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // ??????????
     } else if(c.getID() == 1) { // COM: SEND_MSG
 
-        // std::string from; //Tekur inn fyrsta argument
-        // std::string to; //Tekur inn annad argument
-        // std::string msg; //Tekur inn message-id sjalft
+        std::string from; //Tekur inn fyrsta argument
+        std::string to; //Tekur inn annad argument
+        std::string msg; //Tekur inn message-id sjalft
 
-        // // COM: Create new Message to store message info
-        // Message *newMessage = new Message(from, to, msg);
+        // COM: Create new Message to store message info
+        Message *newMessage = new Message(from, to, msg);
 
-        // // COM: Add new message to FIFO data structure
-        // msgQ.push(*newMessage);
+        // COM: Add new message to FIFO data structure
+        msgQ.push(*newMessage);
 
-        // // DAGUR: Delete here?
+        // DAGUR: Delete here?
 
-        // // Check if FIFO grind is full or index[0] msg is too old
-        // if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-        //     // then send to random one-hopper
-        // }
+        // Check if FIFO grind is full or index[0] msg is too old
+        if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+            // then send to random one-hopper
+        }
 
     } else if (c.getID() == 8){ // COM: SERVERS
 
