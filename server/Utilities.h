@@ -12,6 +12,7 @@
 #include <chrono>
 #include <vector>
 #include <iterator>
+#include <sstream>
 #include <sys/types.h>
 #include <ifaddrs.h>
 #include <sys/socket.h>
@@ -24,6 +25,8 @@ class Utilities {
 
         std::size_t getTimestamp();
         std::string getLocalIP();
+        std::vector<std::string> split(std::string stringToSplit, char delimeter);
+
 
         // start stop | SOH - EOT
         std::string addRawBytes(std::string str);

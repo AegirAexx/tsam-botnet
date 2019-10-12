@@ -57,6 +57,15 @@ std::string Utilities::handshake(std::string groupName, std::string ipAddress, i
     return addRawBytes("LISTSERVERS," + groupName + "," + ipAddress + "," + std::to_string(port));
 }
 
+
+std::vector<std::string> Utilities::split(std::string stringToSplit, char delimeter) {
+    std::stringstream ss(stringToSplit);
+    std::string word;
+	std::vector<std::string> splittedStrings;
+    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
+    return splittedStrings;
+}
+
 // PART: Non workable code. LEGACY.
 
 // int Utilities::idCommand(const char *buffer) {
