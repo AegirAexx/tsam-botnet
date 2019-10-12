@@ -1,18 +1,35 @@
+####################################
 client: skipanir sem koma fra client
+####################################
+
 LISTSERVERS
+
 LEAVE //Debugging
+
 CONNECT
+
 GET MSG
+
 SEND MSG
 
+####################################
 server: skipanir sem koma fra server
+####################################
+
 LISTSERVERS
-LEAVE
-KEEPALIVE
-SEND MSG
-GET MSG
+
 SERVERS
+
+LEAVE
+
+KEEPALIVE
+
+SEND MSG(SEND_MSG)
+
+GET MSG(GET_MSG)
+
 STATUSREQ
+
 STATUSRESP
 
 

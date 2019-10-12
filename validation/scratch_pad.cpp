@@ -119,33 +119,58 @@ int main(int argc, char *argv[]){
 
 // PART: SIMULATE MESSAGE/COMMAND STRING PART 2!!
 
-    std::string commandstring1("LISTSERVERS,V_GROUP_4");
-    std::string commandstring2("KEEPALIVE,24");
-    std::string commandstring3("GET_MSG,V_GROUP_4");
-    std::string commandstring4("SEND_MSG,V_GROUP_4,V_GROUP_123,The cake is a lie! Do not trust GlaDos. Stay Safe.");
-    std::string commandstring5("LEAVE,123.123.123.1223,21341");
-    std::string commandstring6("STATUSREQ,V_GROUP_4");
-    std::string commandstring7("CONNECT, V_GROUP_4");
-    std::string commandstring8("TYPPI");
-    std::string commandstring9("TYPPI,RASS");
-    std::string commandstring0("SERVERS,V_GROUP_1,130.208.243.661,12344;V_GROUP_2,10.2.132.12,8888;V_GROUP_3,130.208.243.61,8878;V_GROUP_567,10.2.132.12,8128;V_GROUP_147,130.208.243.61,8458;V_GROUP_347,10.2.132.12,8848;");
+    std::string commandstring1("SEND_MSG,V_GROUP_4,V_GROUP_1,The cake is a lie! Do not trust GlaDos. Stay Safe.");
+    std::string commandstring2("SEND_MSG,V_GROUP_12,V_GROUP_13,The cake is a lie! Do not trust GlaDos. Stay Safe.");
+    std::string commandstring3("SEND_MSG,V_GROUP_234,V_GROUP_43,The cake is a lie! Do not trust GlaDos. Stay Safe.");
+    std::string commandstring4("SEND_MSG,V_GROUP_14,V_GROUP_23,The cake is a lie! Do not trust GlaDos. Stay Safe.");
 
+    Command cmd1(commandstring1);
+    Command cmd2(commandstring2);
+    Command cmd3(commandstring3);
+    Command cmd4(commandstring4);
 
-    Command cmd1(commandstring0);
-    Command cmd2(commandstring4);
+    Message msg1(cmd1);
+    Message msg2(cmd2);
+    Message msg3(cmd3);
+    Message msg4(cmd4);
 
-    Message msg(cmd2);
-
-    std::cout << "##############################" << std::endl;
+    std::cout << "##################################################" << std::endl;
     std::cout << "Command ID: " << cmd1.getID() << std::endl;
     std::cout << "payload length: " << cmd1.getPayload().size() << std::endl;
     for(auto i: cmd1.getPayload()) std::cout << i << std::endl;
-    std::cout << "##############################" << std::endl;
+    std::cout << "##################################################" << std::endl;
     std::cout << "Command ID: " << cmd2.getID() << std::endl;
     std::cout << "payload length: " << cmd2.getPayload().size() << std::endl;
     for(auto i: cmd2.getPayload()) std::cout << i << std::endl;
-    std::cout << "##############################" << std::endl;
-    std::cout << msg << std::endl;
+    std::cout << "##################################################" << std::endl;
+    std::cout << "Command ID: " << cmd3.getID() << std::endl;
+    std::cout << "payload length: " << cmd3.getPayload().size() << std::endl;
+    for(auto i: cmd3.getPayload()) std::cout << i << std::endl;
+    std::cout << "##################################################" << std::endl;
+    std::cout << "Command ID: " << cmd4.getID() << std::endl;
+    std::cout << "payload length: " << cmd4.getPayload().size() << std::endl;
+    for(auto i: cmd4.getPayload()) std::cout << i << std::endl;
+    std::cout << "##################################################" << std::endl;
+    std::cout << "Logging..." << std::endl;
+
+    msg4.logMessage();
+    msg1.logMessage();
+    msg2.logMessage();
+    msg3.logMessage();
+
+
+    std::cout << "Logging... Finished!" << std::endl;
+    std::cout << "##################################################" << std::endl;
+
+    Message data;
+
+    auto msgs = data.getMessages();
+    std::cout << msgs.size() << std::endl;
+
+    // for(auto i: msgs) std::cout << i << std::endl;
+
+    // std::cout << msg << std::endl;
+    // msg.getMessages();
 
 
     return 0;
