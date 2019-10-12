@@ -32,6 +32,7 @@ std::map<int, Server*> servers;
 int serverCount{0};
 std::string group("P3_GROUP_4");
 std::queue<Message> msgQ;
+int groupMsgCount[200]{0};
 
 
 void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
@@ -120,29 +121,31 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
     Command c(buffer);
 
+    std::cout << "Command #: " << c.getID() << std::endl;
+
     while(stream >> token) tokens.push_back(token);
 
-    if((tokens[0].compare("CONNECT") == 0) && (tokens.size() == 4)) { //Usage: CONNECT groupID IPaddress Port
+    if(c.getID() == 12) { // COM: CONNECT
         // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
-        connectToServer(tokens[2], atoi(tokens[3].c_str()), &*openSockets, &*maxfds, tokens[1]);
+        connectToServer(c.getPayload()[1], atoi(c.getPayload()[2].c_str()), &*openSockets, &*maxfds, c.getPayload()[0]);
         msg = "Si patron";
         send(clientSocket, msg.c_str(), msg.length(), 0);
-    } else if(tokens[0].compare("LISTSERVERS") == 0) {
+    } else if(c.getID() == 7) { // COM: LISTSERVERS
         //Go through clients/servers map and add all to message
         for(auto const& server : servers) {
             msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
         }
         //Add start & end hex
         // DEBUG: Tharf thetta tegar madur er ad respond-a a client, sennilega ekki
-        std::string formattedMsg(u.rebuildString(msg));
+        std::string formattedMsg(u.addRawBytes(msg));
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
     }
-    else if((tokens[0].compare("GET") == 0) &&  (tokens[1].compare("MSG") == 0)) {
+    else if(c.getID() == 10) { // COM: Client GETMSG
         // TODO: Utfaera thetta fall
         // Spurning hvernig thetta fall se
         // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
         // ef ekki tha senda get MSG a alla one hop gaurana
-    } else if(c.getID() == 1) { // COM: SEND_MSG
+    } else if(c.getID() == 11) { // COM: SEND_MSG
 
         std::string from = c.getPayload()[0]; //Tekur inn fyrsta argument
         std::string to = c.getPayload()[1]; //Tekur inn annad argument
@@ -181,12 +184,14 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
     auto cleanBuffer = u.removeRawBytes(buffer);
 
     // COM: Split command from client into tokens for parsing
-    auto tokens = u.split(cleanBuffer, ',');
+    //auto tokens = u.split(cleanBuffer, ',');
+
+    Command c(cleanBuffer);
 
     // String to hold response message
     std::string msg;
 
-    if((tokens[0].compare("LISTSERVERS") == 0)) { //Usage: CONNECT groupID IPaddress Port
+    if(c.getID() == 7) { // DAGUR: LISTSERVERS
         // Get IP address, put in message to send
         msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
@@ -197,13 +202,13 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             }
         }
         //Add start & end hex
-        std::string formattedMsg(u.rebuildString(msg));
+        std::string formattedMsg(u.addRawBytes(msg));
         send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-    } else if(tokens[0].compare("LEAVE") == 0) {  // DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
+    } else if(c.getID() == 5) {  // LEAVE  DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
         // Tokens[1] = serverIp
-        std::string ipAddressToLeave(tokens[1]);
+        std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
         // Tokens[2] = serverPort
-        int portToLeave{atoi(tokens[2].c_str())};
+        int portToLeave{atoi(c.getPayload()[1].c_str())};
 
         // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
         for(auto const& server : servers) {
@@ -212,15 +217,17 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
                 closeServer(serverSocket, openSockets, maxfds);
             }
         }
-    } else if(tokens[0].compare("KEEPALIVE") == 0) {
+    } else if(c.getID() == 3) { // COM: KEEPALIVE
         // Hvernig a eiginlega ad virka?
-    } else if((tokens[0].compare("GET") == 0) && (tokens[1].compare("MSG") == 0)) {
+        // Taka vid keepalive skilabod-um fra odrum server, meta hvort tad seu einhver skilabod til okkar
+        // t.e. ad fjoldinn se staerri en 0, ef svo er tha a ad gera get msg a vidkomandi socket
+    } else if(c.getID() == 2) { // COM: GET_MSG
         // TODO: Utfaera thetta fall
         // Spurning hvernig thetta fall se
         // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
         // ef ekki tha senda get MSG a alla one hop gaurana
         // ??????????
-    } else if((tokens[0].compare("SEND") == 0) && (tokens[1].compare("MSG") == 0)) {
+    } else if(c.getID() == 1) { // COM: SEND_MSG
 
         // std::string from; //Tekur inn fyrsta argument
         // std::string to; //Tekur inn annad argument
@@ -239,12 +246,12 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         //     // then send to random one-hopper
         // }
 
-    } else if (tokens[0].compare("SERVERS") == 0){
+    } else if (c.getID() == 8){ // COM: SERVERS
 
-        servers[serverSocket]->name = tokens[1];
+        servers[serverSocket]->name = c.getPayload()[0];
         // TODO: Aetti ad vera haegt ad skra allar thessar upplysingar fyrir utan nafnid a theim timapunkti sem accept() er gert
-        servers[serverSocket]->ipAddress = tokens[2];
-        servers[serverSocket]->port = atoi(tokens[3].c_str());
+        servers[serverSocket]->ipAddress = c.getPayload()[1];
+        servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
 
         // TODO: Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
         std::cout << "SERVERS message from server:" << cleanBuffer << std::endl; // DEBUG:
@@ -253,18 +260,37 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Ef ekki tha geyma tha i timabundinni gagnagrind (map svipad og servers vaentanlega)
         // rulla svo i gegnum tha og gera connect a server-ana a medan ad servercount er minna en 5
 
-    } else if(tokens[0].compare("STATUSREQ") == 0) {
+    } else if(c.getID() == 6) { // COM: STATUSREQ
         // Thegar thetta kemur inn tha a madur ad skila tilbaka streng sem byrjar a STATUSRESP
         // Og svo fara ofan i gagnagrindina og finna oll skilabodin sem madur er med thar
         // Held eg en frekar oskyrt
-    } else if(tokens[0].compare("STATUSRESP") == 0) {
+    } else if(c.getID() == 9) { // COM: STATUSRESP
         // Thegar thetta kemur inn tydir ad madur er ad fa response fra statusreq sem madur hefur sent
         // Madur vaentanlega sendir statusreq til ad ga hvada skilabod onehop gaurarnir manns eru med
         // Svo er tha spurning hvad madur gerir vid thessar upplysingar?
         // Fer vaentanlega eftir tvi hvernig madur utfaerir get MSG
     } else {
-        std::cout << "Unknown command from client: " << buffer << std::endl;
+        std::cout << "Unknown command from server: " << buffer << std::endl;
+        std::cout << "Command #: " << c.getID() << std::endl;
     }
+}
+
+size_t sendKeepAlive() {
+    Utilities u;
+    std::string aliveMsg("KEEPALIVE,");
+
+    for(auto const& pair : servers) {
+        Server *server = pair.second;
+
+        aliveMsg += std::to_string(0); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
+
+        std::string formattedMsg(u.addRawBytes(aliveMsg));
+        send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+        std::cout << "Send keep alive to: " << server->name << std::endl;
+    }
+
+    return u.getTimestamp();
 }
 
 
@@ -373,12 +399,19 @@ int main(int argc, char* argv[]){
     bool isFinished{false};
     char buffer[1024];
 
+    struct timeval tv{60, 0};
+    size_t lastKeepAlive = u.getTimestamp(); //Initialize-a med now
+    size_t interruptTime;
+
     while(!isFinished) {
         //Get modifiable copy of openSockets
+
+        std::cout << "While loop started: " << std::endl;
+
         readSockets = exceptSockets = openSockets;
         memset(buffer, 0, sizeof(buffer));
 
-        int n = select(maxfds + 1, &readSockets, NULL, &exceptSockets, NULL);
+        int n = select(maxfds + 1, &readSockets, NULL, &exceptSockets, &tv);
 
         if(n < 0) {
             std::perror("select failed - closing down\n");
@@ -427,6 +460,15 @@ int main(int argc, char* argv[]){
             // Decrement the number of sockets waiting to be dealt with
             n--;
             std::cout << "Server connected on socket: " << newSock << std::endl;
+        }
+
+        if(n == 0) { //Vid timeout-udum
+            lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
+            tv.tv_sec = 60;
+        }
+        else {
+            interruptTime = u.getTimestamp();
+            tv.tv_sec = interruptTime - lastKeepAlive;
         }
 
         while(n > 0) {
