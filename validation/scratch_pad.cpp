@@ -12,6 +12,40 @@
 #include "Message.h"
 #include "Utilities.h"
 
+std::vector<std::string> split(std::string stringToSplit, char delimeter) {
+    std::stringstream ss(stringToSplit);
+    std::string word;
+	std::vector<std::string> splittedStrings;
+    while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
+    return splittedStrings;
+}
+
+std::vector<std::string> getMessages() {
+    Utilities u;
+    std::vector<Message> messages;
+    std::vector<std::string> buffers;
+    std::vector<std::string> tokens;
+    std::string buffer;
+    std::ifstream inStream;
+    inStream.open("logs/MessageLog.txt", std::ios::in);
+    if(inStream.is_open()) {
+        while(!inStream.eof()) {
+            getline(inStream, buffer);
+            buffers.push_back(buffer);
+        }
+        inStream.close();
+    }
+    return buffers;
+    // for(size_t i = 0; i < buffers.size(); ++i) {
+    //     tokens = split(buffers[i], ',');
+    //     Message msg(tokens[0],tokens[1],tokens[2],(size_t)atoi(tokens[3].c_str()));
+    //     messages.push_back(msg);
+    //     tokens.clear();
+    // }
+    // return messages;
+}
+
+
 int main(int argc, char *argv[]){
 
 // // SECTION: STRING => RAW BYTE => STRING
@@ -153,21 +187,19 @@ int main(int argc, char *argv[]){
     std::cout << "##################################################" << std::endl;
     std::cout << "Logging..." << std::endl;
 
-    msg4.logMessage();
     msg1.logMessage();
     msg2.logMessage();
     msg3.logMessage();
+    msg4.logMessage();
 
 
     std::cout << "Logging... Finished!" << std::endl;
     std::cout << "##################################################" << std::endl;
 
-    Message data;
-
-    auto msgs = data.getMessages();
+    auto msgs = getMessages();
     std::cout << msgs.size() << std::endl;
 
-    // for(auto i: msgs) std::cout << i << std::endl;
+    for(auto i: msgs) std::cout << i << std::endl;
 
     // std::cout << msg << std::endl;
     // msg.getMessages();

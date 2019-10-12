@@ -62,7 +62,7 @@ size_t Message::getTimeStamp() {
 
 
 std::vector<std::string> Message::getMessages() {
-    std::vector<Message> messages;
+    // std::vector<Message> messages;
     std::vector<std::string> buffers;
     std::vector<std::string> tokens;
     std::string buffer;
