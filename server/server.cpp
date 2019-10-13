@@ -213,6 +213,8 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         msg.pop_back();
 
         Message *newMessage = new Message(from, to , msg);
+        //Message *newMessage = new Message(c);
+
 
         std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
         // COM: Add new message to FIFO data structure

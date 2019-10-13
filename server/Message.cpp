@@ -34,13 +34,13 @@ Message::Message(Command cmd) {
 }
 
 
-// Message::Message(std::string from, std::string to, std::string msg) {
-//     this->from = from;
-//     this->to = to;
-//     this->msg = msg;
-//     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-//     this->groupID = getGroupID();
-// }
+Message::Message(std::string from, std::string to, std::string msg) {
+    this->from = from;
+    this->to = to;
+    this->msg = msg;
+    this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    this->groupID = getGroupID();
+}
 
 
 // Message::Message(std::string from, std::string to, std::string msg, size_t timeStamp) {
