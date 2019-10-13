@@ -164,6 +164,8 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         }
         else {
             // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
+            auto it = msgQ.begin();
+
             for(unsigned int i = 0; i < msgQ.size(); i++) {
                 if(msgQ[i].getTo() == c.getPayload()[0]) {
                     msg = msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
@@ -175,8 +177,9 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
                     groupMsgCount[groupID]--;
 
                     //Remove message from deque
-                    //msgQ.erase(i);
+                    msgQ.erase(it);
                 }
+                it++;
             }
         }
     } else if(c.getID() == 11) { // COM: SENDMSG
@@ -478,15 +481,6 @@ int main(int argc, char* argv[]){
             continue;
         }
 
-        if(n == 0) { //Vid timeout-udum
-            lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
-            tv.tv_sec = 60;
-        }
-        else {
-            interruptTime = u.getTimestamp();
-            tv.tv_sec = interruptTime - lastKeepAlive;
-        }
-
         // Add listen socket to socket set we are monitoring
         if(FD_ISSET(clientSock, &readSockets)) { //Maybe some boolean check to see if it is already connected
             newSock = accept(clientSock, (struct sockaddr *)&client, &clientLen);
@@ -532,6 +526,14 @@ int main(int argc, char* argv[]){
             std::cout << "Server connected on socket: " << newSock << std::endl; // DEBUG:
         }
 
+        if(n == 0) { //Vid timeout-udum
+            lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
+            tv.tv_sec = 60;
+        }
+        else {
+            interruptTime = u.getTimestamp();
+            tv.tv_sec = interruptTime - lastKeepAlive;
+        }
 
         while(n > 0) {
             for(auto const& pair : servers) {
