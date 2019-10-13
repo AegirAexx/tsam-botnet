@@ -10,6 +10,7 @@
 #include <sstream>
 #include <algorithm>
 #include <queue>
+#include <deque>
 #include "Utilities.h"
 #include "Message.h"
 
@@ -31,7 +32,7 @@ class Server {
 std::map<int, Server*> servers;
 int serverCount{0};
 std::string group("P3_GROUP_4");
-std::queue<Message> msgQ;
+std::deque<Message> msgQ;
 int groupMsgCount[200]{0};
 
 
@@ -56,8 +57,6 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
     // And remove from the list of open sockets.
     FD_CLR(serverSocket, openSockets);
 }
-
-
 
 void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
 
@@ -107,12 +106,10 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     // DAGUR: store ipAddress and port number of new connection
     servers[serverSock]->name = name;
     auto temp = u.split(name, '_');
-    servers[serverSock]->groupID =atoi(temp[temp.size()-1].c_str());
+    servers[serverSock]->groupID = atoi(temp[temp.size()-1].c_str());
     servers[serverSock]->ipAddress = ipAddress;
     servers[serverSock]->port = port;
 }
-
-// Process command from client on the server
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
     std::vector<std::string> tokens; // BUG: Delete? Unused? Legacy?
@@ -150,6 +147,38 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // Spurning hvernig thetta fall se
         // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
         // ef ekki tha senda get MSG a alla one hop gaurana
+
+        // COM: Get group ID
+        auto temp = u.split(c.getPayload()[0], '_');
+        int groupID = atoi(temp[temp.size()-1].c_str());
+
+        // Athuga fjolda skilaboda i array
+        int msgCount = groupMsgCount[groupID];
+
+        if(msgCount < 1) {
+            // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
+            msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
+
+            std::string formattedMsg(u.addRawBytes(msg));
+            send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+        }
+        else {
+            // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
+            for(unsigned int i = 0; i < msgQ.size(); i++) {
+                if(msgQ[i].getTo() == c.getPayload()[0]) {
+                    msg = msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
+
+                    std::string formattedMsg(u.addRawBytes(msg));
+                    send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+                    //Decrement group message count
+                    groupMsgCount[groupID]--;
+
+                    //Remove message from deque
+                    //msgQ.erase(i);
+                }
+            }
+        }
     } else if(c.getID() == 11) { // COM: SENDMSG
 
         std::string from = group; //Tekur inn fyrsta argument
@@ -166,10 +195,10 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         Message *newMessage = new Message(from, to, msg);
 
         // COM: Add new message to FIFO data structure
-        msgQ.push(*newMessage);
+        msgQ.push_back(*newMessage);
 
         // DAGUR: Baeta herna inn ++ a videigandi array holf
-        int groupID = msgQ.front().getGroupID();
+        int groupID = msgQ.back().getGroupID();
 
         std::cout << "GroupMsgCount Fyrir: " << groupMsgCount[groupID] << std::endl; // DEBUG:
         groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
@@ -181,10 +210,12 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             // then send to random one-hopper
 
         }
+        // TODO: Implement-a thad sem er ad ofan eins server megin
 
-        // TODO: Implement-a eins server megin
-
-        std::cout << "Message stored in Q, From: " << msgQ.front().getFrom() << " To: " << msgQ.front().getTo() << " Message: " << msgQ.front().getMsg() << " With group ID: " << msgQ.front().getGroupID() << std::endl;
+        // Send confirmation to client
+        msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
+        std::string formattedMsg(u.addRawBytes(msg));
+        send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
@@ -257,7 +288,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         Message *newMessage = new Message(from, to, msg);
 
         // COM: Add new message to FIFO data structure
-        msgQ.push(*newMessage);
+        msgQ.push_back(*newMessage);
 
         // DAGUR: Delete here?
 
@@ -308,12 +339,14 @@ size_t sendKeepAlive() {
 
         // DAGUR: "std::to_chars" virkar kannski betur til ad stoppa auka null i strengnum?
         // DAGUR: Vildi fokka i tessu en tetta gaeti virkad.
-        aliveMsg += std::to_string(groupMsgCount[server->groupID]); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
+        if(!server->isCOC) {
+            aliveMsg += std::to_string(groupMsgCount[server->groupID]); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
 
-        std::string formattedMsg(u.addRawBytes(aliveMsg));
-        send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
+            std::string formattedMsg(u.addRawBytes(aliveMsg));
+            send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
 
-        std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl; // DEBUG:
+            std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl; // DEBUG:
+        }
     }
 
     return u.getTimestamp();
