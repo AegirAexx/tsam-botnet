@@ -176,7 +176,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
                     send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
                     //Message log
-                    //msgQ[i].logMessage();
+                    msgQ[i].logMessage(c.getID());
 
                     //Decrement group message count
                     groupMsgCount[groupID]--;
@@ -189,7 +189,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
                 it++;
             }
         }
-    } else if(tokens[0].compare("SENDMSG") == 0) { // COM: SENDMSG
+    } else if(c.getID() == 11) { // COM: SENDMSG
 
         // COM: Create new Message to store message info
         // Message *newMessage = new Message(c);
@@ -238,7 +238,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
         //Log
-        //msgQ.back().logMessage();
+        msgQ.back().logMessage(c.getID());
     } else if(c.getID() == 5) { //LEAVE
         // Tokens[1] = serverIp
         std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
@@ -275,7 +275,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
     if(c.getID() == 7) { // DAGUR: LISTSERVERS
         // Get IP address, put in message to send
-        msg += "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
+        msg = "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
         //Go through clients/servers map and add all to message
 
         for(auto const& server : servers) {
@@ -309,7 +309,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         size_t temp = u.getTimestamp();
         servers[serverSocket]->lastKeepAlive = temp;
         //Cout out-a thad for debugging purposes
-        std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl;
+        std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl; // DEBUG:
 
         if(atoi(c.getPayload()[c.getPayload().size()-1].c_str()) > 0) {
 
@@ -326,8 +326,11 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         auto temp = u.split(c.getPayload()[0], '_');
         int groupID = atoi(temp[temp.size()-1].c_str());
 
+         std::cout << "Group ID, requesting get_msg: " << groupID << std::endl;
         // Athuga fjolda skilaboda i array
         int msgCount = groupMsgCount[groupID];
+
+        std::cout << "groupMsgCount: " << msgCount << std::endl;
 
         if(msgCount < 1) {
             // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
@@ -348,7 +351,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
                     send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
                     //Message log
-                    //msgQ[i].logMessage();
+                    msgQ[i].logMessage(c.getID());
 
                     //Decrement group message count
                     groupMsgCount[groupID]--;
@@ -366,23 +369,52 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // COM: Create new Message to store message info
         // Message *newMessage = new Message(c);
 
-        // // COM: Add new message to FIFO data structure
-        // msgQ.push_back(*newMessage);
+        std::cout << "Start creating newMessage" << std::endl;
 
-        // // DAGUR: Baeta herna inn ++ a videigandi array holf
-        // int groupID = msgQ.back().getGroupID();
+        std::string from = c.getPayload()[0];
+        std::string to = c.getPayload()[1];
+        std::string msg;
 
-        // groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-        // // DAGUR: Delete here?
+        // std::string from = group;
+        // std::string to = tokens[1];
+        // std::string msg("test msg for debugging");
 
-        // // Check if FIFO grind is full or index[0] msg is too old
-        // if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-        //     // then send to random one-hopper
+        for(unsigned int i = 2; i < c.getPayload().size(); i++) {
+            msg += c.getPayload()[i] + " ";
+        }
 
-        // }
+        std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
+
+        msg.pop_back();
+
+        Message *newMessage = new Message(from, to , msg);
+        //Message *newMessage = new Message(c);
+
+
+        std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
+        // COM: Add new message to FIFO data structure
+        msgQ.push_back(*newMessage);
+        std::cout << "Pushed back message to msgQ:" << std::endl;
+        // DAGUR: Baeta herna inn ++ a videigandi array holf
+        int groupID = msgQ.back().getGroupID();
+
+        groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
+        // DAGUR: Delete here?
+
+        // Check if FIFO grind is full or index[0] msg is too old
+        if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+            // then send to random one-hopper
+
+        }
+
+        // Send confirmation to client
+        msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
+        std::string formattedMsg(u.addRawBytes(msg));
+        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
         //Log
-        //msgQ.back().logMessage();
-    } else if (c.getID() == 8){ // COM: SERVERS
+        msgQ.back().logMessage(c.getID());
+    } else if (c.getID() == 8) { // COM: SERVERS
 
         servers[serverSocket]->name = c.getPayload()[0];
 

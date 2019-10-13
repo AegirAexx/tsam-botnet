@@ -104,10 +104,12 @@ bool Message::getIsClient() {
     return this->isClient;
 }
 
-
 void Message::logMessage(int id) {
     if(id == 1 || id == 11) this->isSend = true;
+    if(id == 2 || id == 10) this->isSend = false;
     if(id == 10 || id == 11) this->isClient = true;
+    if(id == 2 || id == 1) this->isClient = false;
+    if(id == 2 || id == 10) this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     std::ofstream outStream;
     outStream.open("logs/MessageLog.txt", std::ios::app);
     if(outStream.is_open()) outStream << *this;
@@ -118,7 +120,7 @@ std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
     outs << "COMMAND: " <<  (tempMessage.isSend ? "SEND" : "GET")
-         << " | isBot: " << (!tempMessage.isClient ? "TRUE" : "FALSE")
+         << " | isBot: " << (tempMessage.isClient ? "TRUE" : "FALSE")
          << " | FROM: " << tempMessage.from
          << " | TO: " << tempMessage.to
          << " | MSG: " << tempMessage.msg
