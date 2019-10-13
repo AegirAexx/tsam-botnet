@@ -13,6 +13,7 @@
 #include <vector>
 #include <iterator>
 #include <sstream>
+#include <regex>
 #include <sys/types.h>
 #include <ifaddrs.h>
 #include <sys/socket.h>
