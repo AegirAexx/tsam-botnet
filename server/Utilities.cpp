@@ -69,6 +69,15 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
     return splittedStrings;
 }
 
+bool Utilities::validateCommand(Command cmd) {
+    if(cmd.getID() == 4) isCONNECT(cmd.getPayload());
+    else if (cmd.getID() != 1) return false;
+    else return false;
+}
+bool Utilities::isCONNECT(std::vector<std::string> payload) {
+    return false;
+}
+
 // PART: Non workable code. LEGACY.
 
 // int Utilities::idCommand(const char *buffer) {
