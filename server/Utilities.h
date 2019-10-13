@@ -2,12 +2,7 @@
 #define UTILITIES_H
 
 #include "Command.h"
-//#include "Client.h"
 
-// #include <iostream>
-// #include <regex>
-// #include <iomanip>
-// #include <algorithm>
 #include <ctime>
 #include <chrono>
 #include <vector>
@@ -41,8 +36,16 @@ class Utilities {
         bool isCONNECT(std::vector<std::string> payload);
         bool isGETMSG(std::vector<std::string> payload);
         bool isSENDMSG(std::vector<std::string> payload);
+        bool isSEND_MSG(std::vector<std::string> payload);
+        bool isKEEPALIVE(std::vector<std::string> payload);
+        bool isLEAVE(std::vector<std::string> payload);
+        bool isSERVERS(std::vector<std::string> payload);
+        bool isSTATUSRESP(std::vector<std::string> payload);
+        bool isSTATUSREQ(std::vector<std::string> payload);
+        bool isLISTSERVERS(std::vector<std::string> payload);
 
 };
+
 
 #endif // UTILITIES_H
 

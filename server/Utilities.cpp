@@ -70,24 +70,20 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
 // PART: VALIDATION SERVICE
 
 bool Utilities::validateCommand(Command cmd) {
+    if(cmd.getID() == 1) return isSEND_MSG(cmd.getPayload());
+    if(cmd.getID() == 2) return isGETMSG(cmd.getPayload());
+    if(cmd.getID() == 3) return isKEEPALIVE(cmd.getPayload());
     if(cmd.getID() == 4) return isCONNECT(cmd.getPayload());
+    if(cmd.getID() == 5) return isLEAVE(cmd.getPayload());
+    if(cmd.getID() == 6) return isSTATUSREQ(cmd.getPayload());
+    if(cmd.getID() == 7) return isLISTSERVERS(cmd.getPayload());
+    if(cmd.getID() == 8) return isSERVERS(cmd.getPayload());
+    if(cmd.getID() == 9) return isSTATUSRESP(cmd.getPayload());
     if(cmd.getID() == 10) return isGETMSG(cmd.getPayload());
     if(cmd.getID() == 11) return isSENDMSG(cmd.getPayload());
     else if (cmd.getID() != 1) return false;
     else return false;
 }
-
-// if(command == "SEND_MSG") this->id = 1;
-// else if(command == "GET_MSG") this->id = 2;
-// else if(command == "KEEPALIVE") this->id = 3;
-// else if(command == "CONNECT") this->id = 4;
-// else if(command == "LEAVE") this->id = 5;
-// else if(command == "STATUSREQ") this->id = 6;
-// else if(command == "LISTSERVERS") this->id = 7;
-// else if(command == "SERVERS") this->id = 8;
-// else if(command == "STATUSRESP") this->id = 9;
-// else if(command == "GETMSG") this->id = 10;
-// else if(command == "SENDMSG") this->id = 11;
 
 
 bool Utilities::isCONNECT(std::vector<std::string> payload) {
@@ -135,6 +131,112 @@ bool Utilities::isSENDMSG(std::vector<std::string> payload) {
 
     return !matchGroup.empty();
 }
+
+
+bool Utilities::isSEND_MSG(std::vector<std::string> payload) {
+
+    if(!(payload.size() == 3)) return false;
+
+    std::regex rxGroup("(P3_GROUP_\\d+|I[a-z]+_\\d+)");
+    std::smatch matchGroupFrom;
+    std::regex_search(payload[0], matchGroupFrom, rxGroup);
+    std::smatch matchGroupTo;
+    std::regex_search(payload[1], matchGroupTo, rxGroup);
+
+    return !matchGroupFrom.empty() && !matchGroupTo.empty();
+}
+
+
+bool Utilities::isKEEPALIVE(std::vector<std::string> payload) {
+
+    if(!(payload.size() == 1)) return false;
+
+    std::regex rxNumber("(\\d*)");
+    std::smatch matchNumber;
+    std::regex_search(payload[0], matchNumber, rxNumber);
+
+    return !matchNumber.empty();
+}
+
+
+bool Utilities::isLEAVE(std::vector<std::string> payload) {
+
+    if(!(payload.size() == 2)) return false;
+
+    std::regex rxIpAddr("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+    std::smatch matchIpAddr;
+    std::regex_search(payload[0], matchIpAddr, rxIpAddr);
+    bool isIpAddr{!matchIpAddr.empty()};
+
+    std::regex rxPort("^[1-5]?\\d{4}$");
+    std::smatch matchPort;
+    std::regex_search(payload[1], matchPort, rxPort);
+    bool isPort{!matchPort.empty()};
+
+    return isPort && isIpAddr;
+}
+
+
+bool Utilities::isSERVERS(std::vector<std::string> payload) {
+
+    if(!(payload.size() >= 3)) return false;
+
+    std::regex rxIpAddr("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+    std::smatch matchIpAddr;
+    std::regex_search(payload[1], matchIpAddr, rxIpAddr);
+    bool isIpAddr{!matchIpAddr.empty()};
+
+    std::regex rxPort("^[1-5]?\\d{4}$");
+    std::smatch matchPort;
+    std::regex_search(payload[2], matchPort, rxPort);
+    bool isPort{!matchPort.empty()};
+
+    return isPort && isIpAddr;
+}
+
+
+bool Utilities::isSTATUSRESP(std::vector<std::string> payload) {
+
+    if(!(payload.size() >= 4)) return false;
+
+    std::regex rxGroup("(P3_GROUP_\\d+|I[a-z]+_\\d+)");
+    std::smatch matchGroupFrom;
+    std::regex_search(payload[0], matchGroupFrom, rxGroup);
+    std::smatch matchGroupTo;
+    std::regex_search(payload[1], matchGroupTo, rxGroup);
+
+    std::regex rxNumber("(\\d*)");
+    std::smatch matchNumber;
+    std::regex_search(payload[3], matchNumber, rxNumber);
+
+    return !matchGroupFrom.empty() && !matchGroupTo.empty() && !matchNumber.empty();
+
+}
+
+
+bool Utilities::isSTATUSREQ(std::vector<std::string> payload) {
+
+    if(!(payload.size() == 1)) return false;
+
+    std::regex rxGroup("(P3_GROUP_\\d+|I[a-z]+_\\d+)");
+    std::smatch matchGroup;
+    std::regex_search(payload[0], matchGroup, rxGroup);
+
+    return !matchGroup.empty();
+}
+
+
+bool Utilities::isLISTSERVERS(std::vector<std::string> payload) {
+
+    if(!(payload.size() == 1)) return false;
+
+    std::regex rxGroup("(P3_GROUP_\\d+|I[a-z]+_\\d+)");
+    std::smatch matchGroup;
+    std::regex_search(payload[0], matchGroup, rxGroup);
+
+    return !matchGroup.empty();
+}
+
 
 // PART: Non workable code. LEGACY.
 
