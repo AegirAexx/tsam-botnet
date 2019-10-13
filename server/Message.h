@@ -19,6 +19,8 @@ class Message {
         std::string getTo();
         std::string getMsg();
         size_t getTimeStamp();
+        bool getIsSend();
+        bool getIsClient();
         std::string getFormattedMessage();
         int getGroupID();
 
@@ -33,6 +35,8 @@ class Message {
         std::string msg;
         int groupID;
         size_t timeStamp;
+        bool isClient;
+        bool isSend;
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
 
 };

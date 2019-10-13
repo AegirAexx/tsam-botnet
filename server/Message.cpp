@@ -1,8 +1,23 @@
 
 #include "Message.h"
 
+// if(command == "SEND_MSG") this->id = 1;
+// else if(command == "GET_MSG") this->id = 2;
+// else if(command == "KEEPALIVE") this->id = 3;
+// else if(command == "CONNECT") this->id = 4;
+// else if(command == "LEAVE") this->id = 5;
+// else if(command == "STATUSREQ") this->id = 6;
+// else if(command == "LISTSERVERS") this->id = 7;
+// else if(command == "SERVERS") this->id = 8;
+// else if(command == "STATUSRESP") this->id = 9;
+// else if(command == "GETMSG") this->id = 10;
+// else if(command == "SENDMSG") this->id = 11;
 
 Message::Message(Command cmd) {
+    this->isSend = false;
+    if(cmd.getID() == 1 || cmd.getID() == 11) this->isSend = true;
+    this->isClient = false;
+    if(cmd.getID() == 10 || cmd.getID() == 11) this->isClient = true;
     this->from = cmd.getPayload()[0];
     this->to = cmd.getPayload()[1];
     for (size_t i = 2; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
@@ -69,6 +84,16 @@ size_t Message::getTimeStamp() {
 }
 
 
+bool Message::getIsSend() {
+    return this->isSend;
+}
+
+
+bool Message::getIsClient() {
+    return this->isClient;
+}
+
+
 void Message::logMessage() {
     std::ofstream outStream;
     outStream.open("logs/MessageLog.txt", std::ios::app);
@@ -79,7 +104,9 @@ void Message::logMessage() {
 std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
-    outs << "FROM: " << tempMessage.from
+    outs << "COMMAND: " <<  (tempMessage.isSend ? "SEND" : "GET")
+         << " | isBot: " << (tempMessage.isClient ? "TRUE" : "FALSE")
+         << " | FROM: " << tempMessage.from
          << " | TO: " << tempMessage.to
          << " | MSG: " << tempMessage.msg
          << " | TIMESTAMP: " << std::put_time(std::gmtime(&t), "%d.%m.%y -=- %H:%M:%S")
