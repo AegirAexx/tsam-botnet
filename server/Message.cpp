@@ -53,7 +53,7 @@ Message::Message(Command cmd) {
 
 int Message::getGroupID() {
     auto temp = split(this->to, '_');
-    return atoi(temp[2].c_str());
+    return atoi(temp[temp.size()-1].c_str());
 }
 
 std::vector<std::string> Message::split(std::string stringToSplit, char delimeter) {

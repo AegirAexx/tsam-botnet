@@ -41,14 +41,17 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
     // Remove client from the clients list
 
     if(!servers[serverSocket]->isCOC) {
+        std::cout << "Server count decremented " << std::endl;
         serverCount--;
     }
+    std::cout << "Erasing server sockets " << std::endl;
     servers.erase(serverSocket);
 
     // If this client's socket is maxfds then the next lowest
     // one has to be determined. Socket fds can be reused by the Kernel,
     // so there aren't any nice ways to do this.
 
+    std::cout << "New max fds " << std::endl;
     if(*maxfds == serverSocket) {
         for(auto const& p : servers) {
             *maxfds = std::max(*maxfds, p.second->sock);
@@ -56,7 +59,9 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
     }
 
     // And remove from the list of open sockets.
+    std::cout << "Remove from the list of open sockets " << std::endl;
     FD_CLR(serverSocket, openSockets);
+    std::cout << "Removed succesfully from the list of open sockets " << std::endl;
 }
 
 void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
@@ -78,8 +83,6 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     sk_addr.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &sk_addr.sin_addr);
 
-
-
     // COM: Connect to another server
     int connectResponse{connect(serverSock, (sockaddr*)&sk_addr, sizeof(sockaddr_in))};
 
@@ -87,17 +90,11 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
         std::perror("Can't connect");
         return;
     }
-
     // COM: Command set up
-
-
 
     FD_SET(serverSock, &*openSockets);
 
     *maxfds = std::max(*maxfds, serverSock);
-    // // create a new client to store information.
-
-
 
     servers[serverSock] = new Server(serverSock);
 
@@ -113,19 +110,27 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 }
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
-    std::vector<std::string> tokens; // BUG: Delete? Unused? Legacy?
-    std::string token; // BUG: Delete? Unused? Legacy?
-    std::stringstream stream(buffer); // BUG: Delete? Unused? Legacy?
+
+    //Jacky code
+    std::vector<std::string> tokens;
+    std::string token;
+    std::stringstream stream(buffer);
+
+
 
     // COM: Split command from client into tokens for parsing
     std::string msg;
     Utilities u;
+    tokens = u.split(buffer, ',');
 
     Command c(buffer);
 
     std::cout << "Command #: " << c.getID() << std::endl; // DEBUG:
 
-    while(stream >> token) tokens.push_back(token);
+    std::cout << "Test"  << std::endl; // DEBUG:
+
+    std::cout << "Command buffer: " << buffer << std::endl; // DEBUG:
+    // or(auto i : c.getPayload()) std::cout << i;
 
     if(c.getID() == 4) { // COM: CONNECT
         // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
@@ -170,39 +175,53 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
                     std::string formattedMsg(u.addRawBytes(msg));
                     send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
+                    //Message log
+                    //msgQ[i].logMessage();
+
                     //Decrement group message count
                     groupMsgCount[groupID]--;
 
                     //Remove message from deque
                     msgQ.erase(it);
+
+                    // TODO: Herna sennilega break
                 }
                 it++;
             }
         }
-    } else if(c.getID() == 11) { // COM: SENDMSG
+    } else if(tokens[0].compare("SENDMSG") == 0) { // COM: SENDMSG
 
-        std::string from = group; //Tekur inn fyrsta argument
-        std::string to = c.getPayload()[0]; //Tekur inn annad argument
-        std::string msg; //Tekur inn message-id sjalft
+        // COM: Create new Message to store message info
+        // Message *newMessage = new Message(c);
 
-        for (unsigned int i = 1; i < c.getPayload().size(); i++) {
+        std::cout << "Start creating newMessage" << std::endl;
+
+        std::string from = group;
+        std::string to = c.getPayload()[0];
+        std::string msg;
+
+        // std::string from = group;
+        // std::string to = tokens[1];
+        // std::string msg("test msg for debugging");
+
+        for(unsigned int i = 1; i < c.getPayload().size(); i++) {
             msg += c.getPayload()[i] + " ";
         }
 
+        std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
+
         msg.pop_back();
 
-        // COM: Create new Message to store message info
-        Message *newMessage = new Message(from, to, msg);
+        Message *newMessage = new Message(from, to , msg);
 
+        std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
         // COM: Add new message to FIFO data structure
         msgQ.push_back(*newMessage);
-
+        std::cout << "Pushed back message to msgQ:" << std::endl;
         // DAGUR: Baeta herna inn ++ a videigandi array holf
         int groupID = msgQ.back().getGroupID();
 
-        std::cout << "GroupMsgCount Fyrir: " << groupMsgCount[groupID] << std::endl; // DEBUG:
         groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-        std::cout << "GroupMsgCount Eftir: " << groupMsgCount[groupID] << std::endl; // DEBUG:
         // DAGUR: Delete here?
 
         // Check if FIFO grind is full or index[0] msg is too old
@@ -210,7 +229,6 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             // then send to random one-hopper
 
         }
-        // TODO: Implement-a thad sem er ad ofan eins server megin
 
         // Send confirmation to client
         msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
@@ -218,8 +236,8 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
         //Log
-        msgQ.back().logMessage();
-    } else if(c.getID() == 5) {
+        //msgQ.back().logMessage();
+    } else if(c.getID() == 5) { //LEAVE
         // Tokens[1] = serverIp
         std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
         // Tokens[2] = serverPort
@@ -230,6 +248,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
                 std::cout << "Adios " << server.second->name << std::endl;
                 closeServer(server.second->sock, openSockets, maxfds);
+                break;
             }
         }
     } else {
@@ -248,10 +267,6 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
     //auto tokens = u.split(cleanBuffer, ',');
 
     Command c(cleanBuffer);
-
-    if(c.getID() < 1) {
-        // TODO: VALIDATION NEEDED. What to do if there is no valid command in buffer??
-    }
 
     // String to hold response message
     std::string msg;
@@ -330,35 +345,41 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
                     std::string formattedMsg(u.addRawBytes(msg));
                     send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
+                    //Message log
+                    //msgQ[i].logMessage();
 
                     //Decrement group message count
                     groupMsgCount[groupID]--;
 
                     //Remove message from deque
                     msgQ.erase(it);
+
+                    // TODO: Sennilega break her svo ekki oll skilabodin seu send
                 }
                 it++;
             }
         }
     } else if(c.getID() == 1) { // COM: SEND_MSG
 
-        std::string from; //Tekur inn fyrsta argument
-        std::string to; //Tekur inn annad argument
-        std::string msg; //Tekur inn message-id sjalft
-
         // COM: Create new Message to store message info
-        Message *newMessage = new Message(from, to, msg);
+        // Message *newMessage = new Message(c);
 
-        // COM: Add new message to FIFO data structure
-        msgQ.push_back(*newMessage);
+        // // COM: Add new message to FIFO data structure
+        // msgQ.push_back(*newMessage);
 
-        // DAGUR: Delete here?
+        // // DAGUR: Baeta herna inn ++ a videigandi array holf
+        // int groupID = msgQ.back().getGroupID();
 
-        // Check if FIFO grind is full or index[0] msg is too old
-        if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-            // then send to random one-hopper
-        }
+        // groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
+        // // DAGUR: Delete here?
 
+        // // Check if FIFO grind is full or index[0] msg is too old
+        // if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+        //     // then send to random one-hopper
+
+        // }
+        //Log
+        //msgQ.back().logMessage();
     } else if (c.getID() == 8){ // COM: SERVERS
 
         servers[serverSocket]->name = c.getPayload()[0];
@@ -422,6 +443,10 @@ int main(int argc, char* argv[]){
     struct sockaddr_in server_addr; //Server socket address
     struct sockaddr_in client_addr; //Client socket address
 
+    //struct to keep hold of incoming server address
+    struct sockaddr_in server;
+    struct sockaddr_in client;
+
     int serverSock{socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0)};
     int clientSock{socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0)};
 
@@ -433,12 +458,9 @@ int main(int argc, char* argv[]){
 
     std::string myIpAddress(u.getLocalIP()); //Get our Ip address
 
-    //struct to keep hold of incoming server address
-    struct sockaddr_in server;
-    struct sockaddr_in client;
     // DAGUR:Sennilega lengdin a client structinu
-    socklen_t serverLen;
-    socklen_t clientLen;
+    socklen_t serverLen{0};
+    socklen_t clientLen{0};
 
     if(serverSock < 0) {
         std::perror("Failed to open server socket");
@@ -522,13 +544,14 @@ int main(int argc, char* argv[]){
 
     struct timeval tv{60, 0};
     size_t lastKeepAlive = u.getTimestamp(); //Initialize-a med now
-    size_t interruptTime;
+    size_t interruptTime{0};
 
     while(!isFinished) {
+        // Memset
+        memset(&server, 0, sizeof(server));
+        memset(&client, 0, sizeof(client));
+
         //Get modifiable copy of openSockets
-
-        std::cout << "While loop started: " << std::endl; // DEBUG:
-
         readSockets = exceptSockets = openSockets;
         memset(buffer, 0, sizeof(buffer));
 
