@@ -1,7 +1,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-// #include "Command.h"
+#include "Command.h"
 //#include "Client.h"
 
 // #include <iostream>
@@ -13,6 +13,7 @@
 #include <vector>
 #include <iterator>
 #include <sstream>
+#include <regex>
 #include <sys/types.h>
 #include <ifaddrs.h>
 #include <sys/socket.h>
@@ -26,7 +27,7 @@ class Utilities {
         std::size_t getTimestamp();
         std::string getLocalIP();
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
-
+        bool validateCommand(Command cmd);
 
         // start stop | SOH - EOT
         std::string addRawBytes(std::string str);
@@ -37,6 +38,7 @@ class Utilities {
 
 
     private:
+        bool isCONNECT(std::vector<std::string> payload);
 
 };
 

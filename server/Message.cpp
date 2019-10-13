@@ -14,35 +14,42 @@
 // else if(command == "SENDMSG") this->id = 11;
 
 Message::Message(Command cmd) {
-    this->isSend = false;
     if(cmd.getID() == 1 || cmd.getID() == 11) this->isSend = true;
-    this->isClient = false;
+    else this->isSend = false;
     if(cmd.getID() == 10 || cmd.getID() == 11) this->isClient = true;
+    else this->isClient = false;
     if(cmd.getID() == 11) {
         this->from = "P3_GROUP_4";
         this->to = cmd.getPayload()[0];
-    }
-    else {
+        for (size_t i = 1; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
+
+    } else {
         this->from = cmd.getPayload()[0];
         this->to = cmd.getPayload()[1];
+        for (size_t i = 2; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
     }
-    for (size_t i = 2; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
     this->msg.pop_back();
     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     this->groupID = getGroupID();
-
 }
 
 
-Message::Message(std::string from, std::string to, std::string msg) {
-    this->from = from;
-    this->to = to;
-    this->msg = msg;
-    this->isClient = false;
-    this->isSend = false;
-    this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    this->groupID = getGroupID();
-}
+// Message::Message(std::string from, std::string to, std::string msg) {
+//     this->from = from;
+//     this->to = to;
+//     this->msg = msg;
+//     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+//     this->groupID = getGroupID();
+// }
+
+
+// Message::Message(std::string from, std::string to, std::string msg, size_t timeStamp) {
+//     this->from = from;
+//     this->to = to;
+//     this->msg = msg;
+//     this->timeStamp = timeStamp;
+// }
+
 
 int Message::getGroupID() {
     auto temp = split(this->to, '_');
@@ -55,13 +62,6 @@ std::vector<std::string> Message::split(std::string stringToSplit, char delimete
 	std::vector<std::string> splittedStrings;
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
     return splittedStrings;
-}
-
-Message::Message(std::string from, std::string to, std::string msg, size_t timeStamp) {
-    this->from = from;
-    this->to = to;
-    this->msg = msg;
-    this->timeStamp = timeStamp;
 }
 
 
@@ -113,7 +113,7 @@ std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
     outs << "COMMAND: " <<  (tempMessage.isSend ? "SEND" : "GET")
-         << " | isBot: " << (tempMessage.isClient ? "TRUE" : "FALSE")
+         << " | isBot: " << (!tempMessage.isClient ? "TRUE" : "FALSE")
          << " | FROM: " << tempMessage.from
          << " | TO: " << tempMessage.to
          << " | MSG: " << tempMessage.msg
