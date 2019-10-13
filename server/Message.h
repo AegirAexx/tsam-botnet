@@ -24,7 +24,7 @@ class Message {
         std::string getFormattedMessage();
         int getGroupID();
 
-        void logMessage();
+        void logMessage(int id);
 
         friend std::ostream& operator << (std::ostream& outs, const Message& msg);
         friend bool operator < (const Message& rhs, const Message& lhs);
