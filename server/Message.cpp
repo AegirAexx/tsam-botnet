@@ -18,8 +18,14 @@ Message::Message(Command cmd) {
     if(cmd.getID() == 1 || cmd.getID() == 11) this->isSend = true;
     this->isClient = false;
     if(cmd.getID() == 10 || cmd.getID() == 11) this->isClient = true;
-    this->from = cmd.getPayload()[0];
-    this->to = cmd.getPayload()[1];
+    if(cmd.getID() == 11) {
+        this->from = "P3_GROUP_4";
+        this->to = cmd.getPayload()[0];
+    }
+    else {
+        this->from = cmd.getPayload()[0];
+        this->to = cmd.getPayload()[1];
+    }
     for (size_t i = 2; i < cmd.getPayload().size(); i++) this->msg += cmd.getPayload()[i] + " ";
     this->msg.pop_back();
     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -32,13 +38,15 @@ Message::Message(std::string from, std::string to, std::string msg) {
     this->from = from;
     this->to = to;
     this->msg = msg;
+    this->isClient = false;
+    this->isSend = false;
     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     this->groupID = getGroupID();
 }
 
 int Message::getGroupID() {
     auto temp = split(this->to, '_');
-    return atoi(temp[2].c_str());
+    return atoi(temp[temp.size()-1].c_str());
 }
 
 std::vector<std::string> Message::split(std::string stringToSplit, char delimeter) {
