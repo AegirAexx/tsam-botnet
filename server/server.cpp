@@ -448,6 +448,9 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         for(auto const& server : servers) {
             msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
         }
+
+        std::string formattedMsg(u.addRawBytes(msg));
+        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
         std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
 
     } else if(c.getID() == 9) { // COM: STATUSRESP
