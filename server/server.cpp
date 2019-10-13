@@ -107,6 +107,11 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     servers[serverSock]->groupID = atoi(temp[temp.size()-1].c_str());
     servers[serverSock]->ipAddress = ipAddress;
     servers[serverSock]->port = port;
+
+    //Send listservers to new connection
+    std::string msg;
+    msg = u.handshake(group, ipAddress, port);
+    send(serverSock, msg.c_str(), msg.length(), 0);
 }
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
