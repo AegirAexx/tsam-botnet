@@ -39,6 +39,8 @@ class Utilities {
 
     private:
         bool isCONNECT(std::vector<std::string> payload);
+        bool isGETMSG(std::vector<std::string> payload);
+        bool isSENDMSG(std::vector<std::string> payload);
 
 };
 
