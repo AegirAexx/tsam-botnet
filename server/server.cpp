@@ -204,7 +204,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // std::string to = tokens[1];
         // std::string msg("test msg for debugging");
 
-        for(unsigned int i = 1; c.getPayload().size(); i++) {
+        for(unsigned int i = 1; i < c.getPayload().size(); i++) {
             msg += c.getPayload()[i] + " ";
         }
 
