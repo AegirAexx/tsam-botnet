@@ -101,8 +101,8 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
     servers[serverSock] = new Server(serverSock);
 
-    std::cout <<  "ipAddress: " << ipAddress << std::endl;
-    std::cout <<  "port: " << port << std::endl;
+    std::cout <<  "ipAddress: " << ipAddress << std::endl; // DEBUG:
+    std::cout <<  "port: " << port << std::endl; // DEBUG:
 
     // DAGUR: store ipAddress and port number of new connection
     servers[serverSock]->name = name;
@@ -115,16 +115,17 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 // Process command from client on the server
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
-    std::vector<std::string> tokens;
-    std::string token;
-    std::string msg;
+    std::vector<std::string> tokens; // BUG: Delete? Unused? Legacy?
+    std::string token; // BUG: Delete? Unused? Legacy?
+    std::stringstream stream(buffer); // BUG: Delete? Unused? Legacy?
+
     // COM: Split command from client into tokens for parsing
-    std::stringstream stream(buffer);
+    std::string msg;
     Utilities u;
 
     Command c(buffer);
 
-    std::cout << "Command #: " << c.getID() << std::endl;
+    std::cout << "Command #: " << c.getID() << std::endl; // DEBUG:
 
     while(stream >> token) tokens.push_back(token);
 
@@ -170,9 +171,9 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         // DAGUR: Baeta herna inn ++ a videigandi array holf
         int groupID = msgQ.front().getGroupID();
 
-        std::cout << "GroupMsgCount Fyrir: " << groupMsgCount[groupID] << std::endl;
+        std::cout << "GroupMsgCount Fyrir: " << groupMsgCount[groupID] << std::endl; // DEBUG:
         groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-        std::cout << "GroupMsgCount Eftir: " << groupMsgCount[groupID] << std::endl;
+        std::cout << "GroupMsgCount Eftir: " << groupMsgCount[groupID] << std::endl; // DEBUG:
         // DAGUR: Delete here?
 
         // Check if FIFO grind is full or index[0] msg is too old
@@ -194,12 +195,16 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
     // COM: Clean SOH & EOT from buffer
     // TODO: Need to validate message somewhere to see if it has SOH & EOT before we clean it, also if we have noise after or before SOH and EOT I think we are supposed to ignore it
-    auto cleanBuffer = u.removeRawBytes(buffer);
+    auto cleanBuffer = u.removeRawBytes(buffer); // DAGUR: FEAT: removeRawBytes() already partially validates.
 
     // COM: Split command from client into tokens for parsing
     //auto tokens = u.split(cleanBuffer, ',');
 
     Command c(cleanBuffer);
+
+    if(c.getID() < 1) {
+        // TODO: VALIDATION NEEDED. What to do if there is no valid command in buffer??
+    }
 
     // String to hold response message
     std::string msg;
@@ -301,12 +306,14 @@ size_t sendKeepAlive() {
     for(auto const& pair : servers) {
         Server *server = pair.second;
 
+        // DAGUR: "std::to_chars" virkar kannski betur til ad stoppa auka null i strengnum?
+        // DAGUR: Vildi fokka i tessu en tetta gaeti virkad.
         aliveMsg += std::to_string(groupMsgCount[server->groupID]); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
 
         std::string formattedMsg(u.addRawBytes(aliveMsg));
         send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
 
-        std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl;
+        std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl; // DEBUG:
     }
 
     return u.getTimestamp();
@@ -381,8 +388,8 @@ int main(int argc, char* argv[]){
     }
 
 
-    std::cout << "Listening for servers on socket#: " << serverSock << std::endl;
-    std::cout << "Listening for clients on socket#: " << clientSock << std::endl;
+    std::cout << "Listening for servers on socket#: " << serverSock << std::endl; // DEBUG:
+    std::cout << "Listening for clients on socket#: " << clientSock << std::endl; // DEBUG:
 
     // COM: Now we need to listen
 
@@ -425,7 +432,7 @@ int main(int argc, char* argv[]){
     while(!isFinished) {
         //Get modifiable copy of openSockets
 
-        std::cout << "While loop started: " << std::endl;
+        std::cout << "While loop started: " << std::endl; // DEBUG:
 
         readSockets = exceptSockets = openSockets;
         memset(buffer, 0, sizeof(buffer));
@@ -459,7 +466,7 @@ int main(int argc, char* argv[]){
             servers[newSock]->isCOC = true;
             // Decrement the number of sockets waiting to be dealt with
             n--;
-            std::cout << "Client connected on socket: " << newSock << std::endl;
+            std::cout << "Client connected on socket: " << newSock << std::endl; // DEBUG:
         }
 
         if(FD_ISSET(serverSock, &readSockets)&& servers.size() < 5) {
@@ -474,6 +481,8 @@ int main(int argc, char* argv[]){
             // Thar eru upplysingarnar thurfum i raun ekki ad bida eftir LSTSERVER >> SERVER svarinu
             // TODO: add ipAddress and port to new Server .... server.sin_ipAdress server.sin_port
             // DAGUR: Sma tilraunamennska her
+            // FEAT: https://stackoverflow.com/a/9212542
+            // FEAT: https://stackoverflow.com/questions/37721310/c-how-to-get-ip-and-port-from-struct-sockaddr
             // servers[serverSock]->ipAddress = server.sin_addr.s_addr;
             // servers[serverSock]->port = server.sin_port;
             // std::cout << "Sin address: " << server.sin_addr.s_addr << std::endl;
@@ -487,7 +496,7 @@ int main(int argc, char* argv[]){
             send(newSock, msg.c_str(), msg.length(), 0);
             // Decrement the number of sockets waiting to be dealt with
             n--;
-            std::cout << "Server connected on socket: " << newSock << std::endl;
+            std::cout << "Server connected on socket: " << newSock << std::endl; // DEBUG:
         }
 
 

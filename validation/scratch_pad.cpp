@@ -50,17 +50,15 @@ int main(int argc, char *argv[]){
     std::cout << "payload length: " << cmd4.getPayload().size() << std::endl;
     for(auto i: cmd4.getPayload()) std::cout << i << std::endl;
     std::cout << "##################################################" << std::endl;
-    std::cout << "Logging..." << std::endl;
 
+    std::cout << "Logging..." << std::endl;
     msg1.logMessage();
     msg2.logMessage();
     msg3.logMessage();
     msg4.logMessage();
-
-
     std::cout << "Logging... Finished!" << std::endl;
-    std::cout << "##################################################" << std::endl;
 
+    std::cout << "##################################################" << std::endl;
 
     return 0;
 }
@@ -74,6 +72,7 @@ int main(int argc, char *argv[]){
     // STATUSREQ,FROM_GROUP
     // CONNECT ??
 // PART:
+
 
 
 

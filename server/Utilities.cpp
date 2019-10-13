@@ -36,6 +36,9 @@ std::string Utilities::addRawBytes(std::string str){
 
 }
 
+// TODO: FINISH VALIDATION
+// FEAT: Right now we are checking for the presents of SOH and EOT.
+// FEAT: Check for the location of 0xHexes?
 std::string Utilities::removeRawBytes(std::string str){
     std::vector<std::byte> rawBytes;
     std::string reformattedString;
