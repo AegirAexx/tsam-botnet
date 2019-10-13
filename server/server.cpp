@@ -24,6 +24,7 @@ class Server {
     int groupID;
     int port;
     bool isCOC = false;
+    size_t lastKeepAlive;
     Server(int socket) : sock(socket) {}
     ~Server() {}
 };
@@ -143,10 +144,6 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
     }
     else if(c.getID() == 10) { // COM: Client GETMSG
-        // TODO: Utfaera thetta fall
-        // Spurning hvernig thetta fall se
-        // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
-        // ef ekki tha senda get MSG a alla one hop gaurana
 
         // COM: Get group ID
         auto temp = u.split(c.getPayload()[0], '_');
@@ -219,6 +216,22 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
         std::string formattedMsg(u.addRawBytes(msg));
         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+        //Log
+        msgQ.back().logMessage();
+    } else if(c.getID() == 5) {
+        // Tokens[1] = serverIp
+        std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
+        // Tokens[2] = serverPort
+        int portToLeave{atoi(c.getPayload()[1].c_str())};
+
+        // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+        for(auto const& server : servers) {
+            if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
+                std::cout << "Adios " << server.second->name << std::endl;
+                closeServer(server.second->sock, openSockets, maxfds);
+            }
+        }
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
     }
@@ -267,7 +280,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         for(auto const& server : servers) {
             if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
                 std::cout << "Adios " << server.second->name << std::endl;
-                closeServer(serverSocket, openSockets, maxfds);
+                closeServer(server.second->sock, openSockets, maxfds);
             }
         }
     } else if(c.getID() == 3) { // COM: KEEPALIVE
@@ -275,12 +288,58 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Taka vid keepalive skilabod-um fra odrum server, meta hvort tad seu einhver skilabod til okkar
         // t.e. ad fjoldinn se staerri en 0, ef svo er tha a ad gera get msg a vidkomandi socket
 
+        //Thegar vid faum keepAlive i okkur tha aetlum vid ad update-a keepAlive timan
+        size_t temp = u.getTimestamp();
+        servers[serverSocket]->lastKeepAlive = temp;
+        //Cout out-a thad for debugging purposes
+        std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl;
+
+        if(atoi(c.getPayload()[c.getPayload().size()-1].c_str()) > 0) {
+
+            msg = "GET_MSG," + group;
+
+            //Add start & end hex
+            std::string formattedMsg(u.addRawBytes(msg));
+            send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+        }
+
     } else if(c.getID() == 2) { // COM: GET_MSG
-        // TODO: Utfaera thetta fall
-        // Spurning hvernig thetta fall se
-        // Kafa ofan i gagnagrindina og sja hvort seu skilabod handa hopnum sem tilgreindur er til thar
-        // ef ekki tha senda get MSG a alla one hop gaurana
-        // ??????????
+
+        // COM: Get group ID
+        auto temp = u.split(c.getPayload()[0], '_');
+        int groupID = atoi(temp[temp.size()-1].c_str());
+
+        // Athuga fjolda skilaboda i array
+        int msgCount = groupMsgCount[groupID];
+
+        if(msgCount < 1) {
+            // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
+            msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
+
+            std::string formattedMsg(u.addRawBytes(msg));
+            send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+        }
+        else {
+            // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
+            auto it = msgQ.begin();
+
+            for(unsigned int i = 0; i < msgQ.size(); i++) {
+                if(msgQ[i].getTo() == c.getPayload()[0]) {
+                    msg = "SEND_MSG," + msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
+
+                    std::string formattedMsg(u.addRawBytes(msg));
+                    send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+
+                    //Decrement group message count
+                    groupMsgCount[groupID]--;
+
+                    //Remove message from deque
+                    msgQ.erase(it);
+                }
+                it++;
+            }
+        }
     } else if(c.getID() == 1) { // COM: SEND_MSG
 
         std::string from; //Tekur inn fyrsta argument
