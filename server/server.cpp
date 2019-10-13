@@ -107,6 +107,11 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     servers[serverSock]->groupID = atoi(temp[temp.size()-1].c_str());
     servers[serverSock]->ipAddress = ipAddress;
     servers[serverSock]->port = port;
+
+    //Send listservers to new connection
+    std::string msg;
+    msg = u.handshake(group, ipAddress, port);
+    send(serverSock, msg.c_str(), msg.length(), 0);
 }
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
@@ -436,11 +441,25 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Thegar thetta kemur inn tha a madur ad skila tilbaka streng sem byrjar a STATUSRESP
         // Og svo fara ofan i gagnagrindina og finna oll skilabodin sem madur er med thar
         // Held eg en frekar oskyrt
+
+        // Reply med
+        msg = "STATUSRESP," + group + "," + c.getPayload()[0];
+
+        for(auto const& server : servers) {
+            msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
+        }
+
+        std::string formattedMsg(u.addRawBytes(msg));
+        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+        std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
+
     } else if(c.getID() == 9) { // COM: STATUSRESP
         // Thegar thetta kemur inn tydir ad madur er ad fa response fra statusreq sem madur hefur sent
         // Madur vaentanlega sendir statusreq til ad ga hvada skilabod onehop gaurarnir manns eru med
         // Svo er tha spurning hvad madur gerir vid thessar upplysingar?
         // Fer vaentanlega eftir tvi hvernig madur utfaerir get MSG
+        std::cout << "Received STATUSRESP from " << c.getPayload()[0] << std::endl;
+
     } else {
         std::cout << "Unknown command from server: " << buffer << std::endl;
         std::cout << "Command #: " << c.getID() << std::endl;

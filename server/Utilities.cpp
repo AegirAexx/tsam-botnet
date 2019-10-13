@@ -55,7 +55,7 @@ std::string Utilities::removeRawBytes(std::string str){
 
 
 std::string Utilities::handshake(std::string groupName, std::string ipAddress, int port) {
-    return addRawBytes("LISTSERVERS," + groupName + "," + ipAddress + "," + std::to_string(port));
+    return addRawBytes("LISTSERVERS," + groupName);
 }
 
 
