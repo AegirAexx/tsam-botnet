@@ -36,9 +36,7 @@ std::string Utilities::addRawBytes(std::string str){
 
 }
 
-// TODO: FINISH VALIDATION
-// FEAT: Right now we are checking for the presents of SOH and EOT.
-// FEAT: Check for the location of 0xHexes?
+
 std::string Utilities::removeRawBytes(std::string str){
     std::vector<std::byte> rawBytes;
     std::string reformattedString;
@@ -69,6 +67,8 @@ std::vector<std::string> Utilities::split(std::string stringToSplit, char delime
     return splittedStrings;
 }
 
+// PART: VALIDATION SERVICE
+
 bool Utilities::validateCommand(Command cmd) {
     if(cmd.getID() == 4) return isCONNECT(cmd.getPayload());
     else if (cmd.getID() != 1) return false;
@@ -86,7 +86,7 @@ bool Utilities::isCONNECT(std::vector<std::string> payload) {
     std::regex rxIpAddr("\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}");
     std::smatch matchIpAddr;
     std::regex_search(payload[1], matchIpAddr, rxIpAddr);
-    bool isIpAddr{false};
+    bool isIpAddr{!matchIpAddr.empty()};
 
     std::regex rxPort("^[1-5]?\d{4}$");
     std::smatch matchPort;
