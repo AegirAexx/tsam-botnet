@@ -1,46 +1,84 @@
 # TSAM - The Botnet Rises
 
-# TODO
-## Critical services
-Command processing.
-- WIP adding a utility function.
-
-## Networking layer
-Create a server/client hybrid. Look into select() to get away from threads.
 
 ## Folder structure
 ```BASH
 .
-├── data
-├── include
-│   ├── data
-│   │   ├── ReceivedMessageData.h
-│   │   ├── SentMessageData.h
-│   │   └── ServerProfileData.h
-│   ├── model
-│   │   ├── Command.h
-│   │   ├── ReceivedMessage.h
-│   │   ├── SentMessage.h
-│   │   └── ServerProfile.h
-│   ├── service
-│   │   └── Utilities.h
-│   └── ui
-├── main.cpp
-├── Makefile
-├── src
-│   ├── data
-│   │   ├── ReceivedMessageData.cpp
-│   │   ├── SentMessageData.cpp
-│   │   └── ServerProfileData.cpp
-│   ├── model
+├── client
+│   ├── client.cpp
+│   └── c.sh
+├── commands.txt
+├── legacy_source
+│   ├── Makefile
+│   ├── project1
+│   │   ├── client.cpp
+│   │   └── server.cpp
+│   ├── prototype
+│   │   ├── Client.cpp
+│   │   ├── Client.h
 │   │   ├── Command.cpp
+│   │   ├── Command.h
 │   │   ├── ReceivedMessage.cpp
+│   │   ├── ReceivedMessageData.cpp
+│   │   ├── ReceivedMessageData.h
+│   │   ├── ReceivedMessage.h
 │   │   ├── SentMessage.cpp
-│   │   └── ServerProfile.cpp
-│   ├── service
-│   │   └── Utilities.cpp
-│   └── ui
-└── val.sh
+│   │   ├── SentMessageData.cpp
+│   │   ├── SentMessageData.h
+│   │   ├── SentMessage.h
+│   │   ├── ServerProfile.cpp
+│   │   ├── ServerProfileData.cpp
+│   │   ├── ServerProfileData.h
+│   │   ├── ServerProfile.h
+│   │   ├── Utilities.cpp
+│   │   └── Utilities.h
+│   ├── ReceivedMessage
+│   │   ├── main.cpp
+│   │   ├── ReceivedMessage.cpp
+│   │   └── ReceivedMessage.h
+│   ├── SentMessage
+│   │   ├── main.cpp
+│   │   ├── SentMessage.cpp
+│   │   └── SentMessage.h
+│   ├── ServerProfile
+│   │   ├── main.cpp
+│   │   ├── ServerProfile.cpp
+│   │   └── ServerProfile.h
+│   ├── teacher_code
+│   │   ├── client.cpp
+│   │   ├── ip.cpp
+│   │   ├── ip.out
+│   │   ├── readme.txt
+│   │   └── server.cpp
+│   └── val.sh
+├── LICENSE.md
+├── README.md
+├── server
+│   ├── Command.cpp
+│   ├── Command.h
+│   ├── c.sh
+│   ├── Message.cpp
+│   ├── Message.h
+│   ├── server.cpp
+│   ├── server.out
+│   ├── skel.sh
+│   ├── Utilities.cpp
+│   └── Utilities.h
+└── validation
+    ├── Command.cpp
+    ├── Command.h
+    ├── c.sh
+    ├── logs
+    │   └── MessageLog.txt
+    ├── Message.cpp
+    ├── Message.h
+    ├── scratch_pad.cpp
+    ├── Server.cpp
+    ├── Server.h
+    ├── Utilities.cpp
+    ├── Utilities.h
+    └── x.out
+
 
 ```
 
@@ -57,32 +95,11 @@ Wipe local persistent memory:
 
 > `make memory`
 
-### Usage of accompanying teacher code
-> `g++ -std=c++11 client.cpp -lpthread -o client`
-
-> `g++ -std=c+=11 server.cpp o server`
-
-To run (on same machine):
-
-> `./server 10000`
-
-> `./client 127.0.0.1 10000`
-
-Commands on client:
-
-- `CONNECT <name>`
-  - Connect to server as `<name>`
-- `WHO`
-  - Show connections to server
-- `MSG <name> <message>`
-  - Send message to name
-- `MSG ALL <message>`
-  - Send message to all connected
-
-
 ## V_Group_4
 Ægir Tómasson (aegir15)<br>
 Dagur Kristjánsson (dagur17)
+
+# TODO README !!!
 
 # The handout PDF
 
@@ -174,33 +191,34 @@ Periodic message to 1-hop connected servers, indicating still alive and the no. 
 
 ---
 
-> `GET MSG,<GROUP_ID>`
+> `GET_MSG,<GROUP_ID>`
 
 Get messages for the specified group. This may be for your own group, or another group.
 
 ---
 
-> `SEND MSG,<FROM_GROUP_ID>,<TO_GROUP_ID>,<Message content>`
+> `SEND_MSG,<FROM_GROUP_ID>,<TO_GROUP_ID>,<Message content>`
 
 Send message to another group
 
-> `LEAVE,SERVER_IP,PORT`
+---
+
+> `LEAVE,<SERVER_IP>,<PORT>`
 
 Disconnect from server at specified port.
 
 ---
 
-> `STATUSREQ,FROM_GROUP`
+> `STATUSREQ,<FROM_GROUP>`
 
 Reply with `STATUSRESP` as below.
 
 
-> `STATUSRESP,FROM_GROUP,TO_GROUP,<server, msgs held>,...`
+> `STATUSRESP,<FROM_GROUP>,<TO_GROUP>,<server, msgs held>,...`
 
 Reply with comma separated list of servers and no. of messages you have for them eg.
 
-> `STATUSRESP,V_GROUP_2,I_1,V_GROUP4,20,V_GROUP71,2`
-
+> `STATUSRESP,V_GROUP_2,I_1,V_GROUP_4,20,V_GROUP_71,2`
 
 
 # Client Commands
@@ -209,13 +227,13 @@ Communication between the __Client__ and __Server__ should use the protocol belo
 
 ---
 
- > `GET MSG, GROUP_ID`
+ > `GETMSG, GROUP_ID`
 
 Get a single message from the server for the GROUP_ID.
 
 ---
 
-> `SEND MSG, GROUP_ID`
+> `SENDMSG, GROUP_ID`
 
 Send a message to the server for the GROUP_ID.
 
