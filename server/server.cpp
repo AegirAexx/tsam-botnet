@@ -110,7 +110,7 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
     //Send listservers to new connection
     std::string msg;
-    msg = u.handshake(group, ipAddress, port);
+    msg = u.handshake(group);
     send(serverSock, msg.c_str(), msg.length(), 0);
 }
 
@@ -598,10 +598,20 @@ int main(int argc, char* argv[]){
     struct timeval tv{60, 0};
     size_t lastKeepAlive = u.getTimestamp(); //Initialize-a med now
     size_t interruptTime{0};
+    size_t now{0};
 
     int newTime{60};
 
     while(!isFinished) {
+        //Initialize timestruct
+        struct timeval tv{60, 0};
+
+        //now = u.getTimestamp();
+
+        // if((now - lastKeepAlive) > 50) {
+        //     lastKeepAlive = sendKeepAlive();
+        // }
+
         // Memset
         memset(&server, 0, sizeof(server));
         memset(&client, 0, sizeof(client));
@@ -628,6 +638,8 @@ int main(int argc, char* argv[]){
             interruptTime = u.getTimestamp();
             newTime = interruptTime - lastKeepAlive;
         }
+
+
 
         // Add listen socket to socket set we are monitoring
         if(FD_ISSET(clientSock, &readSockets)) { //Maybe some boolean check to see if it is already connected
@@ -667,7 +679,7 @@ int main(int argc, char* argv[]){
             std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
             std::string msg;
-            msg = u.handshake(group, myIpAddress, serverPort);
+            msg = u.handshake(group);
             send(newSock, msg.c_str(), msg.length(), 0);
             // Decrement the number of sockets waiting to be dealt with
             n--;
