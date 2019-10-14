@@ -7,6 +7,7 @@
 // COM: Command API:
 // COM:  public:
 // COM:      Command(string buffer) - Class constructor, takes the buffer.
+// COM:      virtual ~Command() - Class destructor.
 // COM:
 // COM:      int getID() - Class getter.
 // COM:      vector<string> getPayload() - Class getter.
@@ -63,6 +64,11 @@ Command::Command(std::string buffer) {
     }
 }
 
+
+// COM: Class Destructor.
+Command::~Command() {};
+
+
 // COM: Utility function that splits a string according to a delimiter and returns a vector of single words or tokens.
 std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
     // COM: Creating a string stream object from input string.
@@ -77,7 +83,7 @@ std::vector<std::string> Command::split(std::string stringToSplit, char delimete
     return splittedStrings;
 }
 
-// Class getters.
+// COM: Class getters.
 std::vector<std::string>  Command::getPayload(){
     return this->payload;
 }

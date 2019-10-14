@@ -14,8 +14,10 @@
 
 class Command {
     public:
-    // Class constructor.
+    // Class constructor / Destructor.
         Command(std::string buffer);
+        virtual ~Command();
+
     // Class getters.
         int getID();
         std::vector<std::string> getPayload();
