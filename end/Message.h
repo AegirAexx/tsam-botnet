@@ -1,20 +1,26 @@
+// COM: T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
+// COM: Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
+
 #ifndef MESSAGE_H
 #define MESSAGE_H
+
+#include "Command.h"
 
 #include <ctime>
 #include <chrono>
 #include <ostream>
 #include <fstream>
 #include <iomanip>
-#include "Command.h"
+
+// COM: This is our datatype to hold messages and log to file.
 
 class Message {
     public:
-        Message(Command cmd);
+    // COM: Class constructor / Destructor.
         Message(std::string from, std::string to, std::string msg);
-        Message(std::string from, std::string to, std::string msg, size_t timeStamp);
         virtual ~Message();
 
+    // COM: Class getters.
         std::string getFrom();
         std::string getTo();
         std::string getMsg();
@@ -24,12 +30,14 @@ class Message {
         std::string getFormattedMessage();
         int getGroupID();
 
+    // COM: Class data access.
         void logMessage(int id);
 
+    // COM: Formatting for ostream.
         friend std::ostream& operator << (std::ostream& outs, const Message& msg);
-        friend bool operator < (const Message& rhs, const Message& lhs);
 
     private:
+    // Class variables.
         std::string from;
         std::string to;
         std::string msg;
@@ -37,6 +45,7 @@ class Message {
         size_t timeStamp;
         bool isClient;
         bool isSend;
+    // Class utility
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
 
 };

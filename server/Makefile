@@ -2,7 +2,6 @@
 # Variables
 CC=g++
 FLAGS=-O2 -g -Wall -std=gnu++17
-NERD=&& echo "SUCCESS!!" | toilet --gay
 # Verbosity
 V = 0
 ACTUAL_CC := $(CC)
@@ -13,12 +12,15 @@ CC = $(CC_$(V))
 
 #Default
 all:
-	$(CC) $(FLAGS) main.cpp src/*/*.cpp -o x.out $(NERD)
+	server client
 
 #Uninstall
 clean:
-		rm -v x.out
+	rm -v server client
 
-# Wipe local memory, ALL DATA WILL BE REMOVED!
-memory:
-		rm -v data/*
+server:
+	$(CC) $(FLAGS) server/*.cpp -o server
+
+client:
+	$(CC) $(FLAGS) client/client.cpp -o client
+
