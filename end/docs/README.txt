@@ -69,7 +69,15 @@ and the port number. E.g. ./client 178.62.12.185 4001
 
 Flow of the program:
 
-BLA BLA BLA
+The program takes in 2 port numbers as parameters. Sockets are then created and added to a set where we listen to incoming connections
+on either port, first parameter creates a socket for server connections and second parameter for client connections.
+When some action is registered on the sockets we are monitoring we check if it is an incoming connection, if so we establish connection and
+add it to our set of sockets we are monitoring.
+We then listen for the incoming SERVERS message to register the group info (name, ip, port etc.).
+In order to let other servers know that we are not idle, we send a keep alive message every 60 - 90 seconds.
+If the action that is registered on the sockets is a message. We read the buffer and act according to the instructions given in the project
+description.
+
 
 
 Authors:
@@ -85,16 +93,10 @@ TA:
 Jon Petur Jonsson <jonpj16@ru.is>
 
 
-Total time spent on project: 40 hours.
+Total time spent on project: 80 hours.
 
 
 Disclaimer
 
-NEW DISCLAIMER!!!!
-
-We discussed the project with a lot of TA's and fellow students but we spent the most time
-with a group of students (Petur Orn Gudmundsson and Throstur Sveinbjornsson). We discussed
-the project a lot and some similarities in code could exist.
-
-Also we used the code that TA Einar Orn Sveinbjornsson shared. Our checksum calculating
-function and our send function is heavily unfluenced from that code.
+We discussed the project with a lot of TA's and fellow students. We basically discussed the project with everyone and their grandmother,
+but all of the code is our own (as much as anyone can own code).

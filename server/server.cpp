@@ -419,7 +419,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
             std::string formattedMsg(u.addRawBytes(msg));
             send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-            std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
+            std::cout << "Sending STATUSRESP to " << c.getPayload()[0] << std::endl;
         } else {
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
