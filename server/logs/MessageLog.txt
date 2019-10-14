@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_140 | MSG: The cake is a lie!! | TIMESTAMP: 14.10.19 -=- 19:03:01
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Hello from group 4!! | TIMESTAMP: 14.10.19 -=- 19:06:11
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Hello from group 4!! | TIMESTAMP: 14.10.19 -=- 19:06:56
@@ -24,7 +23,6 @@ COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_99 | TO: P3_GROUP_4 | MSG: EXECUTE
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:25
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:43
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:43
-=======
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_17 | TO: P3_GROUP_4 | MSG: Why code in C++ when your programming skills are A++? | TIMESTAMP: 14.10.19 -=- 19:42:01
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_17 | TO: P3_GROUP_4 | MSG: Why code in C++ when your programming skills are A++? | TIMESTAMP: 14.10.19 -=- 19:42:01
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_17 | MSG: Many pages make a thick book | TIMESTAMP: 14.10.19 -=- 19:43:19
@@ -41,4 +39,3 @@ COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_73 | TO: P3_GROUP_4 | MSG: KVEDJA 
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_100 | MSG: Never be led astray onto the path of virtue | TIMESTAMP: 14.10.19 -=- 19:55:54
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Chess tonight | TIMESTAMP: 14.10.19 -=- 19:59:48
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Chess tonight | TIMESTAMP: 14.10.19 -=- 19:59:58
->>>>>>> 0c219ac69941dbbc1376c23d5c4aae5703bce3e7
