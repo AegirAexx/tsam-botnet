@@ -1,0 +1,1052 @@
+No.     Time           Source                Destination           Protocol Length Info
+    202 7.047408588    10.3.17.207           178.62.12.185         TCP      74     48480 → 5000 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM=1 TSval=2723879891 TSecr=0 WS=128
+
+Frame 202: 74 bytes on wire (592 bits), 74 bytes captured (592 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 0, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+    203 7.089767391    178.62.12.185         10.3.17.207           TCP      74     5000 → 48480 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0 MSS=1300 SACK_PERM=1 TSval=2606064282 TSecr=2723879891 WS=128
+
+Frame 203: 74 bytes on wire (592 bits), 74 bytes captured (592 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 0, Ack: 1, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+    204 7.089899607    10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=1 Ack=1 Win=64256 Len=0 TSval=2723879933 TSecr=2606064282
+
+Frame 204: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 1, Ack: 1, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+    205 7.130454362    178.62.12.185         10.3.17.207           SSH      134    Server: Encrypted packet (len=68)
+
+Frame 205: 134 bytes on wire (1072 bits), 134 bytes captured (1072 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1, Ack: 1, Len: 68
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+    206 7.130509805    10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=69 Win=501 Len=0 TSval=2723879974 TSecr=2606064386
+
+Frame 206: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 69, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1267 49.883627201   10.3.17.207           178.62.12.185         IPA      103    unknown 0x4e 
+
+Frame 1267: 103 bytes on wire (824 bits), 103 bytes captured (824 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 1, Ack: 1, Len: 37
+IPA protocol ip.access, type: unknown 0x4e
+
+No.     Time           Source                Destination           Protocol Length Info
+   1268 49.926403102   178.62.12.185         10.3.17.207           SSH      214    Server: Encrypted packet (len=148)
+
+Frame 1268: 214 bytes on wire (1712 bits), 214 bytes captured (1712 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 69, Ack: 1, Len: 148
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1269 49.926454285   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=217 Win=500 Len=0 TSval=2723922770 TSecr=2606107180
+
+Frame 1269: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 217, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1270 49.926485200   178.62.12.185         10.3.17.207           TCP      66     5000 → 48480 [ACK] Seq=1 Ack=38 Win=65024 Len=0 TSval=2606107179 TSecr=2723922727
+
+Frame 1270: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 1, Ack: 38, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1271 49.927095992   178.62.12.185         10.3.17.207           SSH      206    Server: Encrypted packet (len=140)
+
+Frame 1271: 206 bytes on wire (1648 bits), 206 bytes captured (1648 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1, Ack: 1, Len: 140
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1272 49.927135385   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=141 Win=500 Len=0 TSval=2723922771 TSecr=2606107181
+
+Frame 1272: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 141, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1280 49.929699424   178.62.12.185         10.3.17.207           SSH      126    Server: Encrypted packet (len=60)
+
+Frame 1280: 126 bytes on wire (1008 bits), 126 bytes captured (1008 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 217, Ack: 1, Len: 60
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1281 49.929727574   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=277 Win=501 Len=0 TSval=2723922773 TSecr=2606107181
+
+Frame 1281: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 277, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1282 49.929767904   178.62.12.185         10.3.17.207           IPA      75     unknown 0x20 
+
+Frame 1282: 75 bytes on wire (600 bits), 75 bytes captured (600 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 1, Ack: 38, Len: 9
+IPA protocol ip.access, type: unknown 0x20
+
+No.     Time           Source                Destination           Protocol Length Info
+   1283 49.929779431   10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=38 Ack=10 Win=64256 Len=0 TSval=2723922773 TSecr=2606107182
+
+Frame 1283: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 38, Ack: 10, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1284 49.930194859   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1284: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 277, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1285 49.930210924   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=313 Win=501 Len=0 TSval=2723922774 TSecr=2606107181
+
+Frame 1285: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 313, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1286 49.932484086   178.62.12.185         10.3.17.207           SSH      110    Server: Encrypted packet (len=44)
+
+Frame 1286: 110 bytes on wire (880 bits), 110 bytes captured (880 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 313, Ack: 1, Len: 44
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1287 49.932505502   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=357 Win=501 Len=0 TSval=2723922776 TSecr=2606107181
+
+Frame 1287: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 357, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1288 49.932536782   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1288: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 357, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1289 49.932543536   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=393 Win=501 Len=0 TSval=2723922776 TSecr=2606107181
+
+Frame 1289: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 393, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1290 49.932552564   178.62.12.185         10.3.17.207           SSH      126    Server: Encrypted packet (len=60)
+
+Frame 1290: 126 bytes on wire (1008 bits), 126 bytes captured (1008 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 141, Ack: 1, Len: 60
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1291 49.932557977   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=201 Win=501 Len=0 TSval=2723922776 TSecr=2606107182
+
+Frame 1291: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 201, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1292 49.932573878   178.62.12.185         10.3.17.207           SSH      182    Server: Encrypted packet (len=116)
+
+Frame 1292: 182 bytes on wire (1456 bits), 182 bytes captured (1456 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 393, Ack: 1, Len: 116
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1293 49.932579400   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=509 Win=501 Len=0 TSval=2723922776 TSecr=2606107182
+
+Frame 1293: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 509, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1294 49.932587652   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1294: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 509, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1295 49.932592553   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=545 Win=501 Len=0 TSval=2723922776 TSecr=2606107182
+
+Frame 1295: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 545, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1296 49.932616283   178.62.12.185         10.3.17.207           SSH      318    Server: Encrypted packet (len=252)
+
+Frame 1296: 318 bytes on wire (2544 bits), 318 bytes captured (2544 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 201, Ack: 1, Len: 252
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1297 49.932621959   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=453 Win=500 Len=0 TSval=2723922776 TSecr=2606107183
+
+Frame 1297: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 453, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1298 49.935341139   178.62.12.185         10.3.17.207           SSH      150    Server: Encrypted packet (len=84)
+
+Frame 1298: 150 bytes on wire (1200 bits), 150 bytes captured (1200 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 545, Ack: 1, Len: 84
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1299 49.935353404   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=629 Win=501 Len=0 TSval=2723922779 TSecr=2606107183
+
+Frame 1299: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 629, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1300 49.935373825   178.62.12.185         10.3.17.207           SSH      190    Server: Encrypted packet (len=124)
+
+Frame 1300: 190 bytes on wire (1520 bits), 190 bytes captured (1520 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 453, Ack: 1, Len: 124
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1301 49.935378743   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=577 Win=500 Len=0 TSval=2723922779 TSecr=2606107183
+
+Frame 1301: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 577, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1302 49.935389113   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1302: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 577, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1303 49.935393568   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=613 Win=500 Len=0 TSval=2723922779 TSecr=2606107183
+
+Frame 1303: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 613, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1304 49.935402396   178.62.12.185         10.3.17.207           SSH      214    Server: Encrypted packet (len=148)
+
+Frame 1304: 214 bytes on wire (1712 bits), 214 bytes captured (1712 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 613, Ack: 1, Len: 148
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1305 49.935410121   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=761 Win=499 Len=0 TSval=2723922779 TSecr=2606107183
+
+Frame 1305: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 761, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1306 49.935416510   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1306: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 761, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1307 49.935421745   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=797 Win=499 Len=0 TSval=2723922779 TSecr=2606107184
+
+Frame 1307: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 797, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1308 49.935431532   178.62.12.185         10.3.17.207           SSH      118    Server: Encrypted packet (len=52)
+
+Frame 1308: 118 bytes on wire (944 bits), 118 bytes captured (944 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 797, Ack: 1, Len: 52
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1309 49.935437766   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=849 Win=499 Len=0 TSval=2723922779 TSecr=2606107184
+
+Frame 1309: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 849, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1310 49.935448612   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1310: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 849, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1311 49.935455796   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=885 Win=501 Len=0 TSval=2723922779 TSecr=2606107184
+
+Frame 1311: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 885, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1312 49.936141404   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1312: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 629, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1313 49.936159298   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=665 Win=501 Len=0 TSval=2723922780 TSecr=2606107184
+
+Frame 1313: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 665, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1314 49.936616590   178.62.12.185         10.3.17.207           SSH      142    Server: Encrypted packet (len=76)
+
+Frame 1314: 142 bytes on wire (1136 bits), 142 bytes captured (1136 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 665, Ack: 1, Len: 76
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1315 49.936634787   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=741 Win=501 Len=0 TSval=2723922780 TSecr=2606107184
+
+Frame 1315: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 741, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1316 49.966926049   178.62.12.185         10.3.17.207           SSH      502    Server: Encrypted packet (len=436)
+
+Frame 1316: 502 bytes on wire (4016 bits), 502 bytes captured (4016 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 741, Ack: 1, Len: 436
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1317 49.966958445   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=1177 Win=498 Len=0 TSval=2723922810 TSecr=2606107220
+
+Frame 1317: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 1177, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1318 49.973771801   178.62.12.185         10.3.17.207           SSH      270    Server: Encrypted packet (len=204)
+
+Frame 1318: 270 bytes on wire (2160 bits), 270 bytes captured (2160 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 885, Ack: 1, Len: 204
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1319 49.973803039   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1089 Win=500 Len=0 TSval=2723922817 TSecr=2606107227
+
+Frame 1319: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1089, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1320 49.973837950   178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 1320: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1089, Ack: 1, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1321 49.973843779   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1125 Win=500 Len=0 TSval=2723922817 TSecr=2606107227
+
+Frame 1321: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1125, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1322 49.973853519   178.62.12.185         10.3.17.207           SSH      302    Server: Encrypted packet (len=236)
+
+Frame 1322: 302 bytes on wire (2416 bits), 302 bytes captured (2416 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1125, Ack: 1, Len: 236
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1323 49.973859985   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1361 Win=499 Len=0 TSval=2723922817 TSecr=2606107227
+
+Frame 1323: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1361, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   1324 49.975580066   178.62.12.185         10.3.17.207           SSH      190    Server: Encrypted packet (len=124)
+
+Frame 1324: 190 bytes on wire (1520 bits), 190 bytes captured (1520 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1361, Ack: 1, Len: 124
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   1325 49.975604847   10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1485 Win=499 Len=0 TSval=2723922819 TSecr=2606107229
+
+Frame 1325: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1485, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   2348 91.200629641   10.3.17.207           178.62.12.185         IPA      115    unknown 0x4e 
+
+Frame 2348: 115 bytes on wire (920 bits), 115 bytes captured (920 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 38, Ack: 10, Len: 49
+IPA protocol ip.access, type: unknown 0x4e
+
+No.     Time           Source                Destination           Protocol Length Info
+   2349 91.243161463   178.62.12.185         10.3.17.207           IPA      177    unknown 0x65 
+
+Frame 2349: 177 bytes on wire (1416 bits), 177 bytes captured (1416 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 10, Ack: 87, Len: 111
+IPA protocol ip.access, type: unknown 0x65
+
+No.     Time           Source                Destination           Protocol Length Info
+   2350 91.243212525   10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=87 Ack=121 Win=64256 Len=0 TSval=2723964087 TSecr=2606148495
+
+Frame 2350: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 87, Ack: 121, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   2351 91.243241774   178.62.12.185         10.3.17.207           SSH      454    Server: Encrypted packet (len=388)
+
+Frame 2351: 454 bytes on wire (3632 bits), 454 bytes captured (3632 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1177, Ack: 1, Len: 388
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   2352 91.243250030   10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=1565 Win=495 Len=0 TSval=2723964087 TSecr=2606148495
+
+Frame 2352: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 1565, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   3067 115.042252628  10.3.17.207           178.62.12.185         IPA      83     unknown 0x54 
+
+Frame 3067: 83 bytes on wire (664 bits), 83 bytes captured (664 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 87, Ack: 121, Len: 17
+IPA protocol ip.access, type: unknown 0x54
+
+No.     Time           Source                Destination           Protocol Length Info
+   3068 115.084326321  178.62.12.185         10.3.17.207           IPA      120    unknown 0x33 
+
+Frame 3068: 120 bytes on wire (960 bits), 120 bytes captured (960 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 121, Ack: 104, Len: 54
+IPA protocol ip.access, type: unknown 0x33
+
+No.     Time           Source                Destination           Protocol Length Info
+   3069 115.084347112  10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=104 Ack=175 Win=64256 Len=0 TSval=2723987928 TSecr=2606172335
+
+Frame 3069: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 104, Ack: 175, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   3070 115.084363548  178.62.12.185         10.3.17.207           SSH      238    Server: Encrypted packet (len=172)
+
+Frame 3070: 238 bytes on wire (1904 bits), 238 bytes captured (1904 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1565, Ack: 1, Len: 172
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   3071 115.084365886  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=1737 Win=494 Len=0 TSval=2723987928 TSecr=2606172335
+
+Frame 3071: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 1737, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   3072 115.086016046  178.62.12.185         10.3.17.207           SSH      230    Server: Encrypted packet (len=164)
+
+Frame 3072: 230 bytes on wire (1840 bits), 230 bytes captured (1840 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1485, Ack: 1, Len: 164
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   3073 115.086027690  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1649 Win=498 Len=0 TSval=2723987929 TSecr=2606172336
+
+Frame 3073: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1649, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   3074 115.088740960  178.62.12.185         10.3.17.207           SSH      198    Server: Encrypted packet (len=132)
+
+Frame 3074: 198 bytes on wire (1584 bits), 198 bytes captured (1584 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1737, Ack: 1, Len: 132
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   3075 115.088759576  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=1869 Win=493 Len=0 TSval=2723987932 TSecr=2606172337
+
+Frame 3075: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 1869, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   4566 166.162864667  10.3.17.207           178.62.12.185         IPA      88     unknown 0x53 
+
+Frame 4566: 88 bytes on wire (704 bits), 88 bytes captured (704 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 104, Ack: 175, Len: 22
+IPA protocol ip.access, type: unknown 0x53
+
+No.     Time           Source                Destination           Protocol Length Info
+   4569 166.205830587  178.62.12.185         10.3.17.207           SSH      182    Server: Encrypted packet (len=116)
+
+Frame 4569: 182 bytes on wire (1456 bits), 182 bytes captured (1456 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1869, Ack: 1, Len: 116
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   4570 166.205866684  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=1985 Win=493 Len=0 TSval=2724039049 TSecr=2606223455
+
+Frame 4570: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 1985, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   4571 166.205909877  178.62.12.185         10.3.17.207           IPA      102    unknown 0x2c 
+
+Frame 4571: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 175, Ack: 126, Len: 36
+IPA protocol ip.access, type: unknown 0x2c
+
+No.     Time           Source                Destination           Protocol Length Info
+   4572 166.205924242  10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=126 Ack=211 Win=64256 Len=0 TSval=2724039049 TSecr=2606223455
+
+Frame 4572: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 126, Ack: 211, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   5322 196.210785686  178.62.12.185         10.3.17.207           SSH      166    Server: Encrypted packet (len=100)
+
+Frame 5322: 166 bytes on wire (1328 bits), 166 bytes captured (1328 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 1985, Ack: 1, Len: 100
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   5323 196.210821840  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=2085 Win=493 Len=0 TSval=2724069054 TSecr=2606253459
+
+Frame 5323: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 2085, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   5324 196.210964216  178.62.12.185         10.3.17.207           SSH      230    Server: Encrypted packet (len=164)
+
+Frame 5324: 230 bytes on wire (1840 bits), 230 bytes captured (1840 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1649, Ack: 1, Len: 164
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   5325 196.210977139  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=1813 Win=497 Len=0 TSval=2724069054 TSecr=2606253459
+
+Frame 5325: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 1813, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   5326 196.211012957  178.62.12.185         10.3.17.207           SSH      198    Server: Encrypted packet (len=132)
+
+Frame 5326: 198 bytes on wire (1584 bits), 198 bytes captured (1584 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2085, Ack: 1, Len: 132
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   5327 196.211036754  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=2217 Win=493 Len=0 TSval=2724069054 TSecr=2606253460
+
+Frame 5327: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 2217, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   5627 205.605938085  10.3.17.207           178.62.12.185         IPA      90     unknown 0x41 
+
+Frame 5627: 90 bytes on wire (720 bits), 90 bytes captured (720 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 126, Ack: 211, Len: 24
+IPA protocol ip.access, type: unknown 0x41
+
+No.     Time           Source                Destination           Protocol Length Info
+   5628 205.647401053  178.62.12.185         10.3.17.207           SSH      358    Server: Encrypted packet (len=292)
+
+Frame 5628: 358 bytes on wire (2864 bits), 358 bytes captured (2864 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2217, Ack: 1, Len: 292
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   5629 205.647449700  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=2509 Win=493 Len=0 TSval=2724078491 TSecr=2606262896
+
+Frame 5629: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 2509, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   5632 205.689421078  178.62.12.185         10.3.17.207           TCP      66     5000 → 48480 [ACK] Seq=211 Ack=150 Win=65024 Len=0 TSval=2606262938 TSecr=2724078449
+
+Frame 5632: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 211, Ack: 150, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6060 218.551157216  10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [FIN, ACK] Seq=150 Ack=211 Win=64256 Len=0 TSval=2724091395 TSecr=2606262938
+
+Frame 6060: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 150, Ack: 211, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6061 218.593126852  178.62.12.185         10.3.17.207           TCP      66     5000 → 48480 [FIN, ACK] Seq=211 Ack=151 Win=65024 Len=0 TSval=2606275841 TSecr=2724091395
+
+Frame 6061: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 5000, Dst Port: 48480, Seq: 211, Ack: 151, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6062 218.593183632  10.3.17.207           178.62.12.185         TCP      66     48480 → 5000 [ACK] Seq=151 Ack=212 Win=64256 Len=0 TSval=2724091437 TSecr=2606275841
+
+Frame 6062: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 48480, Dst Port: 5000, Seq: 151, Ack: 212, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6063 218.595794503  178.62.12.185         10.3.17.207           SSH      270    Server: Encrypted packet (len=204)
+
+Frame 6063: 270 bytes on wire (2160 bits), 270 bytes captured (2160 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2509, Ack: 1, Len: 204
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6064 218.595824035  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=1 Ack=2713 Win=493 Len=0 TSval=2724091439 TSecr=2606275841
+
+Frame 6064: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 2713, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6111 219.442184752  10.3.17.207           178.62.12.185         SSH      102    Client: Encrypted packet (len=36)
+
+Frame 6111: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 1, Ack: 2713, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6119 219.483048959  178.62.12.185         10.3.17.207           TCP      66     22 → 38584 [ACK] Seq=2713 Ack=37 Win=501 Len=0 TSval=2606276732 TSecr=2724092286
+
+Frame 6119: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2713, Ack: 37, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6120 219.485959251  178.62.12.185         10.3.17.207           SSH      302    Server: Encrypted packet (len=236)
+
+Frame 6120: 302 bytes on wire (2416 bits), 302 bytes captured (2416 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 1813, Ack: 1, Len: 236
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6121 219.486010688  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=1 Ack=2049 Win=496 Len=0 TSval=2724092329 TSecr=2606276734
+
+Frame 6121: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 2049, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6122 219.486079212  178.62.12.185         10.3.17.207           SSH      302    Server: Encrypted packet (len=236)
+
+Frame 6122: 302 bytes on wire (2416 bits), 302 bytes captured (2416 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2713, Ack: 37, Len: 236
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6123 219.486097001  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=2949 Win=500 Len=0 TSval=2724092330 TSecr=2606276734
+
+Frame 6123: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 2949, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6124 219.506575410  178.62.12.185         10.3.17.207           SSH      238    Server: Encrypted packet (len=172)
+
+Frame 6124: 238 bytes on wire (1904 bits), 238 bytes captured (1904 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 2949, Ack: 37, Len: 172
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6125 219.506622992  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3121 Win=499 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6125: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3121, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6126 219.506680321  178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 6126: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 3121, Ack: 37, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6127 219.506690027  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3157 Win=499 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6127: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3157, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6128 219.506704471  178.62.12.185         10.3.17.207           SSH      118    Server: Encrypted packet (len=52)
+
+Frame 6128: 118 bytes on wire (944 bits), 118 bytes captured (944 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 3157, Ack: 37, Len: 52
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6129 219.506712818  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3209 Win=499 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6129: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3209, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6130 219.506726815  178.62.12.185         10.3.17.207           SSH      142    Server: Encrypted packet (len=76)
+
+Frame 6130: 142 bytes on wire (1136 bits), 142 bytes captured (1136 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 3209, Ack: 37, Len: 76
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6131 219.506733813  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3285 Win=499 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6131: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3285, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6132 219.506773138  178.62.12.185         10.3.17.207           SSH      110    Server: Encrypted packet (len=44)
+
+Frame 6132: 110 bytes on wire (880 bits), 110 bytes captured (880 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 3285, Ack: 37, Len: 44
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6133 219.506782597  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3329 Win=499 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6133: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3329, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6134 219.506797514  178.62.12.185         10.3.17.207           SSH      110    Server: Encrypted packet (len=44)
+
+Frame 6134: 110 bytes on wire (880 bits), 110 bytes captured (880 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38584, Seq: 3329, Ack: 37, Len: 44
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6135 219.506833794  10.3.17.207           178.62.12.185         TCP      66     38584 → 22 [ACK] Seq=37 Ack=3373 Win=501 Len=0 TSval=2724092350 TSecr=2606276754
+
+Frame 6135: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38584, Dst Port: 22, Seq: 37, Ack: 3373, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6153 220.451437800  10.3.17.207           178.62.12.185         SSH      102    Client: Encrypted packet (len=36)
+
+Frame 6153: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 1, Ack: 2049, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6155 220.493971834  178.62.12.185         10.3.17.207           SSH      302    Server: Encrypted packet (len=236)
+
+Frame 6155: 302 bytes on wire (2416 bits), 302 bytes captured (2416 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2049, Ack: 37, Len: 236
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6156 220.494030560  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2285 Win=500 Len=0 TSval=2724093337 TSecr=2606277742
+
+Frame 6156: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2285, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6157 220.511676209  178.62.12.185         10.3.17.207           SSH      238    Server: Encrypted packet (len=172)
+
+Frame 6157: 238 bytes on wire (1904 bits), 238 bytes captured (1904 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2285, Ack: 37, Len: 172
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6158 220.511699042  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2457 Win=499 Len=0 TSval=2724093355 TSecr=2606277758
+
+Frame 6158: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2457, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6159 220.511726003  178.62.12.185         10.3.17.207           SSH      102    Server: Encrypted packet (len=36)
+
+Frame 6159: 102 bytes on wire (816 bits), 102 bytes captured (816 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2457, Ack: 37, Len: 36
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6160 220.511730240  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2493 Win=499 Len=0 TSval=2724093355 TSecr=2606277759
+
+Frame 6160: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2493, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6161 220.511736099  178.62.12.185         10.3.17.207           SSH      118    Server: Encrypted packet (len=52)
+
+Frame 6161: 118 bytes on wire (944 bits), 118 bytes captured (944 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2493, Ack: 37, Len: 52
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6162 220.511739242  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2545 Win=499 Len=0 TSval=2724093355 TSecr=2606277759
+
+Frame 6162: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2545, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6163 220.511744982  178.62.12.185         10.3.17.207           SSH      142    Server: Encrypted packet (len=76)
+
+Frame 6163: 142 bytes on wire (1136 bits), 142 bytes captured (1136 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2545, Ack: 37, Len: 76
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6164 220.511748016  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2621 Win=499 Len=0 TSval=2724093355 TSecr=2606277759
+
+Frame 6164: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2621, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6165 220.511752709  178.62.12.185         10.3.17.207           SSH      110    Server: Encrypted packet (len=44)
+
+Frame 6165: 110 bytes on wire (880 bits), 110 bytes captured (880 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2621, Ack: 37, Len: 44
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6166 220.511755555  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2665 Win=499 Len=0 TSval=2724093355 TSecr=2606277759
+
+Frame 6166: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2665, Len: 0
+
+No.     Time           Source                Destination           Protocol Length Info
+   6167 220.511760250  178.62.12.185         10.3.17.207           SSH      110    Server: Encrypted packet (len=44)
+
+Frame 6167: 110 bytes on wire (880 bits), 110 bytes captured (880 bits) on interface 0
+Ethernet II, Src: Cisco_ff:fd:90 (00:08:e3:ff:fd:90), Dst: IntelCor_89:73:3a (e4:42:a6:89:73:3a)
+Internet Protocol Version 4, Src: 178.62.12.185, Dst: 10.3.17.207
+Transmission Control Protocol, Src Port: 22, Dst Port: 38734, Seq: 2665, Ack: 37, Len: 44
+SSH Protocol
+
+No.     Time           Source                Destination           Protocol Length Info
+   6168 220.511763784  10.3.17.207           178.62.12.185         TCP      66     38734 → 22 [ACK] Seq=37 Ack=2709 Win=499 Len=0 TSval=2724093355 TSecr=2606277759
+
+Frame 6168: 66 bytes on wire (528 bits), 66 bytes captured (528 bits) on interface 0
+Ethernet II, Src: IntelCor_89:73:3a (e4:42:a6:89:73:3a), Dst: Cisco_ff:fd:90 (00:08:e3:ff:fd:90)
+Internet Protocol Version 4, Src: 10.3.17.207, Dst: 178.62.12.185
+Transmission Control Protocol, Src Port: 38734, Dst Port: 22, Seq: 37, Ack: 2709, Len: 0

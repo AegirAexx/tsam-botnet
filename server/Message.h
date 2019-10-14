@@ -1,5 +1,5 @@
-// COM: T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
-// COM: Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
+//  T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
+//  Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
 
 #ifndef MESSAGE_H
 #define MESSAGE_H
@@ -12,15 +12,15 @@
 #include <fstream>
 #include <iomanip>
 
-// COM: This is our datatype to hold messages and log to file.
+//  This is our datatype to hold messages and log to file.
 
 class Message {
     public:
-    // COM: Class constructor / Destructor.
+    //  Class constructor / Destructor.
         Message(std::string from, std::string to, std::string msg);
         virtual ~Message();
 
-    // COM: Class getters.
+    //  Class getters.
         std::string getFrom();
         std::string getTo();
         std::string getMsg();
@@ -30,10 +30,10 @@ class Message {
         std::string getFormattedMessage();
         int getGroupID();
 
-    // COM: Class data access.
+    //  Class data access.
         void logMessage(int id);
 
-    // COM: Formatting for ostream.
+    //  Formatting for ostream.
         friend std::ostream& operator << (std::ostream& outs, const Message& msg);
 
     private:

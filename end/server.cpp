@@ -22,7 +22,7 @@ class Server {
     int groupID;
     int port;
     bool isCOC = false;
-    size_t lastKeepAlive{0};
+    size_t lastKeepAlive;
     Server(int socket) : sock(socket) {}
     ~Server() {}
 };
@@ -33,7 +33,7 @@ int serverCount{0};
 std::string group("P3_GROUP_4");
 std::deque<Message> msgQ;
 int groupMsgCount[200]{0};
-Utilities u;
+
 
 void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
     // Remove client from the clients list
@@ -60,6 +60,7 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
 
 void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
     //Initialize Utilities class for helper functions
+    Utilities u;
     //Create a socket
     int serverSock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
 
@@ -99,7 +100,6 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     servers[serverSock]->groupID = atoi(temp[temp.size()-1].c_str());
     servers[serverSock]->ipAddress = ipAddress;
     servers[serverSock]->port = port;
-    servers[serverSock]->lastKeepAlive = u.getTimestamp(); //Set last keep alive to connection time
 
     //Send listservers to new connection
     std::string msg;
@@ -108,6 +108,8 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 }
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
+    //Initialize Utilities class for helper functions
+    Utilities u;
     // String to hold response message
     std::string msg;
     //Splits buffer and checks which kind of command we are receiving
@@ -126,9 +128,7 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         if(u.validateCommand(c)) {
             //Go through clients/servers map and add all to message
             for(auto const& server : servers) {
-                if(!server.second->isCOC) {
-                    msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
-                }
+                msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
             }
             //Add start & end hex
             std::string formattedMsg(u.addRawBytes(msg));
@@ -248,6 +248,8 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 }
 
 void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
+    //Initialize Utilities class for helper functions
+    Utilities u;
     // COM: Clean SOH & EOT from buffer
     auto cleanBuffer = u.removeRawBytes(buffer);
     //Splits buffer and checks which kind of command we are receiving
@@ -264,9 +266,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             for(auto const& server : servers) {
                 // If server is not a client then add to msg
                 if(!server.second->isCOC) {
-                    if(!server.second->name.empty()) {
-                        msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
-                    }
+                    msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
                 }
             }
             //Add start & end hex
@@ -369,7 +369,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             groupMsgCount[groupID] = groupMsgCount[groupID] + 1;
 
             // Message expiry system, check if FIFO structure is full
-            if(msgQ.size() > 50) {
+            if(msgQ.size() > 10) {
                 //Then erease from system
                 std::cout << "Message expired, erase from structure" << std::endl;
                 msgQ.pop_front();
@@ -395,7 +395,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             std::cout << "GroupID of incoming server connection: " << servers[serverSocket]->groupID << std::endl;
             servers[serverSocket]->ipAddress = c.getPayload()[1];
             servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
-            servers[serverSocket]->lastKeepAlive = u.getTimestamp(); //stilla lastKeepAlive a tengingartima
+
             std::cout << "Message:" << cleanBuffer << std::endl;
         } else {
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
@@ -414,14 +414,12 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
             //Check who is connected to us and how many messages we have for them
             for(auto const& server : servers) {
-                if(!server.second->isCOC) {
-                    msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
-                }
+                msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
             }
 
             std::string formattedMsg(u.addRawBytes(msg));
             send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-            std::cout << "Sending STATUSRESP to " << c.getPayload()[0] << std::endl;
+            std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
         } else {
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
@@ -436,14 +434,16 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 }
 
 size_t sendKeepAlive() {
+    //Initialize Utilities class for helper functions
+    Utilities u;
+    //KeepAlive message
+    std::string aliveMsg("KEEPALIVE,");
+
     for(auto const& pair : servers) {
         Server *server = pair.second;
 
         if(!server->isCOC) {
-            //KeepAlive message
-            std::string aliveMsg("KEEPALIVE,");
-            std::string count = std::to_string(groupMsgCount[server->groupID]);
-            aliveMsg += count;
+            aliveMsg += std::to_string(groupMsgCount[server->groupID]);
 
             std::string formattedMsg(u.addRawBytes(aliveMsg));
             send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
@@ -454,6 +454,7 @@ size_t sendKeepAlive() {
     //Timestamp to store last time KeepAlive was sent
     return u.getTimestamp();
 }
+
 
 int main(int argc, char* argv[]){
 
@@ -471,6 +472,8 @@ int main(int argc, char* argv[]){
     int set = 1;
     int serverPort{atoi(argv[1])};
     int clientPort{atoi(argv[2])};
+
+    Utilities u; //Utilities class
 
     std::string myIpAddress(u.getLocalIP()); //Get our Ip address
 
@@ -648,21 +651,6 @@ int main(int argc, char* argv[]){
             }
             n--;
         }
-
-        //Close servers who are idle COM: Ran out of time to implement
-        // for(auto const& pair : servers) {
-        //     Server *server = pair.second;
-        //     if(!server->isCOC) {
-        //         //if(lastKeepAlive > 0) {
-        //             size_t idleTime = now - server->lastKeepAlive;
-        //             size_t allowedTime = 300;
-        //             if(idleTime > allowedTime) { //If idle more then 5 minutes then close connection
-        //                 close(server->sock);
-        //                 closeServer(server->sock, &openSockets, &maxfds);
-        //             }
-        //         //}
-        //     }
-        // }
     }
     return 0;
 }

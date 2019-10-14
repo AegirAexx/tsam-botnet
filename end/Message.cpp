@@ -1,71 +1,71 @@
-// T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
-// Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
+// COM: T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
+// COM: Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
 
 
-// This is our datatype to hold messages and log to file.
-//
-// Message API:
-//  public:
-//      Message(std::string from, std::string to, std::string msg) - Class constructor, takes the buffer.
-//      virtual ~Message() - Class destructor.
-//
-//      string getFrom() - Class getter.
-//      string getTo() - Class getter.
-//      string getMsg() - Class getter.
-//      size_t getTimeStamp() - Class getter.
-//      bool getIsSend() - Class getter.
-//      bool getIsClient() - Class getter.
-//      string getFormattedMessage() - Class getter.
-//      int getGroupID() - Class getter.
-//
-//      void logMessage(int id) - File stream to write log.
-//
-//  private:
-//      string from - Message sender.
-//      string to - Message recipient.
-//      string msg - Message payload.
-//      int groupID - Recipient identifier.
-//      size_t timeStamp - Seconds since Epoch.
-//      bool isClient - Flag for logging.
-//      bool isSend - Flag for logging.
-//
-//      vector<string> split(string stringToSplit, char delimeter) - Private utility function.
+// COM: This is our datatype to hold messages and log to file.
+// COM:
+// COM: Message API:
+// COM:  public:
+// COM:      Message(std::string from, std::string to, std::string msg) - Class constructor, takes the buffer.
+// COM:      virtual ~Message() - Class destructor.
+// COM:
+// COM:      string getFrom() - Class getter.
+// COM:      string getTo() - Class getter.
+// COM:      string getMsg() - Class getter.
+// COM:      size_t getTimeStamp() - Class getter.
+// COM:      bool getIsSend() - Class getter.
+// COM:      bool getIsClient() - Class getter.
+// COM:      string getFormattedMessage() - Class getter.
+// COM:      int getGroupID() - Class getter.
+// COM:
+// COM:      void logMessage(int id) - File stream to write log.
+// COM:
+// COM:  private:
+// COM:      string from - Message sender.
+// COM:      string to - Message recipient.
+// COM:      string msg - Message payload.
+// COM:      int groupID - Recipient identifier.
+// COM:      size_t timeStamp - Seconds since Epoch.
+// COM:      bool isClient - Flag for logging.
+// COM:      bool isSend - Flag for logging.
+// COM:
+// COM:      vector<string> split(string stringToSplit, char delimeter) - Private utility function.
 
 
 #include "Message.h"
 
-// Class constructor.
+// COM: Class constructor.
 Message::Message(std::string from, std::string to, std::string msg) {
     this->from = from;
     this->to = to;
     this->msg = msg;
-    // Timestamp - seconds since Epoch.
+    // COM: Timestamp - seconds since Epoch.
     this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     this->groupID = getGroupID();
-    // Render flags.
+    // COM: Render flags.
     this->isClient = false;
     this->isSend = false;
 }
 
-// Class destructor.
+// COM: Class destructor.
 Message::~Message() {}
 
 
-// Utility function that splits a string according to a delimiter and returns a vector of single words or tokens.
+// COM: Utility function that splits a string according to a delimiter and returns a vector of single words or tokens.
 std::vector<std::string> Message::split(std::string stringToSplit, char delimeter) {
-    // Creating a string stream object from input string.
+    // COM: Creating a string stream object from input string.
     std::stringstream ss(stringToSplit);
-    // Temporary placeholder.
+    // COM: Temporary placeholder.
     std::string word;
-    // Container to hold words or tokens.
+    // COM: Container to hold words or tokens.
 	std::vector<std::string> splittedStrings;
-    // While getline is fed strings from the string stream object, they are push onto the container.
+    // COM: While getline is fed strings from the string stream object, they are push onto the container.
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
-    // The container is returned.
+    // COM: The container is returned.
     return splittedStrings;
 }
 
-// Class getters.
+// COM: Class getters.
 int Message::getGroupID() {
     auto temp = split(this->to, '_');
     return atoi(temp[temp.size()-1].c_str());
@@ -99,26 +99,26 @@ bool Message::getIsClient() {
     return this->isClient;
 }
 
-// Function with fstream access and logic to log messages to text file.
+// COM: Function with fstream access and logic to log messages to text file.
 void Message::logMessage(int id) {
-    // Logic to render logs correctly.
+    // COM: Logic to render logs correctly.
     if(id == 1 || id == 11) this->isSend = true;
     if(id == 2 || id == 10) this->isSend = false;
     if(id == 10 || id == 11) this->isClient = true;
     if(id == 2 || id == 1) this->isClient = false;
-    // Seconds since Epoch
+    // COM: Seconds since Epoch
     if(id == 2 || id == 10) this->timeStamp = (size_t)std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    // Writing to text file.
+    // COM: Writing to text file.
     std::ofstream outStream;
     outStream.open("logs/MessageLog.txt", std::ios::app);
     if(outStream.is_open()) outStream << *this;
     outStream.close();
 }
 
-// Overwriting the << operator to format output to file.
+// COM: Overwriting the << operator to format output to file.
 std::ostream& operator << (std::ostream& outs, const Message& msg) {
     Message tempMessage = msg;
-    // Time object for static casting seconds since Epoch.
+    // COM: Time object for static casting seconds since Epoch.
     std::time_t t = static_cast<std::time_t>(tempMessage.timeStamp);
     outs << "COMMAND: " <<  (tempMessage.isSend ? "SEND" : "GET")
          << " | isBot: " << (tempMessage.isClient ? "TRUE" : "FALSE")
