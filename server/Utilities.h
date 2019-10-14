@@ -1,3 +1,6 @@
+// COM: T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
+// COM: Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
+
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
@@ -15,21 +18,27 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+// COM: This is our collection of utility fuctions.
+
 class Utilities {
     public:
+    // COM: Class constructor.
         Utilities();
 
-        std::size_t getTimestamp();
+    // COM: Class utility getters.
+        size_t getTimestamp();
         std::string getLocalIP();
+
+    // COM: Split utility function.
         std::vector<std::string> split(std::string stringToSplit, char delimeter);
         bool validateCommand(Command cmd);
 
-        // start stop | SOH - EOT
+    // COM: Functions for manipulating SOH and EOT.
         std::string addRawBytes(std::string str);
         std::string removeRawBytes(std::string str);
 
-        // Handshake
-        std::string handshake(std::string groupName, std::string ipAddress, int port);
+    // COM: Our handshake protocol.
+        std::string handshake(std::string groupName);
 
 
     private:
