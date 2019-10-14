@@ -436,14 +436,16 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 size_t sendKeepAlive() {
     //Initialize Utilities class for helper functions
     Utilities u;
-    //KeepAlive message
-    std::string aliveMsg("KEEPALIVE,");
+
 
     for(auto const& pair : servers) {
         Server *server = pair.second;
 
         if(!server->isCOC) {
-            aliveMsg += std::to_string(groupMsgCount[server->groupID]);
+            //KeepAlive message
+            std::string aliveMsg("KEEPALIVE,");
+            std::string count = std::to_string(groupMsgCount[server->groupID]);
+            aliveMsg += count;
 
             std::string formattedMsg(u.addRawBytes(aliveMsg));
             send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
@@ -454,7 +456,6 @@ size_t sendKeepAlive() {
     //Timestamp to store last time KeepAlive was sent
     return u.getTimestamp();
 }
-
 
 int main(int argc, char* argv[]){
 
