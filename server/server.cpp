@@ -116,26 +116,15 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
 
-    //Jacky code
-    std::vector<std::string> tokens;
-    std::string token;
-    std::stringstream stream(buffer);
-
-
 
     // COM: Split command from client into tokens for parsing
     std::string msg;
     Utilities u;
-    tokens = u.split(buffer, ',');
 
     Command c(buffer);
 
     std::cout << "Command #: " << c.getID() << std::endl; // DEBUG:
-
-    std::cout << "Test"  << std::endl; // DEBUG:
-
     std::cout << "Command buffer: " << buffer << std::endl; // DEBUG:
-    // or(auto i : c.getPayload()) std::cout << i;
 
     if(c.getID() == 4) { // COM: CONNECT
         // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
@@ -197,8 +186,6 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 
                         //Remove message from deque
                         msgQ.erase(it);
-
-                        // TODO: Herna sennilega break
                     }
                     it++;
                 }
@@ -258,22 +245,27 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             //Log
             msgQ.back().logMessage(c.getID());
         } else {
-            msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
+            msg = "Invalid usage of SENDMSG please format correctly, usage: SENDMSG,<Group name to>,<message>";
             send(clientSocket, msg.c_str(), msg.length(), 0);
         }
     } else if(c.getID() == 5) { //LEAVE
-        // Tokens[1] = serverIp
-        std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
-        // Tokens[2] = serverPort
-        int portToLeave{atoi(c.getPayload()[1].c_str())};
+        if(u.validateCommand(c)) {
+            // Tokens[1] = serverIp
+            std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
+            // Tokens[2] = serverPort
+            int portToLeave{atoi(c.getPayload()[1].c_str())};
 
-        // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
-        for(auto const& server : servers) {
-            if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
-                std::cout << "Adios " << server.second->name << std::endl;
-                closeServer(server.second->sock, openSockets, maxfds);
-                break;
+            // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+            for(auto const& server : servers) {
+                if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
+                    std::cout << "Adios " << server.second->name << std::endl;
+                    closeServer(server.second->sock, openSockets, maxfds);
+                    break;
+                }
             }
+        } else {
+            msg = "Invalid usage of LEAVE please format correctly, usage: LEAVE,<ipAddress>,<port>";
+            send(clientSocket, msg.c_str(), msg.length(), 0);
         }
     } else {
         std::cout << "Unknown command from client:" << buffer << std::endl;
@@ -296,160 +288,182 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
     std::string msg;
 
     if(c.getID() == 7) { // DAGUR: LISTSERVERS
-        // Get IP address, put in message to send
-        msg = "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
-        //Go through clients/servers map and add all to message
+        if(u.validateCommand(c)) {
+            // Get IP address, put in message to send
+            msg = "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
+            //Go through clients/servers map and add all to message
 
-        for(auto const& server : servers) {
-            // If server is not a client then add to msg // DAGUR: er thessi isCOC logic kannski sma stupid? aettum vid ad hafa ser client map frekar?
-            if(!server.second->isCOC) {
-                msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
+            for(auto const& server : servers) {
+                // If server is not a client then add to msg // DAGUR: er thessi isCOC logic kannski sma stupid? aettum vid ad hafa ser client map frekar?
+                if(!server.second->isCOC) {
+                    msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
+                }
             }
-        }
-        //Add start & end hex
-        std::string formattedMsg(u.addRawBytes(msg));
-        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-    } else if(c.getID() == 5) {  // LEAVE  DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
-        // Tokens[1] = serverIp
-        std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
-        // Tokens[2] = serverPort
-        int portToLeave{atoi(c.getPayload()[1].c_str())};
-
-        // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
-        for(auto const& server : servers) {
-            if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
-                std::cout << "Adios " << server.second->name << std::endl;
-                closeServer(server.second->sock, openSockets, maxfds);
-            }
-        }
-    } else if(c.getID() == 3) { // COM: KEEPALIVE
-        // Hvernig a eiginlega ad virka?
-        // Taka vid keepalive skilabod-um fra odrum server, meta hvort tad seu einhver skilabod til okkar
-        // t.e. ad fjoldinn se staerri en 0, ef svo er tha a ad gera get msg a vidkomandi socket
-
-        //Thegar vid faum keepAlive i okkur tha aetlum vid ad update-a keepAlive timan
-        size_t temp = u.getTimestamp();
-        servers[serverSocket]->lastKeepAlive = temp;
-        //Cout out-a thad for debugging purposes
-        std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl; // DEBUG:
-
-        if(atoi(c.getPayload()[c.getPayload().size()-1].c_str()) > 0) {
-
-            msg = "GET_MSG," + group;
-
             //Add start & end hex
             std::string formattedMsg(u.addRawBytes(msg));
             send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+        } else {
+            msg = "Invalid usage of LISTSERVERS please format correctly, usage: LISTSERVERS,<Group name>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
+        }
+    } else if(c.getID() == 5) {  // LEAVE  DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
+        if(u.validateCommand(c)) {
+            std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
+            // Tokens[2] = serverPort
+            int portToLeave{atoi(c.getPayload()[1].c_str())};
+
+            // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+            for(auto const& server : servers) {
+                if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
+                    std::cout << "Adios " << server.second->name << std::endl;
+                    closeServer(server.second->sock, openSockets, maxfds);
+                }
+            }
+        } else {
+            msg = "Invalid usage of LEAVE please format correctly, usage: LEAVE,<ipAddress>,<port>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
+        }
+    } else if(c.getID() == 3) { // COM: KEEPALIVE
+        if(u.validateCommand(c)) {
+            //Thegar vid faum keepAlive i okkur tha aetlum vid ad update-a keepAlive timan
+            size_t temp = u.getTimestamp();
+            servers[serverSocket]->lastKeepAlive = temp;
+            //Cout out-a thad for debugging purposes
+            std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl; // DEBUG:
+
+            if(atoi(c.getPayload()[c.getPayload().size()-1].c_str()) > 0) {
+
+                msg = "GET_MSG," + group;
+
+                //Add start & end hex
+                std::string formattedMsg(u.addRawBytes(msg));
+                send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+            }
+        } else {
+            msg = "Invalid usage of KEEPALIVE please format correctly, usage: KEEPALIVE,<# of messages>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
         }
 
     } else if(c.getID() == 2) { // COM: GET_MSG
+        if(u.validateCommand(c)) {
+            // COM: Get group ID
+            auto temp = u.split(c.getPayload()[0], '_');
+            int groupID = atoi(temp[temp.size()-1].c_str());
 
-        // COM: Get group ID
-        auto temp = u.split(c.getPayload()[0], '_');
-        int groupID = atoi(temp[temp.size()-1].c_str());
+            std::cout << "Group ID, requesting get_msg: " << groupID << std::endl;
+            // Athuga fjolda skilaboda i array
+            int msgCount = groupMsgCount[groupID];
 
-         std::cout << "Group ID, requesting get_msg: " << groupID << std::endl;
-        // Athuga fjolda skilaboda i array
-        int msgCount = groupMsgCount[groupID];
+            std::cout << "groupMsgCount: " << msgCount << std::endl;
 
-        std::cout << "groupMsgCount: " << msgCount << std::endl;
+            if(msgCount < 1) {
+                // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
+                msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
 
-        if(msgCount < 1) {
-            // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
-            msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
-
-            std::string formattedMsg(u.addRawBytes(msg));
-            send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-        }
-        else {
-            // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
-            auto it = msgQ.begin();
-
-            for(unsigned int i = 0; i < msgQ.size(); i++) {
-                if(msgQ[i].getTo() == c.getPayload()[0]) {
-                    msg = "SEND_MSG," + msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
-
-                    std::string formattedMsg(u.addRawBytes(msg));
-                    send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-
-                    //Message log
-                    msgQ[i].logMessage(c.getID());
-
-                    //Decrement group message count
-                    groupMsgCount[groupID]--;
-
-                    //Remove message from deque
-                    msgQ.erase(it);
-
-                    // TODO: Sennilega break her svo ekki oll skilabodin seu send
-                }
-                it++;
+                std::string formattedMsg(u.addRawBytes(msg));
+                send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
             }
+            else {
+                // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
+                auto it = msgQ.begin();
+
+                for(unsigned int i = 0; i < msgQ.size(); i++) {
+                    if(msgQ[i].getTo() == c.getPayload()[0]) {
+                        msg = "SEND_MSG," + msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
+
+                        std::string formattedMsg(u.addRawBytes(msg));
+                        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+                        //Message log
+                        msgQ[i].logMessage(c.getID());
+
+                        //Decrement group message count
+                        groupMsgCount[groupID]--;
+
+                        //Remove message from deque
+                        msgQ.erase(it);
+
+                        // TODO: Sennilega break her svo ekki oll skilabodin seu send
+                    }
+                    it++;
+                }
+            }
+        } else {
+            msg = "Invalid usage of GET_MSG please format correctly, usage: GET_MSG,<Group name>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
         }
     } else if(c.getID() == 1) { // COM: SEND_MSG
+        if(u.validateCommand(c)) {
+            // COM: Create new Message to store message info
+            // Message *newMessage = new Message(c);
 
-        // COM: Create new Message to store message info
-        // Message *newMessage = new Message(c);
+            std::cout << "Start creating newMessage" << std::endl;
 
-        std::cout << "Start creating newMessage" << std::endl;
+            std::string from = c.getPayload()[0];
+            std::string to = c.getPayload()[1];
+            std::string msg;
 
-        std::string from = c.getPayload()[0];
-        std::string to = c.getPayload()[1];
-        std::string msg;
+            // std::string from = group;
+            // std::string to = tokens[1];
+            // std::string msg("test msg for debugging");
 
-        // std::string from = group;
-        // std::string to = tokens[1];
-        // std::string msg("test msg for debugging");
+            for(unsigned int i = 2; i < c.getPayload().size(); i++) {
+                msg += c.getPayload()[i] + " ";
+            }
 
-        for(unsigned int i = 2; i < c.getPayload().size(); i++) {
-            msg += c.getPayload()[i] + " ";
+            std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
+
+            msg.pop_back();
+
+            Message *newMessage = new Message(from, to , msg);
+            //Message *newMessage = new Message(c);
+
+
+            std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
+            // COM: Add new message to FIFO data structure
+            msgQ.push_back(*newMessage);
+            std::cout << "Pushed back message to msgQ:" << std::endl;
+            // DAGUR: Baeta herna inn ++ a videigandi array holf
+            int groupID = msgQ.back().getGroupID();
+
+            groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
+            // DAGUR: Delete here?
+
+            // Check if FIFO grind is full or index[0] msg is too old
+            if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
+                // then send to random one-hopper
+
+            }
+
+            // Send confirmation to client
+            msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
+            std::string formattedMsg(u.addRawBytes(msg));
+            send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+
+            //Log
+            msgQ.back().logMessage(c.getID());
+        } else {
+            msg = "Invalid usage of SEND_MSG please format correctly, usage: SEND_MSG,<Group name from>,<Group name to>,<message>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-
-        std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
-
-        msg.pop_back();
-
-        Message *newMessage = new Message(from, to , msg);
-        //Message *newMessage = new Message(c);
-
-
-        std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
-        // COM: Add new message to FIFO data structure
-        msgQ.push_back(*newMessage);
-        std::cout << "Pushed back message to msgQ:" << std::endl;
-        // DAGUR: Baeta herna inn ++ a videigandi array holf
-        int groupID = msgQ.back().getGroupID();
-
-        groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-        // DAGUR: Delete here?
-
-        // Check if FIFO grind is full or index[0] msg is too old
-        if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-            // then send to random one-hopper
-
-        }
-
-        // Send confirmation to client
-        msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
-        std::string formattedMsg(u.addRawBytes(msg));
-        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-
-        //Log
-        msgQ.back().logMessage(c.getID());
     } else if (c.getID() == 8) { // COM: SERVERS
+        if(u.validateCommand(c)) {
+            servers[serverSocket]->name = c.getPayload()[0];
 
-        servers[serverSocket]->name = c.getPayload()[0];
+            auto temp = u.split(c.getPayload()[0], '_');
+            servers[serverSocket]->groupID =atoi(temp[temp.size()-1].c_str());
+            std::cout << "GroupID a incoming server connection: " << servers[serverSocket]->groupID << std::endl;
+            servers[serverSocket]->ipAddress = c.getPayload()[1];
+            servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
 
-        auto temp = u.split(c.getPayload()[0], '_');
-        servers[serverSocket]->groupID =atoi(temp[temp.size()-1].c_str());
-        std::cout << "GroupID a incoming server connection: " << servers[serverSocket]->groupID << std::endl;
-        // TODO: Aetti ad vera haegt ad skra allar thessar upplysingar fyrir utan nafnid a theim timapunkti sem accept() er gert
-        servers[serverSocket]->ipAddress = c.getPayload()[1];
-        servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
+            // TODO: Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
+            std::cout << "SERVERS message from server:" << cleanBuffer << std::endl; // DEBUG:
+        } else {
+            msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
+        }
 
-        // TODO: Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
-        std::cout << "SERVERS message from server:" << cleanBuffer << std::endl; // DEBUG:
-
+        // TODO:
         // Taka alla server-ana i svarinu og athuga fyrst hvort vid seum nu thegar tengdir theim
         // Ef ekki tha geyma tha i timabundinni gagnagrind (map svipad og servers vaentanlega)
         // rulla svo i gegnum tha og gera connect a server-ana a medan ad servercount er minna en 5
@@ -458,25 +472,27 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Thegar thetta kemur inn tha a madur ad skila tilbaka streng sem byrjar a STATUSRESP
         // Og svo fara ofan i gagnagrindina og finna oll skilabodin sem madur er med thar
         // Held eg en frekar oskyrt
+        if(u.validateCommand(c)) {
+            // Reply med
+            msg = "STATUSRESP," + group + "," + c.getPayload()[0];
 
-        // Reply med
-        msg = "STATUSRESP," + group + "," + c.getPayload()[0];
+            for(auto const& server : servers) {
+                msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
+            }
 
-        for(auto const& server : servers) {
-            msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
+            std::string formattedMsg(u.addRawBytes(msg));
+            send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
+            std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
+        } else {
+            msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
+            send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-
-        std::string formattedMsg(u.addRawBytes(msg));
-        send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-        std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
-
     } else if(c.getID() == 9) { // COM: STATUSRESP
         // Thegar thetta kemur inn tydir ad madur er ad fa response fra statusreq sem madur hefur sent
         // Madur vaentanlega sendir statusreq til ad ga hvada skilabod onehop gaurarnir manns eru med
         // Svo er tha spurning hvad madur gerir vid thessar upplysingar?
         // Fer vaentanlega eftir tvi hvernig madur utfaerir get MSG
         std::cout << "Received STATUSRESP from " << c.getPayload()[0] << std::endl;
-
     } else {
         std::cout << "Unknown command from server: " << buffer << std::endl;
         std::cout << "Command #: " << c.getID() << std::endl;
@@ -621,11 +637,11 @@ int main(int argc, char* argv[]){
 
     while(!isFinished) {
         //Initialize timestruct
-        struct timeval tv{60, 0};
+        struct timeval tv{30, 0};
 
         now = u.getTimestamp();
 
-        if((now - lastKeepAlive) > 40) {
+        if((now - lastKeepAlive) > 60) {
             lastKeepAlive = sendKeepAlive();
         }
 

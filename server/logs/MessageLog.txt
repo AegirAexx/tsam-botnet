@@ -7,3 +7,9 @@ COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Jaeja | T
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Jaeja | TIMESTAMP: 14.10.19 -=- 17:57:54
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Jaeja | TIMESTAMP: 14.10.19 -=- 17:57:54
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Jaeja | TIMESTAMP: 14.10.19 -=- 17:57:54
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_42 | MSG: Saelir piltar | TIMESTAMP: 14.10.19 -=- 18:48:16
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_42 | MSG: Saelir piltar | TIMESTAMP: 14.10.19 -=- 18:49:18
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_111 | MSG: How much does it cost to ride the Unibus 2 bits | TIMESTAMP: 14.10.19 -=- 19:06:55
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_111 | MSG: How much does it cost to ride the Unibus 2 bits | TIMESTAMP: 14.10.19 -=- 19:07:57
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_42 | MSG: You are at the end of the road again | TIMESTAMP: 14.10.19 -=- 19:09:02
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_42 | MSG: You are at the end of the road again | TIMESTAMP: 14.10.19 -=- 19:10:05
