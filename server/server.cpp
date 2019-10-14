@@ -14,8 +14,6 @@
 #include "Utilities.h"
 #include "Message.h"
 
-//Backlog
-
 class Server {
   public:
     int sock;              // socket of client connection
@@ -29,7 +27,7 @@ class Server {
     ~Server() {}
 };
 
-// DAGUR: Sloppy hornid
+// Global variables
 std::map<int, Server*> servers;
 int serverCount{0};
 std::string group("P3_GROUP_4");
@@ -39,7 +37,6 @@ int groupMsgCount[200]{0};
 
 void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
     // Remove client from the clients list
-
     if(!servers[serverSocket]->isCOC) {
         std::cout << "Server count decremented " << std::endl;
         serverCount--;
@@ -49,15 +46,12 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
 
     // If this client's socket is maxfds then the next lowest
     // one has to be determined. Socket fds can be reused by the Kernel,
-    // so there aren't any nice ways to do this.
-
     std::cout << "New max fds " << std::endl;
     if(*maxfds == serverSocket) {
         for(auto const& p : servers) {
             *maxfds = std::max(*maxfds, p.second->sock);
         }
     }
-
     // And remove from the list of open sockets.
     std::cout << "Remove from the list of open sockets " << std::endl;
     FD_CLR(serverSocket, openSockets);
@@ -65,9 +59,9 @@ void closeServer(int serverSocket, fd_set *openSockets, int *maxfds) {
 }
 
 void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *maxfds, std::string name) {
-
+    //Initialize Utilities class for helper functions
     Utilities u;
-    // COM: Create a socket
+    //Create a socket
     int serverSock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
 
     if(serverSock < 0) {
@@ -83,15 +77,14 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     sk_addr.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &sk_addr.sin_addr);
 
-    // COM: Connect to another server
+    //Connect to another server
     int connectResponse{connect(serverSock, (sockaddr*)&sk_addr, sizeof(sockaddr_in))};
 
     if(connectResponse < 0) {
         std::perror("Can't connect");
         return;
     }
-    // COM: Command set up
-
+    //Command set up
     FD_SET(serverSock, &*openSockets);
 
     *maxfds = std::max(*maxfds, serverSock);
@@ -101,7 +94,7 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
     std::cout <<  "ipAddress: " << ipAddress << std::endl; // DEBUG:
     std::cout <<  "port: " << port << std::endl; // DEBUG:
 
-    // DAGUR: store ipAddress and port number of new connection
+    // Store ipAddress and port number of new connection
     servers[serverSock]->name = name;
     auto temp = u.split(name, '_');
     servers[serverSock]->groupID = atoi(temp[temp.size()-1].c_str());
@@ -115,19 +108,14 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 }
 
 void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
-
-
-    // COM: Split command from client into tokens for parsing
-    std::string msg;
+    //Initialize Utilities class for helper functions
     Utilities u;
-
+    // String to hold response message
+    std::string msg;
+    //Splits buffer and checks which kind of command we are receiving
     Command c(buffer);
 
-    std::cout << "Command #: " << c.getID() << std::endl; // DEBUG:
-    std::cout << "Command buffer: " << buffer << std::endl; // DEBUG:
-
-    if(c.getID() == 4) { // COM: CONNECT
-        // DAGUR: We need to take this command out later as it is not in the specifications, but good to have during development
+    if(c.getID() == 4) { //CONNECT function to make server connect to other servers
         if(u.validateCommand(c)) {
             connectToServer(c.getPayload()[1], atoi(c.getPayload()[2].c_str()), &*openSockets, &*maxfds, c.getPayload()[0]);
             msg = "Si patron";
@@ -136,14 +124,13 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(clientSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 7) { // COM: LISTSERVERS
+    } else if(c.getID() == 7) { //LISTSERVERS
         if(u.validateCommand(c)) {
             //Go through clients/servers map and add all to message
             for(auto const& server : servers) {
                 msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
             }
             //Add start & end hex
-            // DEBUG: Tharf thetta tegar madur er ad respond-a a client, sennilega ekki
             std::string formattedMsg(u.addRawBytes(msg));
             send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
         } else {
@@ -151,39 +138,35 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             send(clientSocket, msg.c_str(), msg.length(), 0);
         }
     }
-    else if(c.getID() == 10) { // COM: Client GETMSG
+    else if(c.getID() == 10) { //Client GETMSG
         if(u.validateCommand(c)) {
-            // COM: Get group ID
+            //Get group ID
             auto temp = u.split(c.getPayload()[0], '_');
             int groupID = atoi(temp[temp.size()-1].c_str());
 
-            // Athuga fjolda skilaboda i array
+            // Check number of messages in array
             int msgCount = groupMsgCount[groupID];
 
             if(msgCount < 1) {
-                // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
+                //If no messages for group, send that info to client
                 msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
 
                 std::string formattedMsg(u.addRawBytes(msg));
                 send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
             }
             else {
-                // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
+                //Otherwise find messages in message queue
                 auto it = msgQ.begin();
 
                 for(unsigned int i = 0; i < msgQ.size(); i++) {
                     if(msgQ[i].getTo() == c.getPayload()[0]) {
                         msg = msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
-
                         std::string formattedMsg(u.addRawBytes(msg));
                         send(clientSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-
                         //Message log
                         msgQ[i].logMessage(c.getID());
-
                         //Decrement group message count
                         groupMsgCount[groupID]--;
-
                         //Remove message from deque
                         msgQ.erase(it);
                     }
@@ -194,47 +177,38 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of GETMSG please format correctly, usage: GETMSG,<Group name>";
             send(clientSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 11) { // COM: SENDMSG
+    } else if(c.getID() == 11) { //SENDMSG
         if(u.validateCommand(c)) {
-            // COM: Create new Message to store message info
-            // Message *newMessage = new Message(c);
-
-            std::cout << "Start creating newMessage" << std::endl;
-
+            // Create new Message to store message info
             std::string from = group;
             std::string to = c.getPayload()[0];
             std::string msg;
-
-            // std::string from = group;
-            // std::string to = tokens[1];
-            // std::string msg("test msg for debugging");
 
             for(unsigned int i = 1; i < c.getPayload().size(); i++) {
                 msg += c.getPayload()[i] + " ";
             }
 
-            std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
+            std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl;
 
+            //Remove trailing " "
             msg.pop_back();
 
             Message *newMessage = new Message(from, to , msg);
-            //Message *newMessage = new Message(c);
-
 
             std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
-            // COM: Add new message to FIFO data structure
+            // Add new message to FIFO data structure
             msgQ.push_back(*newMessage);
             std::cout << "Pushed back message to msgQ:" << std::endl;
-            // DAGUR: Baeta herna inn ++ a videigandi array holf
+            //Get groupID
             int groupID = msgQ.back().getGroupID();
+            //increment count of messages for group
+            groupMsgCount[groupID] = groupMsgCount[groupID] + 1;
 
-            groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-            // DAGUR: Delete here?
-
-            // Check if FIFO grind is full or index[0] msg is too old
-            if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-                // then send to random one-hopper
-
+            // Message expiry system, check if FIFO structure is full
+            if(msgQ.size() > 10) {
+                //Then erease from system
+                std::cout << "Message expired, erase from structure" << std::endl;
+                msgQ.pop_front();
             }
 
             // Send confirmation to client
@@ -250,15 +224,16 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
         }
     } else if(c.getID() == 5) { //LEAVE
         if(u.validateCommand(c)) {
-            // Tokens[1] = serverIp
-            std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
-            // Tokens[2] = serverPort
+            //ipAddress to leave
+            std::string ipAddressToLeave(c.getPayload()[0]);
+            //port to leave
             int portToLeave{atoi(c.getPayload()[1].c_str())};
 
-            // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+            //Find server to leave
             for(auto const& server : servers) {
                 if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
                     std::cout << "Adios " << server.second->name << std::endl;
+                    //Disconnect from server
                     closeServer(server.second->sock, openSockets, maxfds);
                     break;
                 }
@@ -273,28 +248,23 @@ void clientCommand(int clientSocket, fd_set *openSockets, int *maxfds, char *buf
 }
 
 void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buffer, std::string myIpAddress, int myPort) {
+    //Initialize Utilities class for helper functions
     Utilities u;
-
     // COM: Clean SOH & EOT from buffer
-    // TODO: Need to validate message somewhere to see if it has SOH & EOT before we clean it, also if we have noise after or before SOH and EOT I think we are supposed to ignore it
-    auto cleanBuffer = u.removeRawBytes(buffer); // DAGUR: FEAT: removeRawBytes() already partially validates.
-
-    // COM: Split command from client into tokens for parsing
-    //auto tokens = u.split(cleanBuffer, ',');
-
+    auto cleanBuffer = u.removeRawBytes(buffer);
+    //Splits buffer and checks which kind of command we are receiving
     Command c(cleanBuffer);
-
     // String to hold response message
     std::string msg;
 
-    if(c.getID() == 7) { // DAGUR: LISTSERVERS
+    if(c.getID() == 7) { //LISTSERVERS
         if(u.validateCommand(c)) {
             // Get IP address, put in message to send
             msg = "SERVERS," + group + "," + myIpAddress + "," + std::to_string(myPort) + ";";
-            //Go through clients/servers map and add all to message
 
+            //Go through clients/servers map and add all to message
             for(auto const& server : servers) {
-                // If server is not a client then add to msg // DAGUR: er thessi isCOC logic kannski sma stupid? aettum vid ad hafa ser client map frekar?
+                // If server is not a client then add to msg
                 if(!server.second->isCOC) {
                     msg += server.second->name + "," + server.second->ipAddress + "," +  std::to_string(server.second->port) + ";";
                 }
@@ -306,13 +276,12 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of LISTSERVERS please format correctly, usage: LISTSERVERS,<Group name>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 5) {  // LEAVE  DAGUR: Ran into trouble debugging, tharf ad baeta inn client megin for debugging purposes
+    } else if(c.getID() == 5) {  // LEAVE
         if(u.validateCommand(c)) {
-            std::string ipAddressToLeave(c.getPayload()[0]); // COM: Tharf ad breyta i c.payload eitthvad
-            // Tokens[2] = serverPort
+            std::string ipAddressToLeave(c.getPayload()[0]);
             int portToLeave{atoi(c.getPayload()[1].c_str())};
 
-            // DAGUR: Gaeti madur ekki i raun bara checkad hvort server.second->sock == serverSocket ???
+            //Finna hvern a ad aftengjast vid
             for(auto const& server : servers) {
                 if((server.second->ipAddress == ipAddressToLeave) && (server.second->port == portToLeave)) {
                     std::cout << "Adios " << server.second->name << std::endl;
@@ -323,18 +292,15 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of LEAVE please format correctly, usage: LEAVE,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 3) { // COM: KEEPALIVE
+    } else if(c.getID() == 3) { //KEEPALIVE
         if(u.validateCommand(c)) {
-            //Thegar vid faum keepAlive i okkur tha aetlum vid ad update-a keepAlive timan
+            //Update the last time we received keep alive
             size_t temp = u.getTimestamp();
             servers[serverSocket]->lastKeepAlive = temp;
-            //Cout out-a thad for debugging purposes
-            std::cout << "Updated keep alive time for " << servers[serverSocket]->name << std::endl; // DEBUG:
 
+            //If keepalive is indicating we have a message we send GET_MSG
             if(atoi(c.getPayload()[c.getPayload().size()-1].c_str()) > 0) {
-
                 msg = "GET_MSG," + group;
-
                 //Add start & end hex
                 std::string formattedMsg(u.addRawBytes(msg));
                 send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
@@ -343,27 +309,22 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of KEEPALIVE please format correctly, usage: KEEPALIVE,<# of messages>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-
-    } else if(c.getID() == 2) { // COM: GET_MSG
+    } else if(c.getID() == 2) { //GET_MSG
         if(u.validateCommand(c)) {
-            // COM: Get group ID
+            //Get group ID
             auto temp = u.split(c.getPayload()[0], '_');
             int groupID = atoi(temp[temp.size()-1].c_str());
-
-            std::cout << "Group ID, requesting get_msg: " << groupID << std::endl;
-            // Athuga fjolda skilaboda i array
+            //Check number of messages for group
             int msgCount = groupMsgCount[groupID];
-
-            std::cout << "groupMsgCount: " << msgCount << std::endl;
-
+            //If group has messages we go through the queue and send the group all messages for given groupID
             if(msgCount > 0) {
-                // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
                 auto it = msgQ.begin();
 
                 for(unsigned int i = 0; i < msgQ.size(); i++) {
                     if(msgQ[i].getTo() == c.getPayload()[0]) {
                         msg = "SEND_MSG," + msgQ[i].getFrom() + "," + msgQ[i].getTo() + "," + msgQ[i].getMsg();
 
+                        //Add start & end
                         std::string formattedMsg(u.addRawBytes(msg));
                         send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
 
@@ -375,61 +336,45 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
                         //Remove message from deque
                         msgQ.erase(it);
-
-                        // TODO: Sennilega break her svo ekki oll skilabodin seu send
                     }
                     it++;
                 }
             }
-
         } else {
             msg = "Invalid usage of GET_MSG please format correctly, usage: GET_MSG,<Group name>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 1) { // COM: SEND_MSG
+    } else if(c.getID() == 1) { //SEND_MSG
         if(u.validateCommand(c)) {
-            // COM: Create new Message to store message info
-            // Message *newMessage = new Message(c);
-
-            std::cout << "Start creating newMessage" << std::endl;
-
+            //Create new Message to store message info
             std::string from = c.getPayload()[0];
             std::string to = c.getPayload()[1];
             std::string msg;
 
-            // std::string from = group;
-            // std::string to = tokens[1];
-            // std::string msg("test msg for debugging");
-
             for(unsigned int i = 2; i < c.getPayload().size(); i++) {
                 msg += c.getPayload()[i] + " ";
             }
-
-            std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl; // DEBUG:
-
+            std::cout << "From: " << from << " To: " << to << " msg: " << msg << std::endl;
+            //Remove trailing " "
             msg.pop_back();
-
+            //Message constructor
             Message *newMessage = new Message(from, to , msg);
-            //Message *newMessage = new Message(c);
-
-
             std::cout << "Created newMessage; From: " << newMessage->getFrom() << "To: " << newMessage->getTo() << " Msg: " << newMessage->getMsg() << std::endl;
-            // COM: Add new message to FIFO data structure
+            //Add new message to FIFO data structure
             msgQ.push_back(*newMessage);
             std::cout << "Pushed back message to msgQ:" << std::endl;
-            // DAGUR: Baeta herna inn ++ a videigandi array holf
+            // Get groupID
             int groupID = msgQ.back().getGroupID();
+            //increment count of messages for group
+            groupMsgCount[groupID] = groupMsgCount[groupID] + 1;
 
-            groupMsgCount[groupID] = groupMsgCount[groupID] + 1; //increment count of messages for group
-            // DAGUR: Delete here?
-
-            // Check if FIFO grind is full or index[0] msg is too old
-            if(msgQ.size() > 10) { // msgQ.front().getTimeStamp()
-                // then send to random one-hopper
-
+            // Message expiry system, check if FIFO structure is full
+            if(msgQ.size() > 10) {
+                //Then erease from system
+                std::cout << "Message expired, erase from structure" << std::endl;
+                msgQ.pop_front();
             }
-
-            // Send confirmation to client
+            // Send confirmation to server
             msg = "Message stored in Q, From: " + msgQ.back().getFrom() + " To: " + msgQ.back().getTo() + " Message: " + msgQ.back().getMsg() + " With group ID: " + std::to_string(msgQ.back().getGroupID());
             std::string formattedMsg(u.addRawBytes(msg));
             send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
@@ -440,18 +385,18 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of SEND_MSG please format correctly, usage: SEND_MSG,<Group name from>,<Group name to>,<message>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if (c.getID() == 8) { // COM: SERVERS
+    } else if (c.getID() == 8) { //SERVERS
         if(u.validateCommand(c)) {
+            //Register group name for incoming connection
             servers[serverSocket]->name = c.getPayload()[0];
-
+            //Split to get group ID, then register rest of group info
             auto temp = u.split(c.getPayload()[0], '_');
             servers[serverSocket]->groupID =atoi(temp[temp.size()-1].c_str());
-            std::cout << "GroupID a incoming server connection: " << servers[serverSocket]->groupID << std::endl;
+            std::cout << "GroupID of incoming server connection: " << servers[serverSocket]->groupID << std::endl;
             servers[serverSocket]->ipAddress = c.getPayload()[1];
             servers[serverSocket]->port = atoi(c.getPayload()[2].c_str());
 
-            // TODO: Svo tharf ad dila vid restina af strengnum sem inniheldur upplysingar um alla onehop dudes
-            std::cout << "SERVERS message from server:" << cleanBuffer << std::endl; // DEBUG:
+            std::cout << "Message:" << cleanBuffer << std::endl;
         } else {
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
@@ -462,14 +407,12 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
         // Ef ekki tha geyma tha i timabundinni gagnagrind (map svipad og servers vaentanlega)
         // rulla svo i gegnum tha og gera connect a server-ana a medan ad servercount er minna en 5
 
-    } else if(c.getID() == 6) { // COM: STATUSREQ
-        // Thegar thetta kemur inn tha a madur ad skila tilbaka streng sem byrjar a STATUSRESP
-        // Og svo fara ofan i gagnagrindina og finna oll skilabodin sem madur er med thar
-        // Held eg en frekar oskyrt
+    } else if(c.getID() == 6) { //STATUSREQ
         if(u.validateCommand(c)) {
-            // Reply med
+            // Reply with STATUSRESP
             msg = "STATUSRESP," + group + "," + c.getPayload()[0];
 
+            //Check who is connected to us and how many messages we have for them
             for(auto const& server : servers) {
                 msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
             }
@@ -481,11 +424,8 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
         }
-    } else if(c.getID() == 9) { // COM: STATUSRESP
-        // Thegar thetta kemur inn tydir ad madur er ad fa response fra statusreq sem madur hefur sent
-        // Madur vaentanlega sendir statusreq til ad ga hvada skilabod onehop gaurarnir manns eru med
-        // Svo er tha spurning hvad madur gerir vid thessar upplysingar?
-        // Fer vaentanlega eftir tvi hvernig madur utfaerir get MSG
+    } else if(c.getID() == 9) { //STATUSRESP
+        //Print to screen status response
         std::cout << "Received STATUSRESP from " << c.getPayload()[0] << std::endl;
     } else {
         std::cout << "Unknown command from server: " << buffer << std::endl;
