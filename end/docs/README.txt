@@ -37,25 +37,29 @@ To make only one binary, use either:
     make client
 
 
-The Server files:
-
-/server
+The project files:
+.
+├── client.cpp
 ├── Command.cpp
 ├── Command.h
+├── docs
+│   ├── HistoryLog.txt
+│   ├── README.txt
+│   ├── screen1.png
+│   ├── screen2.png
+│   ├── screen3.png
+│   ├── screen4.png
+│   ├── screen5.png
+│   └── WireSharkLogs.txt
 ├── logs
 │   └── MessageLog.txt
 ├── Makefile
 ├── Message.cpp
 ├── Message.h
-├── README.txt
 ├── server.cpp
 ├── Utilities.cpp
 └── Utilities.h
 
-The Client file:
-
-/client
-└── client.cpp
 
 
 Usage:

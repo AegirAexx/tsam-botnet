@@ -1,5 +1,5 @@
-// COM: T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
-// COM: Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
+// T-409-TSAM-2019-3 | Project 3 - The Botnet Rises
+// Aegir_Tomasson[aegir15] && Dagur_Kristjansson[dagur17]
 
 
 #ifndef COMMAND_H
@@ -10,7 +10,7 @@
 #include <regex>
 #include <iterator>
 
-// COM: This is our datatype to hold and identify commands as they come off the buffer.
+// This is our datatype to hold and identify commands as they come off the buffer.
 
 class Command {
     public:
