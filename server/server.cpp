@@ -356,14 +356,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
             std::cout << "groupMsgCount: " << msgCount << std::endl;
 
-            if(msgCount < 1) {
-                // Eg engin tha "Sorry no messages for you, to GET_MSG use XXXX format"
-                msg = "Sorry, there are no messages for " + c.getPayload()[0] + " in our system: Protocol to get message from server is 'GETMSG,<P3_GROUP_X>' where X is group number";
-
-                std::string formattedMsg(u.addRawBytes(msg));
-                send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-            }
-            else {
+            if(msgCount > 0) {
                 // Annars rulla i gegnum queue og finna skilabodin og pussla theim saman
                 auto it = msgQ.begin();
 
@@ -388,6 +381,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
                     it++;
                 }
             }
+
         } else {
             msg = "Invalid usage of GET_MSG please format correctly, usage: GET_MSG,<Group name>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
@@ -500,24 +494,24 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 }
 
 size_t sendKeepAlive() {
+    //Initialize Utilities class for helper functions
     Utilities u;
+    //KeepAlive message
     std::string aliveMsg("KEEPALIVE,");
 
     for(auto const& pair : servers) {
         Server *server = pair.second;
 
-        // DAGUR: "std::to_chars" virkar kannski betur til ad stoppa auka null i strengnum?
-        // DAGUR: Vildi fokka i tessu en tetta gaeti virkad.
         if(!server->isCOC) {
-            aliveMsg += std::to_string(groupMsgCount[server->groupID]); // DAGUR: Herna thyrfti ad finna ut fjolda skilaboda sem vidkomandi a i message menginu okkar
+            aliveMsg += std::to_string(groupMsgCount[server->groupID]);
 
             std::string formattedMsg(u.addRawBytes(aliveMsg));
             send(server->sock, formattedMsg.c_str(), formattedMsg.length(), 0);
 
-            std::cout << "Send keep alive to: " << server->name << " With groupID: " << server->groupID << " With count: " << groupMsgCount[server->groupID] << std::endl; // DEBUG:
+            std::cout << "Sending keep alive to: " << server->name << " With count: " << groupMsgCount[server->groupID] << std::endl;
         }
     }
-
+    //Timestamp to store last time KeepAlive was sent
     return u.getTimestamp();
 }
 
@@ -525,7 +519,6 @@ size_t sendKeepAlive() {
 int main(int argc, char* argv[]){
 
     // COM: Open socket
-
     struct sockaddr_in server_addr; //Server socket address
     struct sockaddr_in client_addr; //Client socket address
 
@@ -544,7 +537,6 @@ int main(int argc, char* argv[]){
 
     std::string myIpAddress(u.getLocalIP()); //Get our Ip address
 
-    // DAGUR:Sennilega lengdin a client structinu
     socklen_t serverLen{0};
     socklen_t clientLen{0};
 
@@ -558,7 +550,7 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
-    // Set sock opt SO_REUSADDR // DAGUR: Einhverskonar hefd samkvaemt geeks for geeks
+    // Set sock opt SO_REUSADDR
     if(setsockopt(serverSock, SOL_SOCKET, SO_REUSEADDR, &set, sizeof(set)) < 0) {
         std::perror("Failed to set SO_REUSEADDR:");
     }
@@ -590,12 +582,10 @@ int main(int argc, char* argv[]){
         return -1;
     }
 
-
-    std::cout << "Listening for servers on socket#: " << serverSock << std::endl; // DEBUG:
-    std::cout << "Listening for clients on socket#: " << clientSock << std::endl; // DEBUG:
+    std::cout << "Listening for servers on socket#: " << serverPort << std::endl; // DEBUG:
+    std::cout << "Listening for clients on socket#: " << clientPort << std::endl; // DEBUG:
 
     // COM: Now we need to listen
-
     //create Socket list
     fd_set openSockets;
 
@@ -624,11 +614,9 @@ int main(int argc, char* argv[]){
     //Socket to take care of new connections
     int newSock{0};
 
-
     bool isFinished{false};
     char buffer[1024];
 
-    //struct timeval tv{60, 0};
     size_t lastKeepAlive = u.getTimestamp(); //Initialize-a med now
     // size_t interruptTime{0};
     size_t now{0};
@@ -636,7 +624,7 @@ int main(int argc, char* argv[]){
     //int newTime{60};
 
     while(!isFinished) {
-        //Initialize timestruct
+        //Initialize timestruct 30, Keep alive sent on 60 - 90 second interval
         struct timeval tv{30, 0};
 
         now = u.getTimestamp();
@@ -653,8 +641,6 @@ int main(int argc, char* argv[]){
         readSockets = exceptSockets = openSockets;
         memset(buffer, 0, sizeof(buffer));
 
-        // tv.tv_sec = newTime;
-
         int n = select(maxfds + 1, &readSockets, NULL, &exceptSockets, &tv);
 
         if(n < 0) {
@@ -662,18 +648,6 @@ int main(int argc, char* argv[]){
             isFinished = true;
             continue;
         }
-
-        // DAGUR: Gamla keep alive
-        // if(n == 0) { //Vid timeout-udum
-        //     lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
-        //     newTime = 60;
-        // }
-        // else {
-        //     interruptTime = u.getTimestamp();
-        //     newTime = interruptTime - lastKeepAlive;
-        // }
-
-
 
         // Add listen socket to socket set we are monitoring
         if(FD_ISSET(clientSock, &readSockets)) { //Maybe some boolean check to see if it is already connected
@@ -683,11 +657,11 @@ int main(int argc, char* argv[]){
             // And update the maximum file descriptor
             maxfds = std::max(maxfds, newSock);
             // MAybe some C&C info if we want.
-            servers[newSock] = new Server(newSock); // DAGUR: Afhverju erum vid aftur ad skra client-ana inn i map-id????
+            servers[newSock] = new Server(newSock);
             servers[newSock]->isCOC = true;
             // Decrement the number of sockets waiting to be dealt with
             n--;
-            std::cout << "Client connected on socket: " << newSock << std::endl; // DEBUG:
+            std::cout << "Client connected on socket: " << newSock << std::endl;
         }
 
         if(FD_ISSET(serverSock, &readSockets)&& servers.size() < 5) {
@@ -698,19 +672,7 @@ int main(int argc, char* argv[]){
             maxfds = std::max(maxfds, newSock);
             // create a new client to store information.
             servers[newSock] = new Server(newSock);
-            // DAGUR: Herna aettum vid ad geta skrad inn upplysingarnar um thann sem er ad tengjast okkur strax med server.sin_addr og server.sin_port
-            // Thar eru upplysingarnar thurfum i raun ekki ad bida eftir LSTSERVER >> SERVER svarinu
-            // TODO: add ipAddress and port to new Server .... server.sin_ipAdress server.sin_port
-            // DAGUR: Sma tilraunamennska her
-            // FEAT: https://stackoverflow.com/a/9212542
-            // FEAT: https://stackoverflow.com/questions/37721310/c-how-to-get-ip-and-port-from-struct-sockaddr
-            // servers[serverSock]->ipAddress = server.sin_addr.s_addr;
-            // servers[serverSock]->port = server.sin_port;
-            // std::cout << "Sin address: " << server.sin_addr.s_addr << std::endl;
-            // std::cout << "Sin port: " << server.sin_port << std::endl;
-
             serverCount++; //increment server count
-            std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
             std::string msg;
             msg = u.handshake(group);
@@ -719,7 +681,6 @@ int main(int argc, char* argv[]){
             n--;
             std::cout << "Server connected on socket: " << newSock << std::endl; // DEBUG:
         }
-
 
         while(n > 0) {
             for(auto const& pair : servers) {
@@ -730,7 +691,7 @@ int main(int argc, char* argv[]){
                         std::cout << "Server or client closed connection:" << server->sock << std::endl;
                         close(server->sock);
                         closeServer(server->sock, &openSockets, &maxfds);
-                        break; // DAGUR: Added this so server would not crash when connection is closed
+                        break;
                     } else {
                         // We don't check for -1 (nothing received) because select()
                         // only triggers if there is something on the socket for us.
@@ -751,7 +712,6 @@ int main(int argc, char* argv[]){
             n--;
         }
     }
-
     return 0;
 }
 
