@@ -110,7 +110,7 @@ void connectToServer(std::string ipAddress, int port, fd_set *openSockets, int *
 
     //Send listservers to new connection
     std::string msg;
-    msg = u.handshake(group, ipAddress, port);
+    msg = u.handshake(group);
     send(serverSock, msg.c_str(), msg.length(), 0);
 }
 
@@ -667,7 +667,7 @@ int main(int argc, char* argv[]){
             std::cout << "Server count: " << serverCount << std::endl;
             //Listserver sent to incoming connection server
             std::string msg;
-            msg = u.handshake(group, myIpAddress, serverPort);
+            msg = u.handshake(group);
             send(newSock, msg.c_str(), msg.length(), 0);
             // Decrement the number of sockets waiting to be dealt with
             n--;

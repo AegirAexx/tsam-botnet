@@ -98,14 +98,14 @@ std::string Utilities::removeRawBytes(std::string str){
     return reformattedString;
 }
 
-// TODO: DELETE???
+// COM: Function that does our server2server hanshake.
 std::string Utilities::handshake(std::string groupName) {
     return addRawBytes("LISTSERVERS," + groupName);
 }
 
 
 // COM: Utility function that splits a string according to a delimiter and returns a vector of single words or tokens.
-std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
+std::vector<std::string> Utilities::split(std::string stringToSplit, char delimeter) {
     // COM: Creating a string stream object from input string.
     std::stringstream ss(stringToSplit);
     // COM: Temporary placeholder.
