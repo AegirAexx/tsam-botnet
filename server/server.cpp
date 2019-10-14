@@ -369,7 +369,7 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
             groupMsgCount[groupID] = groupMsgCount[groupID] + 1;
 
             // Message expiry system, check if FIFO structure is full
-            if(msgQ.size() > 10) {
+            if(msgQ.size() > 50) {
                 //Then erease from system
                 std::cout << "Message expired, erase from structure" << std::endl;
                 msgQ.pop_front();
@@ -414,12 +414,14 @@ void serverCommand(int serverSocket, fd_set *openSockets, int *maxfds, char *buf
 
             //Check who is connected to us and how many messages we have for them
             for(auto const& server : servers) {
-                msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
+                if(!server.second->isCOC) {
+                    msg += "," + server.second->name + "," + std::to_string(groupMsgCount[server.second->groupID]);
+                }
             }
 
             std::string formattedMsg(u.addRawBytes(msg));
             send(serverSocket, formattedMsg.c_str(), formattedMsg.length(), 0);
-            std::cout << "Sending status req to " << c.getPayload()[0] << std::endl;
+            std::cout << "Sending STATUSRESP to " << c.getPayload()[0] << std::endl;
         } else {
             msg = "Invalid usage of CONNECT please format correctly, usage: CONNECT,<Group name>,<ipAddress>,<port>";
             send(serverSocket, msg.c_str(), msg.length(), 0);
