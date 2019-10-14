@@ -38,8 +38,7 @@ To make only one binary, use either:
 
 
 The Server files:
-
-/server
+.
 ├── Command.cpp
 ├── Command.h
 ├── logs
@@ -50,11 +49,7 @@ The Server files:
 ├── README.txt
 ├── server.cpp
 ├── Utilities.cpp
-└── Utilities.h
-
-The Client file:
-
-/client
+├── Utilities.h
 └── client.cpp
 
 
