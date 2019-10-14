@@ -1,3 +1,30 @@
+<<<<<<< HEAD
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_140 | MSG: The cake is a lie!! | TIMESTAMP: 14.10.19 -=- 19:03:01
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Hello from group 4!! | TIMESTAMP: 14.10.19 -=- 19:06:11
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Hello from group 4!! | TIMESTAMP: 14.10.19 -=- 19:06:56
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_73 | TO: P3_GROUP_4 | MSG: Hallo Aegir! | TIMESTAMP: 14.10.19 -=- 19:13:04
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_73 | TO: P3_GROUP_4 | MSG: Hallo Aegir! | TIMESTAMP: 14.10.19 -=- 19:13:04
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_109 | TO: P3_GROUP_4 | MSG: Hello Aegir... I see we have established an awesome connection! | TIMESTAMP: 14.10.19 -=- 19:13:20
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_109 | TO: P3_GROUP_4 | MSG: Hello Aegir... I see we have established an awesome connection! | TIMESTAMP: 14.10.19 -=- 19:13:20
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_42 | TO: P3_GROUP_4 | MSG: "Funny " he intoned funereally  "how just when you think life can’t possibly get any worse it suddenly does." | TIMESTAMP: 14.10.19 -=- 19:14:26
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_42 | TO: P3_GROUP_4 | MSG: "Funny " he intoned funereally  "how just when you think life can’t possibly get any worse it suddenly does." | TIMESTAMP: 14.10.19 -=- 19:14:26
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_111 | MSG: What's going in the kitchen and I don't know what's cooking? | TIMESTAMP: 14.10.19 -=- 19:16:02
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_111 | MSG: What's going in the kitchen and I don't know what's cooking? | TIMESTAMP: 14.10.19 -=- 19:16:02
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_109 | TO: P3_GROUP_4 | MSG: Hello Aegir... this is very 1337 connections we have established | TIMESTAMP: 14.10.19 -=- 19:26:15
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_109 | TO: P3_GROUP_4 | MSG: Hello Aegir... this is very 1337 connections we have established | TIMESTAMP: 14.10.19 -=- 19:26:15
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Hello from the wireshark logs! | TIMESTAMP: 14.10.19 -=- 19:44:01
+COMMAND: GET | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_4 | MSG: Hello from the wireshark logs! | TIMESTAMP: 14.10.19 -=- 19:44:25
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_32 | TO: P3_GROUP_4 | MSG: Hello | TIMESTAMP: 14.10.19 -=- 19:58:27
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_32 | TO: P3_GROUP_4 | MSG: Hello | TIMESTAMP: 14.10.19 -=- 19:58:27
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:06:00
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_99 | TO: P3_GROUP_4 | MSG: EXECUTE ORDER 66 - Group99 | TIMESTAMP: 14.10.19 -=- 20:08:01
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_99 | TO: P3_GROUP_4 | MSG: EXECUTE ORDER 66 - Group99 | TIMESTAMP: 14.10.19 -=- 20:08:01
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_99 | TO: P3_GROUP_4 | MSG: EXECUTE ORDER 66 - Group99 | TIMESTAMP: 14.10.19 -=- 20:08:01
+COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_99 | TO: P3_GROUP_4 | MSG: EXECUTE ORDER 66 - Group99 | TIMESTAMP: 14.10.19 -=- 20:08:01
+COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:25
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:43
+COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_99 | MSG: What's going on in the kitchen and I don't know what's cooking! | TIMESTAMP: 14.10.19 -=- 20:08:43
+=======
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_17 | TO: P3_GROUP_4 | MSG: Why code in C++ when your programming skills are A++? | TIMESTAMP: 14.10.19 -=- 19:42:01
 COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_17 | TO: P3_GROUP_4 | MSG: Why code in C++ when your programming skills are A++? | TIMESTAMP: 14.10.19 -=- 19:42:01
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_17 | MSG: Many pages make a thick book | TIMESTAMP: 14.10.19 -=- 19:43:19
@@ -14,3 +41,4 @@ COMMAND: SEND | isBot: FALSE | FROM: P3_GROUP_73 | TO: P3_GROUP_4 | MSG: KVEDJA 
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_100 | MSG: Never be led astray onto the path of virtue | TIMESTAMP: 14.10.19 -=- 19:55:54
 COMMAND: SEND | isBot: TRUE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Chess tonight | TIMESTAMP: 14.10.19 -=- 19:59:48
 COMMAND: GET | isBot: FALSE | FROM: P3_GROUP_4 | TO: P3_GROUP_109 | MSG: Chess tonight | TIMESTAMP: 14.10.19 -=- 19:59:58
+>>>>>>> 0c219ac69941dbbc1376c23d5c4aae5703bce3e7
