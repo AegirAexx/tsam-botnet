@@ -599,6 +599,8 @@ int main(int argc, char* argv[]){
     size_t lastKeepAlive = u.getTimestamp(); //Initialize-a med now
     size_t interruptTime{0};
 
+    int newTime{60};
+
     while(!isFinished) {
         // Memset
         memset(&server, 0, sizeof(server));
@@ -608,12 +610,23 @@ int main(int argc, char* argv[]){
         readSockets = exceptSockets = openSockets;
         memset(buffer, 0, sizeof(buffer));
 
+        tv.tv_sec = newTime;
+
         int n = select(maxfds + 1, &readSockets, NULL, &exceptSockets, &tv);
 
         if(n < 0) {
             std::perror("select failed - closing down\n");
             isFinished = true;
             continue;
+        }
+
+        if(n == 0) { //Vid timeout-udum
+            lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
+            newTime = 60;
+        }
+        else {
+            interruptTime = u.getTimestamp();
+            newTime = interruptTime - lastKeepAlive;
         }
 
         // Add listen socket to socket set we are monitoring
@@ -661,14 +674,6 @@ int main(int argc, char* argv[]){
             std::cout << "Server connected on socket: " << newSock << std::endl; // DEBUG:
         }
 
-        if(n == 0) { //Vid timeout-udum
-            lastKeepAlive = sendKeepAlive(); //update-a lastKeepAlive
-            tv.tv_sec = 60;
-        }
-        else {
-            interruptTime = u.getTimestamp();
-            tv.tv_sec = interruptTime - lastKeepAlive;
-        }
 
         while(n > 0) {
             for(auto const& pair : servers) {
