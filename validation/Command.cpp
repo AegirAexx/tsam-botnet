@@ -19,7 +19,6 @@ Command::Command(std::string buffer) {
         else if(command == "STATUSRESP") this->id = 9;
         else if(command == "GETMSG") this->id = 10;
         else if(command == "SENDMSG") this->id = 11;
-        else if(command == "CONNECT") this->id = 12;
         else this->id = 0;
     } else this->id = -1;
 
@@ -28,15 +27,6 @@ Command::Command(std::string buffer) {
         this->payload = split(std::regex_replace(buffer,rx,","), ',');
         this->payload.erase(this->payload.begin());
     }
-
-}
-
-std::vector<std::string>  Command::getPayload(){
-    return this->payload;
-}
-
-int Command::getID(){
-    return this->id;
 }
 
 std::vector<std::string> Command::split(std::string stringToSplit, char delimeter) {
@@ -45,4 +35,12 @@ std::vector<std::string> Command::split(std::string stringToSplit, char delimete
 	std::vector<std::string> splittedStrings;
     while (std::getline(ss, word, delimeter)) splittedStrings.push_back(word);
     return splittedStrings;
+}
+
+std::vector<std::string>  Command::getPayload(){
+    return this->payload;
+}
+
+int Command::getID(){
+    return this->id;
 }

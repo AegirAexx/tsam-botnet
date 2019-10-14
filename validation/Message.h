@@ -19,9 +19,12 @@ class Message {
         std::string getTo();
         std::string getMsg();
         size_t getTimeStamp();
+        bool getIsSend();
+        bool getIsClient();
         std::string getFormattedMessage();
+        int getGroupID();
 
-        void logMessage();
+        void logMessage(int id);
 
         friend std::ostream& operator << (std::ostream& outs, const Message& msg);
         friend bool operator < (const Message& rhs, const Message& lhs);
@@ -30,7 +33,12 @@ class Message {
         std::string from;
         std::string to;
         std::string msg;
+        int groupID;
         size_t timeStamp;
+        bool isClient;
+        bool isSend;
+        std::vector<std::string> split(std::string stringToSplit, char delimeter);
+
 };
 
 #endif // MESSAGE_H
